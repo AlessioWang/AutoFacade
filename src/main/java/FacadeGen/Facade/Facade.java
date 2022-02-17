@@ -4,8 +4,10 @@ import FacadeGen.Unit.ClassUnit;
 import FacadeGen.Unit.Unit;
 import FacadeGen.Vol;
 import FacadeGen.Cell;
+import Tools.W_Tools;
 import wblut.geom.*;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,7 +61,7 @@ public abstract class Facade {
         return new WB_Polygon(p0, p1, p2, p3);
     }
 
-    private void iniGrid(){
+    private void iniGrid() {
         //根据横纵的分隔数量初始化分隔
         cells = initCellGrid();
         //在每一个的cell上都先初始化上一个unit
@@ -104,6 +106,7 @@ public abstract class Facade {
 
         return cells;
     }
+
 
 
 }

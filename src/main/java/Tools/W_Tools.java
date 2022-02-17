@@ -5,10 +5,7 @@ import org.locationtech.jts.geom.*;
 import org.locationtech.jts.operation.polygonize.Polygonizer;
 import wblut.geom.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @auther Alessio
@@ -561,6 +558,7 @@ public class W_Tools {
      * 检测两个二维的wb_polygon是否相连
      * 涉及较为复杂几何运算，有时会出现浮点误差与计算时间过长等问题
      * 若输入的list中仅含有一个元素，输出为true，但会生成提示
+     *
      * @param polygons
      * @return
      */
@@ -571,7 +569,7 @@ public class W_Tools {
         }
 
         WB_Polygon origin = polygons.get(0);
-        List<WB_Polygon> result = new LinkedList<>();
+        List<WB_Polygon> result;
         for (int i = 1; i < polygons.size(); i++) {
             result = wbgf.unionPolygons2D(origin, polygons.get(i));
             if (result.size() > 1) {
@@ -582,9 +580,46 @@ public class W_Tools {
         return true;
     }
 
+    /**
+     * 检测两个二维的wb_polygon是否相连
+     * 涉及较为复杂几何运算，有时会出现浮点误差与计算时间过长等问题
+     * 若输入的list中仅含有一个元素，输出为true，但会生成提示
+     *
+     * @return
+     */
+    public static boolean checkIfNeighbor2D(WB_Polygon p1, WB_Polygon p2) {
+        List<WB_Polygon> result = wbgf.unionPolygons2D(p1, p2);
+        return result.size() == 1;
+    }
 
+    public static WB_Polygon unionPolygons(WB_Polygon p1, WB_Polygon p2) {
+        if (checkIfNeighbor2D(p1, p2)) {
+            System.out.println("多边形不相邻，无法合并");
+            return null;
+        }
+        List<WB_Polygon> result = wbgf.unionPolygons2D(p1, p2);
+        return result.get(0);
+    }
 
+    /**
+     * 将wb_polygon进行合并
+     * @param ps
+     * @return
+     */
+    public static List<WB_Polygon> unionPolygons(WB_Polygon... ps) {
+        if (ps.length == 1) {
+            return Collections.singletonList(ps[0]);
+        }
 
+        List<WB_Polygon> result = new LinkedList<>();
+        Iterator<WB_Polygon> it = Arrays.stream(ps).iterator();
+        it.next();
+        while (it.hasNext()) {
+            result = wbgf.unionPolygons2D(ps[0], it.next());
+        }
+
+        return result;
+    }
 
 }
 

@@ -1,6 +1,7 @@
 package FacadeGen;
 
 import FacadeGen.Facade.Facade;
+import processing.core.PApplet;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
 
@@ -9,6 +10,7 @@ import wblut.geom.WB_Polygon;
  * @date 2022/2/16
  **/
 public class Cell {
+
     //Cell的几何尺寸
     private double width;
     private double height;
@@ -68,4 +70,7 @@ public class Cell {
     public WB_Point getOriginPoint() {
         return originPoint;
     }
+
+
+
 }

@@ -1,21 +1,12 @@
 package FacadeGen.Unit;
 
 import FacadeGen.Cell;
-import FacadeGen.Facade.Wall;
 
 import FacadeGen.Panel.Panel;
-import FacadeGen.Panel.PanelFactory;
 import Tools.Douglas;
-import org.locationtech.jts.simplify.DouglasPeuckerSimplifier;
 import wblut.geom.WB_GeometryFactory;
-import wblut.geom.WB_GeometryOp;
-import wblut.geom.WB_Polygon;
-import wblut.geom.WB_Vector;
+import wblut.geom.WB_Polygon;import wblut.geom.WB_Vector;
 
-import javax.imageio.plugins.tiff.FaxTIFFTagSet;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -59,8 +50,6 @@ public class Unit {
         Douglas douglas = new Douglas(result, .0001);
         return douglas.getAsPolygon();
     }
-
-
 
     public WB_Polygon getShape() {
         return shape;

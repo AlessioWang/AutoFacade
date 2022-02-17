@@ -12,6 +12,11 @@ import java.util.List;
  **/
 public class ClassUnit extends Unit implements Panelable {
 
+    public ClassUnit(Unit basicUnit){
+        super(basicUnit.cells, basicUnit.index);
+        function = CLASS;
+    }
+
     public ClassUnit(List<Cell> cells, int index) {
         super(cells, index);
         function = CLASS;
