@@ -7,6 +7,7 @@ import wblut.geom.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -494,7 +495,7 @@ public class W_Tools {
         double x2 = v2.xd();
         double y2 = v2.yd();
         double value = (x1 * x2 + y1 * y2) / (Math.sqrt(x1 * x1 + y1 * y1) * Math.sqrt(x2 * x2 + y2 * y2)); // 余弦值
-        return  Math.acos(value);
+        return Math.acos(value);
     }
 
 
@@ -539,13 +540,51 @@ public class W_Tools {
         return target;
     }
 
-    public static  WB_Polygon createRecPolygon(double width, double height){
+    /**
+     * 创建四边形的wb_polygon
+     * 基点在左下角
+     *
+     * @param width
+     * @param height
+     * @return
+     */
+    public static WB_Polygon createRecPolygon(double width, double height) {
         WB_Point p0 = new WB_Point(0, 0);
         WB_Point p1 = new WB_Point(width, 0);
         WB_Point p2 = new WB_Point(width, height);
         WB_Point p3 = new WB_Point(0, height);
         return new WB_Polygon(p0, p1, p2, p3);
     }
+
+
+    /**
+     * 检测两个二维的wb_polygon是否相连
+     * 涉及较为复杂几何运算，有时会出现浮点误差与计算时间过长等问题
+     * 若输入的list中仅含有一个元素，输出为true，但会生成提示
+     * @param polygons
+     * @return
+     */
+    public static boolean checkIfNeighbor2D(List<WB_Polygon> polygons) {
+        if (polygons.size() < 2) {
+            System.out.println("仅存在一个图元");
+            return true;
+        }
+
+        WB_Polygon origin = polygons.get(0);
+        List<WB_Polygon> result = new LinkedList<>();
+        for (int i = 1; i < polygons.size(); i++) {
+            result = wbgf.unionPolygons2D(origin, polygons.get(i));
+            if (result.size() > 1) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
+
+
 
 }
 

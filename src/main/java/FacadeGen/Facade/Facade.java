@@ -1,8 +1,13 @@
 package FacadeGen.Facade;
 
+import FacadeGen.Unit.ClassUnit;
+import FacadeGen.Unit.Unit;
 import FacadeGen.Vol;
 import FacadeGen.Cell;
 import wblut.geom.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @auther Alessio
@@ -26,24 +31,25 @@ public abstract class Facade {
     protected int allCellNum;
     //记录Facade上的每个基本格子单元
     protected Cell[][] cells;
+    //初始的时候为每个Cell上都初始化上Unit
+    protected Unit[][] units;
 
-    public Facade(int index, Vol vol, WB_Polygon base, int uUnitNum, int vUnitNum) {
+    public Facade(int index, Vol vol, WB_Polygon base, int uCellNum, int vCellNum) {
         this.index = index;
         this.vol = vol;
         this.base = base;
-        this.uCellNum = uUnitNum;
-        this.vCellNum = vUnitNum;
+        this.uCellNum = uCellNum;
+        this.vCellNum = vCellNum;
         initWH();
         volName = vol.getName();
-        allCellNum = uUnitNum * vUnitNum;
-        cells = new Cell[uUnitNum][vUnitNum];
+        allCellNum = uCellNum * vCellNum;
+        iniGrid();
     }
 
-    private void initWH(){
+    private void initWH() {
         width = base.getAABB().getWidth();
         height = base.getAABB().getHeight();
     }
-
 
     private WB_Polygon createRec(double width, double height) {
         WB_Point p0 = new WB_Point(0, 0);
@@ -53,8 +59,32 @@ public abstract class Facade {
         return new WB_Polygon(p0, p1, p2, p3);
     }
 
+    private void iniGrid(){
+        //根据横纵的分隔数量初始化分隔
+        cells = initCellGrid();
+        //在每一个的cell上都先初始化上一个unit
+        units = createOriginUnits();
+    }
+
+    private Unit[][] createOriginUnits() {
+        int u = uCellNum;
+        int v = vCellNum;
+        Unit[][] result = new Unit[u][v];
+
+        for (int i = 0; i < u; i++) {
+            for (int j = 0; j < v; j++) {
+                List<Cell> cell = new ArrayList<>();
+                cell.add(cells[i][j]);
+                int index = j * v + u;
+                result[i][j] = new ClassUnit(cell, index);
+            }
+        }
+
+        return result;
+    }
+
     //以横纵分隔数来基本初始化Grid
-    public Cell[][] initGridByNum() {
+    public Cell[][] initCellGrid() {
         //存储cell信息
         Cell[][] cells = new Cell[uCellNum][vCellNum];
 
@@ -62,7 +92,6 @@ public abstract class Facade {
         double uStep = width / uCellNum;
         double vStep = height / vCellNum;
         WB_Polygon basic = createRec(uStep, vStep);
-        System.out.println(basic.getCenter());
         //遍历初始化
         for (int u = 0; u < uCellNum; u++) {
             for (int v = 0; v < vCellNum; v++) {
@@ -75,5 +104,6 @@ public abstract class Facade {
 
         return cells;
     }
+
 
 }

@@ -1,7 +1,5 @@
 package FacadeGen;
 
-
-
 import FacadeGen.Facade.Facade;
 import FacadeGen.Facade.Roof;
 import FacadeGen.Facade.Wall;

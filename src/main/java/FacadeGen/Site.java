@@ -16,28 +16,28 @@ import java.util.List;
  **/
 public class Site {
     //存储的建筑集合
-    List<Vol> volList;
+    List<Building> buildingList;
 
     //场地的物理形态
     WB_Polygon polygon;
 
     public Site() {
-        volList = new ArrayList<>();
+        buildingList = new ArrayList<>();
     }
 
     public Site(WB_Polygon polygon) {
-        volList = new ArrayList<>();
+        buildingList = new ArrayList<>();
         this.polygon = polygon;
     }
 
-    public void add(Vol vol) {
-        this.volList.add(vol);
+    public void add(Building b) {
+        this.buildingList.add(b);
     }
 
     @Override
     public String toString() {
         return "Site{" +
-                "vol nums=" + volList.size() +
+                "vol nums=" + buildingList.size() +
                 '}';
     }
 }
