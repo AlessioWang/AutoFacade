@@ -1,11 +1,11 @@
 package FacadeGen.Unit;
 
-import FacadeGen.Cell;
+import Geo.Cell;
 
 import FacadeGen.Panel.Panel;
 import Tools.Douglas;
 import wblut.geom.WB_GeometryFactory;
-import wblut.geom.WB_Polygon;import wblut.geom.WB_Vector;
+import wblut.geom.WB_Polygon;
 
 import java.util.List;
 

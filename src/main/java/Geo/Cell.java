@@ -1,4 +1,4 @@
-package FacadeGen;
+package Geo;
 
 import FacadeGen.Facade.Facade;
 import processing.core.PApplet;
@@ -21,7 +21,10 @@ public class Cell {
     private WB_Point originPoint;
 
     //所属Facade
-    private final Facade facade;
+    private Facade facade;
+
+    //所属的Grid
+    protected Grid grid;
 
     //记录cell位于墙面的相对信息， [0]为横坐标，[1]为纵坐标
     protected int posU;
@@ -32,15 +35,23 @@ public class Cell {
     public boolean available = true;
 
     public Cell(Facade facade, WB_Polygon shape, int posU, int posV) {
+        wallPos = new int[2];
         this.shape = shape;
         this.facade = facade;
+        initWallPos(posU, posV);
+        initShapeParas();
+    }
+
+    public Cell(Grid grid, WB_Polygon shape, int posU, int posV) {
         wallPos = new int[2];
+        this.grid = grid;
+        this.shape = shape;
         initWallPos(posU, posV);
         initShapeParas();
     }
 
     //初始化长宽
-    private void initShapeParas(){
+    private void initShapeParas() {
         width = shape.getAABB().getWidth();
         height = shape.getAABB().getHeight();
         originPoint = shape.getPoint(0);
@@ -70,7 +81,6 @@ public class Cell {
     public WB_Point getOriginPoint() {
         return originPoint;
     }
-
 
 
 }

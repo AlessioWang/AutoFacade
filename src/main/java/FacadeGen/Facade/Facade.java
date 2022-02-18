@@ -3,11 +3,10 @@ package FacadeGen.Facade;
 import FacadeGen.Unit.ClassUnit;
 import FacadeGen.Unit.Unit;
 import FacadeGen.Vol;
-import FacadeGen.Cell;
-import Tools.W_Tools;
+import Geo.Cell;
+import Geo.Grid;
 import wblut.geom.*;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +30,8 @@ public abstract class Facade {
     protected int uCellNum;
     protected int vCellNum;
     protected int allCellNum;
+
+    protected Grid gird;
     //记录Facade上的每个基本格子单元
     protected Cell[][] cells;
     //初始的时候为每个Cell上都初始化上Unit
@@ -107,6 +108,26 @@ public abstract class Facade {
         return cells;
     }
 
+    public Grid setGrid() {
+        //存储cell信息
+        Grid grid = new Grid(cells);
 
+        //计算每个cell的尺寸
+        double uStep = width / uCellNum;
+        double vStep = height / vCellNum;
+        WB_Polygon basic = createRec(uStep, vStep);
+        //遍历初始化
+        for (int u = 0; u < uCellNum; u++) {
+            for (int v = 0; v < vCellNum; v++) {
+                WB_Transform3D transform3D = new WB_Transform3D();
+                transform3D.addTranslate(new WB_Vector(u * uStep, v * vStep));
+                WB_Polygon newShape = basic.apply(transform3D);
+                Cell c = new Cell(this, newShape, u, v);
+                grid.setSingleCell(c);
+            }
+        }
+
+        return grid;
+    }
 
 }

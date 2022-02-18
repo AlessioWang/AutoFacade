@@ -1,7 +1,7 @@
 package Client;
 
 import FacadeGen.Building;
-import FacadeGen.Cell;
+import Geo.Cell;
 import FacadeGen.Facade.Facade;
 import FacadeGen.Facade.Wall;
 import FacadeGen.Vol;

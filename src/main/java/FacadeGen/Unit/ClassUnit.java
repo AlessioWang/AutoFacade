@@ -1,8 +1,7 @@
 package FacadeGen.Unit;
 
-import FacadeGen.Cell;
+import Geo.Cell;
 import FacadeGen.Panel.PanelFactory;
-import wblut.geom.WB_GeometryFactory;
 
 import java.util.List;
 

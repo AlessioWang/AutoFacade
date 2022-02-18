@@ -1,6 +1,6 @@
 package FacadeGen.Unit;
 
-import FacadeGen.Cell;
+import Geo.Cell;
 import FacadeGen.Panel.PanelFactory;
 
 import java.util.List;

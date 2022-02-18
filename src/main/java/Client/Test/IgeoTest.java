@@ -1,7 +1,6 @@
-package Test;
+package Client.Test;
 
 import igeo.*;
-import igeo.gui.IPolyline;
 
 /**
  * @auther Alessio
