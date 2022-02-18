@@ -1,4 +1,4 @@
-package Client.Test;
+package Client;
 
 import igeo.*;
 

@@ -37,6 +37,15 @@ public class Building {
         }
     }
 
+
+    public void setVolList(List<Vol> volList) {
+        this.volList = volList;
+    }
+
+    public List<Vol> getVolList() {
+        return volList;
+    }
+
     @Override
     public String toString() {
         return "Building{" +

@@ -15,6 +15,8 @@ import java.util.List;
  * @date 2021/12/14
  **/
 public abstract class Facade {
+    //基准面
+    protected WB_Plane plane;
     //位于vol的编号
     protected final int index;
     //所属形体
@@ -23,7 +25,7 @@ public abstract class Facade {
     protected String volName;
     //基准面
     private final WB_Polygon base;
-    //立面的长宽
+    //立面的长宽，整体的长宽
     protected double width;
     protected double height;
     //立面的Unit数量
@@ -31,15 +33,26 @@ public abstract class Facade {
     protected int vCellNum;
     protected int allCellNum;
 
-    protected Grid gird;
-    //记录Facade上的每个基本格子单元
-    protected Cell[][] cells;
+    protected Grid grid;
     //初始的时候为每个Cell上都初始化上Unit
     protected Unit[][] units;
 
     public Facade(int index, Vol vol, WB_Polygon base, int uCellNum, int vCellNum) {
         this.index = index;
         this.vol = vol;
+        this.base = base;
+        this.uCellNum = uCellNum;
+        this.vCellNum = vCellNum;
+        initWH();
+        volName = vol.getName();
+        allCellNum = uCellNum * vCellNum;
+        iniGrid();
+    }
+
+    public Facade(int index, Vol vol,WB_Plane plane, WB_Polygon base, int uCellNum, int vCellNum) {
+        this.index = index;
+        this.vol = vol;
+        this.plane = plane;
         this.base = base;
         this.uCellNum = uCellNum;
         this.vCellNum = vCellNum;
@@ -63,8 +76,7 @@ public abstract class Facade {
     }
 
     private void iniGrid() {
-        //根据横纵的分隔数量初始化分隔
-        cells = initCellGrid();
+        grid = createGrid();
         //在每一个的cell上都先初始化上一个unit
         units = createOriginUnits();
     }
@@ -76,20 +88,19 @@ public abstract class Facade {
 
         for (int i = 0; i < u; i++) {
             for (int j = 0; j < v; j++) {
-                List<Cell> cell = new ArrayList<>();
-                cell.add(cells[i][j]);
-                int index = j * v + u;
-                result[i][j] = new ClassUnit(cell, index);
+                List<Cell> cells = new ArrayList<>();
+                cells.add(grid.getCells()[i][j]);
+                int index = j * v + i;
+                result[i][j] = new Unit(cells, index);
             }
         }
 
         return result;
     }
 
-    //以横纵分隔数来基本初始化Grid
-    public Cell[][] initCellGrid() {
+    public Grid createGrid() {
         //存储cell信息
-        Cell[][] cells = new Cell[uCellNum][vCellNum];
+        Grid grid = new Grid(uCellNum, vCellNum);
 
         //计算每个cell的尺寸
         double uStep = width / uCellNum;
@@ -101,33 +112,19 @@ public abstract class Facade {
                 WB_Transform3D transform3D = new WB_Transform3D();
                 transform3D.addTranslate(new WB_Vector(u * uStep, v * vStep));
                 WB_Polygon newShape = basic.apply(transform3D);
-                cells[u][v] = new Cell(this, newShape, u, v);
-            }
-        }
-
-        return cells;
-    }
-
-    public Grid setGrid() {
-        //存储cell信息
-        Grid grid = new Grid(cells);
-
-        //计算每个cell的尺寸
-        double uStep = width / uCellNum;
-        double vStep = height / vCellNum;
-        WB_Polygon basic = createRec(uStep, vStep);
-        //遍历初始化
-        for (int u = 0; u < uCellNum; u++) {
-            for (int v = 0; v < vCellNum; v++) {
-                WB_Transform3D transform3D = new WB_Transform3D();
-                transform3D.addTranslate(new WB_Vector(u * uStep, v * vStep));
-                WB_Polygon newShape = basic.apply(transform3D);
-                Cell c = new Cell(this, newShape, u, v);
+                Cell c = new Cell(grid, newShape, u, v);
                 grid.setSingleCell(c);
             }
         }
-
         return grid;
+    }
+
+    public Grid getGrid() {
+        return grid;
+    }
+
+    public void setPlane(WB_Plane plane) {
+        this.plane = plane;
     }
 
 }

@@ -16,12 +16,9 @@ public class Cell {
     private double height;
 
     //几何图形
-    private final WB_Polygon shape;
+    protected final WB_Polygon shape;
     //左下角脚点
-    private WB_Point originPoint;
-
-    //所属Facade
-    private Facade facade;
+    protected WB_Point originPoint;
 
     //所属的Grid
     protected Grid grid;
@@ -31,21 +28,15 @@ public class Cell {
     protected int posV;
     protected int[] wallPos;
 
-    //是否可以用做unit（是否被遮挡）
-    public boolean available = true;
-
-    public Cell(Facade facade, WB_Polygon shape, int posU, int posV) {
-        wallPos = new int[2];
-        this.shape = shape;
-        this.facade = facade;
-        initWallPos(posU, posV);
-        initShapeParas();
-    }
+    //是否可以用做unit（是否被遮挡，或是空）
+    protected boolean available = true;
 
     public Cell(Grid grid, WB_Polygon shape, int posU, int posV) {
         wallPos = new int[2];
         this.grid = grid;
         this.shape = shape;
+        this.posU = posU;
+        this.posV = posV;
         initWallPos(posU, posV);
         initShapeParas();
     }
@@ -70,10 +61,6 @@ public class Cell {
         return height;
     }
 
-    public Facade getFacade() {
-        return facade;
-    }
-
     public WB_Polygon getShape() {
         return shape;
     }
@@ -82,5 +69,20 @@ public class Cell {
         return originPoint;
     }
 
+    public int getPosU() {
+        return posU;
+    }
+
+    public int getPosV() {
+        return posV;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
 
 }

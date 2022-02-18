@@ -5,6 +5,7 @@ import Geo.Cell;
 import FacadeGen.Facade.Facade;
 import FacadeGen.Facade.Wall;
 import FacadeGen.Vol;
+import Geo.Grid;
 import Tools.W_Tools;
 import wblut.geom.WB_Polygon;
 
@@ -21,19 +22,15 @@ public class TestClient {
         Vol vol = new Vol(building, 0);
 
         WB_Polygon polygon = W_Tools.createRecPolygon(50, 40);
-        Facade wall = new Wall(0, vol, polygon,5,4);
+        Facade wall = new Wall(0, vol, polygon, 5, 4);
 
         vol.addFacade(wall);
 
-        Cell[][] cells = wall.initCellGrid();
-        Cell cell = cells[1][2];
+        Grid grid = wall.getGrid();
+        Cell[][] cells = grid.getCells();
+        Cell c = cells[3][4];
+        System.out.println(c.getOriginPoint());
 
-        System.out.println(cell.getShape().getPoint(1));
-
-        List<Cell> cellList = new ArrayList<>();
-        cellList.add(cells[0][0]);
-        cellList.add(cells[1][0]);
-        cellList.add(cells[0][1]);
     }
 
 }

@@ -48,6 +48,27 @@ public class Grid {
         cells[u][v] = cell;
     }
 
+    public void changeCellAvail(int u, int v, boolean flag) {
+        cells[u][v].setAvailable(flag);
+    }
+
+    public void closeCell(int u, int v) {
+        cells[u][v].setAvailable(false);
+    }
+
+    public void closeCells(int startU, int startV, int endU, int endV) {
+        startU = Math.min(startU, uNum);
+        startV = Math.min(startV, vNum);
+        endU = Math.min(endU, uNum);
+        endV = Math.min(endV, vNum);
+
+        for (int i = startU; i < endU; i++) {
+            for (int j = startV; j < endV; j++) {
+                cells[i][j].setAvailable(false);
+            }
+        }
+    }
+
     public void setCells(Cell[][] targetCells) {
         cells = targetCells;
     }
@@ -56,5 +77,8 @@ public class Grid {
         this.facade = facade;
     }
 
+    public Cell[][] getCells() {
+        return cells;
+    }
 
 }
