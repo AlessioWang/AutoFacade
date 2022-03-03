@@ -13,12 +13,12 @@ import java.util.List;
  * @auther Alessio
  * @date 2022/2/17
  **/
-public class RenderManger {
+public class RenderMgr {
 
     public PApplet applet;
     WB_Render render;
 
-    public RenderManger(PApplet applet) {
+    public RenderMgr(PApplet applet) {
         this.applet = applet;
         render = new WB_Render(applet);
     }

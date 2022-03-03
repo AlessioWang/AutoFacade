@@ -1,21 +1,19 @@
 package FacadeGen.Panel;
 
+import FacadeGen.Panel.PanelBase.Base;
+import wblut.geom.WB_Point;
+
+import java.awt.*;
+import java.util.HashMap;
+
 /**
  * @auther Alessio
- * @date 2021/12/14
+ * @date 2022/3/3
  **/
-public abstract class Panel {
+public class Panel {
 
-    public static final int SIMPLE_WALL = 0, WINDOW_WALL = 1, HANDRAIL_WALL = 2;
-    private int style;
-
-
-
-
-
-    public Panel(int style) {
-        this.style = style;
-    }
+    public Base base;
+    public HashMap<Component, WB_Point> components = new HashMap<>();
 
 
 

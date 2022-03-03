@@ -3,12 +3,11 @@ package Client;
 import FacadeGen.Building;
 import FacadeGen.Facade.Facade;
 import FacadeGen.Facade.Wall;
-import FacadeGen.RenderManger;
+import FacadeGen.RenderMgr;
 import FacadeGen.Vol;
 import Geo.Grid;
 import Tools.W_Tools;
 import guo_cam.CameraController;
-import processing.awt.PShapeJava2D;
 import processing.core.PApplet;
 import wblut.geom.WB_Polygon;
 
@@ -22,7 +21,7 @@ public class RenderClient extends PApplet {
         PApplet.main("Client.RenderClient");
     }
 
-    RenderManger renderManger;
+    RenderMgr renderManger;
     CameraController cameraController;
     Building building;
     Wall wall;
@@ -34,7 +33,7 @@ public class RenderClient extends PApplet {
 
     public void setup() {
         cameraController = new CameraController(this, 100);
-        renderManger = new RenderManger(this);
+        renderManger = new RenderMgr(this);
         init();
         wall = building.getVolList().get(0).getWalls().get(0);
 

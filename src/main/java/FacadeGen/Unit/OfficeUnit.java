@@ -1,7 +1,7 @@
 package FacadeGen.Unit;
 
 import Geo.Cell;
-import FacadeGen.Panel.PanelFactory;
+import FacadeGen.Panel.PanelsBak.PanelFactory;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import java.util.List;
  * @auther Alessio
  * @date 2022/2/17
  **/
-public class OfficeUnit extends Unit  implements Panelable {
+public class OfficeUnit extends Unit  implements PanelSetAble {
 
     public OfficeUnit(List<Cell> cells, int index) {
         super(cells, index);

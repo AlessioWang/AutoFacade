@@ -1,7 +1,7 @@
 package FacadeGen.Unit;
 
 import Geo.Cell;
-import FacadeGen.Panel.PanelFactory;
+import FacadeGen.Panel.PanelsBak.PanelFactory;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import java.util.List;
  * @auther Alessio
  * @date 2022/2/17
  **/
-public class ClassUnit extends Unit implements Panelable {
+public class ClassUnit extends Unit implements PanelSetAble {
 
     public ClassUnit(Unit basicUnit){
         super(basicUnit.cells, basicUnit.index);

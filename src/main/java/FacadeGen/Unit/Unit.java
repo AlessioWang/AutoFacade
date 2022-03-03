@@ -2,7 +2,7 @@ package FacadeGen.Unit;
 
 import Geo.Cell;
 
-import FacadeGen.Panel.Panel;
+import FacadeGen.Panel.PanelsBak.Panel;
 import Tools.Douglas;
 import wblut.geom.WB_GeometryFactory;
 import wblut.geom.WB_Polygon;
