@@ -1,5 +1,7 @@
 package FacadeGen.Panel;
 
+import org.eclipse.collections.api.tuple.Pair;
+
 import java.util.HashMap;
 import java.util.Map;
 
