@@ -2,8 +2,6 @@ package FacadeGen.Panel.PanelBase;
 
 import wblut.geom.WB_Polygon;
 
-import java.util.List;
-
 /**
  * 所有panelBase的基类
  *
@@ -13,10 +11,13 @@ import java.util.List;
 public abstract class Base {
 
     //基本形状
-    public WB_Polygon shape;
+    public WB_Polygon basicShape;
+
+    public WB_Polygon shapeWithHoles;
 
     //材质
     public int material;
+
 
 
     public Base(WB_Polygon shape) {
@@ -32,22 +33,22 @@ public abstract class Base {
      * 判断shape是不是矩形
      */
     private boolean checkShape(double tol) {
-        if (shape.toSegments().size() != 4) {
+        if (basicShape.toSegments().size() != 4) {
             return false;
         }
 
-        return shape.getAABB().getArea() - Math.abs(shape.getSignedArea()) < tol;
+        return basicShape.getAABB().getArea() - Math.abs(basicShape.getSignedArea()) < tol;
     }
 
     private void iniShape(WB_Polygon shape) {
         if (checkShape(0.1)) {
-            this.shape = shape;
+            this.basicShape = shape;
         } else
             throw new IllegalArgumentException("传入的shape不是矩形");
     }
 
-    public WB_Polygon getShape() {
-        return shape;
+    public WB_Polygon getBasicShape() {
+        return basicShape;
     }
 
     public int getMaterial() {
@@ -61,8 +62,8 @@ public abstract class Base {
     @Override
     public String toString() {
         return "Base{" +
-                "shapeWidth + " + shape.getAABB().getWidth() +
-                "shapeHeight + " + shape.getAABB().getHeight() +
+                "shapeWidth + " + basicShape.getAABB().getWidth() +
+                "shapeHeight + " + basicShape.getAABB().getHeight() +
                 ", material=" + material +
                 '}';
     }
