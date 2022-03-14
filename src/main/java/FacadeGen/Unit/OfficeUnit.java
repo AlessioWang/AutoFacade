@@ -1,7 +1,6 @@
 package FacadeGen.Unit;
 
 import Geo.Cell;
-import FacadeGen.Panel.PanelsBak.PanelFactory;
 
 import java.util.List;
 
@@ -16,9 +15,9 @@ public class OfficeUnit extends Unit  implements PanelSetAble {
         function = OFFICE;
     }
 
-    @Override
-    public void setPanel(PanelFactory factory, Integer style) {
-        this.panel = factory.createPanel(style);
-    }
+//    @Override
+//    public void setPanel(PanelFactory factory, Integer style) {
+//        this.panel = factory.createPanel(style);
+//    }
 
 }

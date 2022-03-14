@@ -14,10 +14,13 @@ public class Frame {
     public Window window;
     //窗子外边框线
     private WB_Polygon frameBoundary;
+
     //边框宽度
     private double frameWidth;
     //边框深度
     private double frameDepth;
+
+
 
     public Frame(Window window, double frameWidth, double frameDepth) {
         this.window = window;

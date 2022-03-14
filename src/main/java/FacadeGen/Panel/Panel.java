@@ -15,8 +15,13 @@ import java.util.List;
  **/
 public class Panel {
 
-    public Base base;
-    public HashMap<PanelComponent, WB_Point> components = new HashMap<>();
+    private int index;
+
+    private Base base;
+
+    private HashMap<PanelComponent, WB_Point> components = new HashMap<>();
+
+    public Panel() {}
 
     public Panel(Base base) {
         this.base = base;
@@ -26,8 +31,36 @@ public class Panel {
         components.put(component, p);
     }
 
+    public int getIndex() {
+        return index;
+    }
 
+    public void setIndex(int index) {
+        this.index = index;
+    }
 
+    public Base getBase() {
+        return base;
+    }
 
+    public void setBase(Base base) {
+        this.base = base;
+    }
 
+    public HashMap<PanelComponent, WB_Point> getComponents() {
+        return components;
+    }
+
+    public void setComponents(HashMap<PanelComponent, WB_Point> components) {
+        this.components = components;
+    }
+
+    @Override
+    public String toString() {
+        return "Panel{" +
+                "index=" + index +
+                ", base =" + base +
+                ", components=" + components +
+                '}';
+    }
 }

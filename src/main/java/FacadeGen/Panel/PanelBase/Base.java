@@ -10,6 +10,7 @@ import wblut.geom.WB_Polygon;
  **/
 public abstract class Base {
 
+    public WB_Polygon inputShape;
     //基本形状
     public WB_Polygon basicShape;
 
@@ -18,13 +19,13 @@ public abstract class Base {
     //材质
     public int material;
 
-
-
     public Base(WB_Polygon shape) {
+        this.inputShape = shape;
         iniShape(shape);
     }
 
     public Base(WB_Polygon shape, int material) {
+        this.inputShape = shape;
         iniShape(shape);
         this.material = material;
     }
@@ -33,11 +34,11 @@ public abstract class Base {
      * 判断shape是不是矩形
      */
     private boolean checkShape(double tol) {
-        if (basicShape.toSegments().size() != 4) {
+        if (inputShape.toSegments().size() != 4) {
             return false;
         }
 
-        return basicShape.getAABB().getArea() - Math.abs(basicShape.getSignedArea()) < tol;
+        return inputShape.getAABB().getArea() - 2 * Math.abs(inputShape.getSignedArea()) < tol;
     }
 
     private void iniShape(WB_Polygon shape) {

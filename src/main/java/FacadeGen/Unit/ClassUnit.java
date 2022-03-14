@@ -1,7 +1,6 @@
 package FacadeGen.Unit;
 
 import Geo.Cell;
-import FacadeGen.Panel.PanelsBak.PanelFactory;
 
 import java.util.List;
 
@@ -9,7 +8,7 @@ import java.util.List;
  * @auther Alessio
  * @date 2022/2/17
  **/
-public class ClassUnit extends Unit implements PanelSetAble {
+public class ClassUnit extends Unit  {
 
     public ClassUnit(Unit basicUnit){
         super(basicUnit.cells, basicUnit.index);
@@ -21,9 +20,9 @@ public class ClassUnit extends Unit implements PanelSetAble {
         function = CLASS;
     }
 
-    @Override
-    public void setPanel(PanelFactory factory, Integer style) {
-        this.panel = factory.createPanel(style);
-    }
+//    @Override
+//    public void setPanel(PanelFactory factory, Integer style) {
+//        this.panel = factory.createPanel(style);
+//    }
 
 }

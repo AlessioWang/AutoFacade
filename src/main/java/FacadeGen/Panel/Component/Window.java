@@ -52,6 +52,19 @@ public abstract class Window extends PanelComponent {
         super(shape, base, material);
     }
 
+    public WindowBeam getHoriBeam() {
+        return horiBeam;
+    }
 
+    public void setHoriBeam(WindowBeam horiBeam) {
+        this.horiBeam = horiBeam;
+    }
 
+    public WindowBeam getVertiBeam() {
+        return vertiBeam;
+    }
+
+    public void setVertiBeam(WindowBeam vertiBeam) {
+        this.vertiBeam = vertiBeam;
+    }
 }

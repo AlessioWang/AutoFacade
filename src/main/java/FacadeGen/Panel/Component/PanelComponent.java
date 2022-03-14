@@ -46,4 +46,6 @@ public abstract class PanelComponent {
     public void setShape(WB_Polygon shape) {
         this.shape = shape;
     }
+
+
 }

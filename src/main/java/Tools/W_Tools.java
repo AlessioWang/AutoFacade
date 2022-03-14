@@ -622,6 +622,18 @@ public class W_Tools {
         return result;
     }
 
+    public static WB_Polygon movePolygon(WB_Polygon origin, WB_Point dir) {
+        WB_Transform2D transform2D = new WB_Transform2D();
+        transform2D.addTranslate2D(dir);
+        return (WB_Polygon) origin.apply2D(transform2D);
+    }
+
+    public static WB_PolyLine movePolyline(WB_PolyLine origin, WB_Point dir) {
+        WB_Transform2D transform2D = new WB_Transform2D();
+        transform2D.addTranslate2D(dir);
+        return origin.apply2D(transform2D);
+    }
+
 }
 
 
