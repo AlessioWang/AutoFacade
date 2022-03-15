@@ -12,7 +12,7 @@ import java.util.*;
  * @date 2020/12/24
  **/
 
-public class W_Tools {
+public class GeoTools {
     private static GeometryFactory gf = new GeometryFactory();
     private static WB_GeometryFactory wbgf = new WB_GeometryFactory();
 
@@ -61,8 +61,8 @@ public class W_Tools {
         return true;
     }
 
-    public static WB_Polygon getBuffer(WB_Polygon boundary, double redLineDis) {
-        List<WB_Polygon> list = wbgf.createBufferedPolygons(boundary, redLineDis, 0);
+    public static WB_Polygon getBuffer(WB_Polygon boundary, double dis) {
+        List<WB_Polygon> list = wbgf.createBufferedPolygons(boundary, dis, 0);
         return list.get(0);
     }
 
@@ -218,7 +218,7 @@ public class W_Tools {
             holeCoordsList = new WB_Coord[holeList.size()][holeList.get(i).getPoints().size()];    //创建洞的点集
             for (int j = 0; j < holeList.size(); j++) {
                 WB_Coord[] hole = holeList.get(j).getPoints().toArray();
-                WB_Coord[] reverse = W_Tools.reserve(hole);
+                WB_Coord[] reverse = GeoTools.reserve(hole);
                 holeCoordsList[j] = reverse;
             }
         }
@@ -518,13 +518,13 @@ public class W_Tools {
 
             for (WB_Coord[] line : coordsList) {
                 WB_Coord start = line[0];
-                if (W_Tools.comparePts(formerEnd, start, 0.1)) {
+                if (GeoTools.comparePts(formerEnd, start, 0.1)) {
                     nextLines.add(line);
                 }
             }
 
             if (nextLines.size() > 0) {
-                WB_Coord[] nextSelLine = W_Tools.selNextLineCoords(originLine, nextLines);
+                WB_Coord[] nextSelLine = GeoTools.selNextLineCoords(originLine, nextLines);
                 target.get(target.size() - 1).add(nextSelLine[1]);
                 System.out.println("add point");
             } else {

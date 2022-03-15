@@ -9,29 +9,22 @@ import wblut.geom.WB_Polygon;
  **/
 public class TianWindow extends Window {
 
-    public TianWindow(WB_Polygon shape) {
-        super(shape);
-        iniComponent();
-    }
-
     public TianWindow(WB_Polygon shape, Base base) {
         super(shape, base);
         iniComponent();
-    }
 
-    public TianWindow(WB_Polygon shape, Base base, int material) {
-        super(shape, base, material);
-        iniComponent();
+        WindowGeos g = new WindowGeos(this);
+        setWindowGeos(g);
     }
 
     private void iniBasicParas() {
         //边框宽度
-        frameWidth = 50;
+        frameWidth = 30;
         //边框深度
         frameDepth = 70;
 
         //水平向分隔中心线位置(横向)
-        horiBeamsPos = new double[]{0.5};
+        horiBeamsPos = new double[]{0.2, 0.5, 0.8};
         //水平向分隔宽度（在buffer的时候需要距离减半，双向buffer）
         horiBeamsWidth = 20;
         //水平向分隔深度
@@ -47,12 +40,13 @@ public class TianWindow extends Window {
 
 
     private void createFrame() {
-        frame = new Frame(this, 30, 50);
+        frame = new Frame(this, frameWidth, frameDepth);
+        System.out.println(frame);
     }
 
     private void createBeams() {
-        horiBeam = new WindowBeam(1, horiBeamsPos, horiBeamsWidth, horiBeamsDepth);
-        vertiBeam = new WindowBeam(0, vertiBeamsPos, vertiBeamWidth, vertiBeamsDepth);
+        horiBeam = new WindowBeam(this,1, horiBeamsPos, horiBeamsWidth, horiBeamsDepth);
+        vertiBeam = new WindowBeam(this,0, vertiBeamsPos, vertiBeamWidth, vertiBeamsDepth);
     }
 
     private void iniComponent() {

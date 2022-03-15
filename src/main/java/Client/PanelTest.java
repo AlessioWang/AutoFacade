@@ -1,21 +1,20 @@
 package Client;
 
-import FacadeGen.Panel.Component.PanelComponent;
 import FacadeGen.Panel.Component.TianWindow;
+import FacadeGen.Panel.Component.Window;
+import FacadeGen.Panel.Component.WindowGeos;
 import FacadeGen.Panel.Panel;
 import FacadeGen.Panel.PanelBase.BasicBase;
-import FacadeGen.RenderMgr;
-import Tools.W_Tools;
+import Tools.GeoTools;
 import guo_cam.CameraController;
 import processing.core.PApplet;
-import wblut.geom.WB_AABB;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_PolyLine;
 import wblut.geom.WB_Polygon;
 import wblut.processing.WB_Render;
 
-import java.awt.*;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +31,10 @@ public class PanelTest extends PApplet {
     Panel panel = new Panel();
     CameraController cameraController;
     WB_Render render;
-    HashMap<PanelComponent, WB_Point> comps;
+    HashMap<Window, WB_Point> comps;
+
+    List<WB_Polygon> frames = new LinkedList<>();
+    List<WB_PolyLine> beams = new LinkedList<>();
 
     public void settings() {
         size(800, 800, P3D);
@@ -42,18 +44,18 @@ public class PanelTest extends PApplet {
         cameraController = new CameraController(this, 100);
         render = new WB_Render(this);
 
-        WB_Polygon basePolygon = W_Tools.createRecPolygon(300, 200);
+        WB_Polygon basePolygon = GeoTools.createRecPolygon(4000, 2000);
         BasicBase base = new BasicBase(basePolygon);
 
-        WB_Polygon winPolygon1 = W_Tools.createRecPolygon(30, 100);
-        WB_Polygon winPolygon2 = W_Tools.createRecPolygon(50, 80);
-        WB_Polygon winPolygon3 = W_Tools.createRecPolygon(80,100);
+        WB_Polygon winPolygon1 = GeoTools.createRecPolygon(300, 1000);
+        WB_Polygon winPolygon2 = GeoTools.createRecPolygon(500, 800);
+        WB_Polygon winPolygon3 = GeoTools.createRecPolygon(800, 1000);
         TianWindow window1 = new TianWindow(winPolygon1, base);
         TianWindow window2 = new TianWindow(winPolygon2, base);
-        TianWindow window3= new TianWindow(winPolygon3, base);
-        WB_Point pos1 = new WB_Point(50, 30);
-        WB_Point pos2 = new WB_Point(150, 30);
-        WB_Point pos3 = new WB_Point(200, 80);
+        TianWindow window3 = new TianWindow(winPolygon3, base);
+        WB_Point pos1 = new WB_Point(200, 300);
+        WB_Point pos2 = new WB_Point(1000, 300);
+        WB_Point pos3 = new WB_Point(2500, 300);
 
 
         panel.setBase(base);
@@ -61,9 +63,23 @@ public class PanelTest extends PApplet {
         panel.addComponents(window2, pos2);
         panel.addComponents(window3, pos3);
 
-        comps = panel.getComponents();
+        comps = panel.getWindows();
+
+        for (Map.Entry<Window, WB_Point> entry : comps.entrySet()) {
+            Window win = entry.getKey();
+            WindowGeos geos = win.getWindowGeos();
+
+            frames.add(GeoTools.movePolygon(geos.getFrameBase2D(), entry.getValue()));
+
+            List<WB_PolyLine> rawBeams = geos.getAll2DBeams();
+            for (WB_PolyLine l : rawBeams) {
+                beams.add(GeoTools.movePolyline(l, entry.getValue()));
+            }
+
+        }
 
     }
+
 
     public void draw() {
         background(255);
@@ -71,19 +87,24 @@ public class PanelTest extends PApplet {
         render.drawPolygonEdges(panel.getBase().getBasicShape());
 
         pushStyle();
-        stroke(100,20,20);
+        stroke(80, 50, 20);
         strokeWeight(3);
-        for (Map.Entry<PanelComponent, WB_Point> entry : comps.entrySet()) {
-            PanelComponent win = entry.getKey();
-            WB_Polygon comFrame = win.getShape();
-
-            WB_Polygon p = W_Tools.movePolygon(comFrame, entry.getValue());
-            render.drawPolygonEdges(p);
-
+        for (WB_PolyLine l : beams) {
+            render.drawPolylineEdges(l);
         }
         popStyle();
 
+        frameRender();
+    }
 
+    private void frameRender() {
+        pushStyle();
+        stroke(10,50,130);
+        strokeWeight(3);
+        for (WB_Polygon p : frames) {
+            render.drawPolygonEdges(p);
+        }
+        popStyle();
     }
 
 

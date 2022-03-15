@@ -6,7 +6,7 @@ import FacadeGen.Facade.Wall;
 import FacadeGen.RenderMgr;
 import FacadeGen.Vol;
 import Geo.Grid;
-import Tools.W_Tools;
+import Tools.GeoTools;
 import guo_cam.CameraController;
 import processing.core.PApplet;
 import wblut.geom.WB_Polygon;
@@ -52,7 +52,7 @@ public class RenderClient extends PApplet {
         building = new Building("AAA");
         Vol vol = new Vol(building, 0);
         building.addVol(vol);
-        WB_Polygon polygon = W_Tools.createRecPolygon(80, 40);
+        WB_Polygon polygon = GeoTools.createRecPolygon(80, 40);
         Facade wall = new Wall(0, vol, polygon, 30, 20);
         vol.addFacade(wall);
     }

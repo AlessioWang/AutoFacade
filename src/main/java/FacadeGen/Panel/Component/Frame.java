@@ -1,8 +1,6 @@
 package FacadeGen.Panel.Component;
 
-import FacadeGen.Panel.PanelBase.BasicBase;
-import FacadeGen.Unit.Unit;
-import Tools.W_Tools;
+import Tools.GeoTools;
 import wblut.geom.WB_Polygon;
 
 /**
@@ -19,8 +17,6 @@ public class Frame {
     private double frameWidth;
     //边框深度
     private double frameDepth;
-
-
 
     public Frame(Window window, double frameWidth, double frameDepth) {
         this.window = window;

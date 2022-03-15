@@ -1,13 +1,11 @@
 package FacadeGen.Panel;
 
 import FacadeGen.Panel.Component.PanelComponent;
+import FacadeGen.Panel.Component.Window;
 import FacadeGen.Panel.PanelBase.Base;
 import wblut.geom.WB_Point;
-import wblut.geom.WB_Polygon;
 
-import java.awt.*;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * @auther Alessio
@@ -21,14 +19,20 @@ public class Panel {
 
     private HashMap<PanelComponent, WB_Point> components = new HashMap<>();
 
-    public Panel() {}
+    private HashMap<Window, WB_Point> windows = new HashMap<>();
+
+    public Panel() {
+    }
 
     public Panel(Base base) {
         this.base = base;
     }
 
-    public void addComponents(PanelComponent component, WB_Point p){
-        components.put(component, p);
+    public void addComponents(PanelComponent component, WB_Point p) {
+
+        if (component instanceof Window) {
+            windows.put((Window) component, p);
+        }
     }
 
     public int getIndex() {
@@ -49,6 +53,10 @@ public class Panel {
 
     public HashMap<PanelComponent, WB_Point> getComponents() {
         return components;
+    }
+
+    public HashMap<Window, WB_Point> getWindows() {
+        return windows;
     }
 
     public void setComponents(HashMap<PanelComponent, WB_Point> components) {

@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * 存放panel的几何图元用于渲染计算等
  * @auther Alessio
  * @date 2022/3/4
  **/

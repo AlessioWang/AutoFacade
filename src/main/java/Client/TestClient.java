@@ -6,11 +6,8 @@ import FacadeGen.Facade.Facade;
 import FacadeGen.Facade.Wall;
 import FacadeGen.Vol;
 import Geo.Grid;
-import Tools.W_Tools;
+import Tools.GeoTools;
 import wblut.geom.WB_Polygon;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @auther Alessio
@@ -21,7 +18,7 @@ public class TestClient {
         Building building = new Building("AAA");
         Vol vol = new Vol(building, 0);
 
-        WB_Polygon polygon = W_Tools.createRecPolygon(50, 40);
+        WB_Polygon polygon = GeoTools.createRecPolygon(50, 40);
         Facade wall = new Wall(0, vol, polygon, 5, 4);
 
         vol.addFacade(wall);

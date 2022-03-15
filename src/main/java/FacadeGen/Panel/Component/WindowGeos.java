@@ -1,8 +1,11 @@
 package FacadeGen.Panel.Component;
 
-import Tools.W_Tools;
+import Tools.GeoTools;
+import wblut.geom.WB_PolyLine;
 import wblut.geom.WB_Polygon;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -18,21 +21,81 @@ public class WindowGeos {
     private WindowBeam vertiBeam;
     private WindowBeam horiBeam;
 
-    public List<WB_Polygon> framesGeo;
-    public List<WB_Polygon> vertiBeamsGeo;
-    public List<WB_Polygon> horiBeamsGeo;
+    private WB_Polygon frameBase2D;
+    private List<WB_PolyLine> vertiBeamLine2D;
+    private List<WB_PolyLine> horiBeamLine2D;
+    private List<WB_PolyLine> all2DBeams;
 
     public WindowGeos(Window window) {
         this.window = window;
         frame = window.frame;
         vertiBeam = window.vertiBeam;
         horiBeam = window.horiBeam;
+
+        //初始化2维基准线
+        ini2DGeos();
     }
 
-    public WB_Polygon calFrameBase() {
+    private void ini2DGeos() {
+        frameBase2D = calFrameBase();
+        vertiBeamLine2D = vertiBeam.getbLines();
+        horiBeamLine2D = horiBeam.getbLines();
+        iniAllBeamLines();
+    }
+
+    private WB_Polygon calFrameBase() {
         WB_Polygon boundary = frame.getFrameBoundary();
-        return W_Tools.getPolygonWithHoles(boundary, frame.getFrameWidth());
+        System.out.println(boundary.getPoint(0));
+        System.out.println(boundary.getPoint(1));
+        System.out.println(boundary.getPoint(2));
+        System.out.println(boundary.getPoint(3));
+        System.out.println(frame.getFrameWidth());
+        return GeoTools.getPolygonWithHoles(boundary, frame.getFrameWidth());
     }
 
+    private void iniAllBeamLines() {
+        all2DBeams = new LinkedList<>();
+        all2DBeams.addAll(horiBeamLine2D);
+        all2DBeams.addAll(vertiBeamLine2D);
+    }
 
+    public Frame getFrame() {
+        return frame;
+    }
+
+    public void setFrame(Frame frame) {
+        this.frame = frame;
+    }
+
+    public WB_Polygon getFrameBase2D() {
+        return frameBase2D;
+    }
+
+    public void setFrameBase2D(WB_Polygon frameBase2D) {
+        this.frameBase2D = frameBase2D;
+    }
+
+    public List<WB_PolyLine> getVertiBeamLine2D() {
+        return vertiBeamLine2D;
+    }
+
+    public void setVertiBeamLine2D(List<WB_PolyLine> vertiBeamLine2D) {
+        this.vertiBeamLine2D = vertiBeamLine2D;
+    }
+
+    public List<WB_PolyLine> getHoriBeamLine2D() {
+        return horiBeamLine2D;
+    }
+
+    public void setHoriBeamLine2D(List<WB_PolyLine> horiBeamLine2D) {
+        this.horiBeamLine2D = horiBeamLine2D;
+    }
+
+    public List<WB_PolyLine> getAll2DBeams() {
+        return all2DBeams;
+    }
+
+    public void setAll2DBeams(List<WB_PolyLine> all2DBeams) {
+        this.all2DBeams = all2DBeams;
+    }
 }

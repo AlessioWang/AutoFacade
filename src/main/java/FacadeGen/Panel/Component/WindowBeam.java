@@ -23,37 +23,43 @@ public class WindowBeam {
 
     private List<WB_PolyLine> bLines;
 
-    public WindowBeam(int type, double[] pos, double width, double depth) {
+    public WindowBeam(Window window, int type, double[] pos, double width, double depth) {
+        this.window = window;
         this.type = type;
         this.pos = pos;
         this.width = width;
         this.depth = depth;
-//        bLines = createBLines();
+        bLines = createBLines();
     }
 
     private List<WB_PolyLine> createBLines() {
-        WB_Segment baseLine = new WB_Segment();
-        WB_Segment dirLine = new WB_Segment();
-        WB_Vector dir = null;
+        WB_Segment baseLine;
+        WB_Segment dirLine;
+        WB_Vector dir;
+
         //判断beam的方向
-        //纵向分隔
         if (type == 0) {
             baseLine = window.getShape().toSegments().get(0);
             dirLine = window.getShape().toSegments().get(1);
-            dir = dirLine.getNormal();
+            dir = baseLine.getNormal();
+        } else {
+            baseLine = window.getShape().toSegments().get(1);
+            dirLine = window.getShape().toSegments().get(0);
+            dir = baseLine.getNormal();
         }
 
         List<WB_PolyLine> res = new LinkedList<>();
-        for (double d : pos) {
-            WB_Transform2D transform2D = new WB_Transform2D();
-            assert dir != null;
-            transform2D.addTranslate2D(dir.mul(d * dirLine.getLength()));
-            WB_Segment segment = baseLine.apply2D(transform2D);
+        if (pos != null) {
+            for (double d : pos) {
+                WB_Transform2D transform2D = new WB_Transform2D();
+                assert dir != null;
+                transform2D.addTranslate2D(dir.mul(d * dirLine.getLength()));
+                WB_Segment segment = baseLine.apply2D(transform2D);
 
-            WB_PolyLine line = new WB_PolyLine(segment.getOrigin(), segment.getEndpoint());
-            res.add(line);
+                WB_PolyLine line = new WB_PolyLine(segment.getOrigin(), segment.getEndpoint());
+                res.add(line);
+            }
         }
-
         return res;
     }
 

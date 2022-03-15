@@ -39,6 +39,8 @@ public abstract class Window extends PanelComponent {
     //纵向分隔
     public WindowBeam vertiBeam;
 
+    private WindowGeos windowGeos;
+
 
     public Window(WB_Polygon shape) {
         super(shape);
@@ -67,4 +69,14 @@ public abstract class Window extends PanelComponent {
     public void setVertiBeam(WindowBeam vertiBeam) {
         this.vertiBeam = vertiBeam;
     }
+
+    public WindowGeos getWindowGeos() {
+        return windowGeos;
+    }
+
+    public void setWindowGeos(WindowGeos windowGeos) {
+        this.windowGeos = windowGeos;
+    }
+
+
 }
