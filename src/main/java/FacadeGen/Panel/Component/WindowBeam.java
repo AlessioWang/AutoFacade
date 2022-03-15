@@ -39,13 +39,13 @@ public class WindowBeam {
 
         //判断beam的方向
         if (type == 0) {
-            baseLine = window.getShape().toSegments().get(0);
-            dirLine = window.getShape().toSegments().get(1);
-            dir = baseLine.getNormal();
+            baseLine = window.frame.getInnerBoundary().toSegments().get(1);
+            dirLine = window.frame.getInnerBoundary().toSegments().get(0);
+            dir = baseLine.getNormal().mul(-1);
         } else {
-            baseLine = window.getShape().toSegments().get(1);
-            dirLine = window.getShape().toSegments().get(0);
-            dir = baseLine.getNormal();
+            baseLine = window.frame.getInnerBoundary().toSegments().get(0);
+            dirLine = window.frame.getInnerBoundary().toSegments().get(1);
+            dir = baseLine.getNormal().mul(-1);
         }
 
         List<WB_PolyLine> res = new LinkedList<>();

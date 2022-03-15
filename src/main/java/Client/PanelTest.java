@@ -35,6 +35,7 @@ public class PanelTest extends PApplet {
 
     List<WB_Polygon> frames = new LinkedList<>();
     List<WB_PolyLine> beams = new LinkedList<>();
+    List<WB_Polygon> glass = new LinkedList<>();
 
     public void settings() {
         size(800, 800, P3D);
@@ -53,7 +54,7 @@ public class PanelTest extends PApplet {
         TianWindow window1 = new TianWindow(winPolygon1, base);
         TianWindow window2 = new TianWindow(winPolygon2, base);
         TianWindow window3 = new TianWindow(winPolygon3, base);
-        WB_Point pos1 = new WB_Point(200, 300);
+        WB_Point pos1 = new WB_Point(0, 0);
         WB_Point pos2 = new WB_Point(1000, 300);
         WB_Point pos3 = new WB_Point(2500, 300);
 
@@ -71,13 +72,14 @@ public class PanelTest extends PApplet {
 
             frames.add(GeoTools.movePolygon(geos.getFrameBase2D(), entry.getValue()));
 
+            glass.add(GeoTools.movePolygon(geos.getGlassShape(), entry.getValue()));
+
             List<WB_PolyLine> rawBeams = geos.getAll2DBeams();
             for (WB_PolyLine l : rawBeams) {
                 beams.add(GeoTools.movePolyline(l, entry.getValue()));
             }
 
         }
-
     }
 
 
@@ -86,6 +88,12 @@ public class PanelTest extends PApplet {
         //绘制panel面板边界
         render.drawPolygonEdges(panel.getBase().getBasicShape());
 
+        beamRender();
+        frameRender();
+        glassRender();
+    }
+
+    private void beamRender() {
         pushStyle();
         stroke(80, 50, 20);
         strokeWeight(3);
@@ -93,15 +101,22 @@ public class PanelTest extends PApplet {
             render.drawPolylineEdges(l);
         }
         popStyle();
-
-        frameRender();
     }
 
     private void frameRender() {
         pushStyle();
-        stroke(10,50,130);
+        stroke(10, 50, 130);
         strokeWeight(3);
         for (WB_Polygon p : frames) {
+            render.drawPolygonEdges(p);
+        }
+        popStyle();
+    }
+
+    private void glassRender() {
+        pushStyle();
+        fill(84, 192, 235);
+        for (WB_Polygon p : glass) {
             render.drawPolygonEdges(p);
         }
         popStyle();

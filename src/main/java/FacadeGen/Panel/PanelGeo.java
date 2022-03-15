@@ -1,5 +1,6 @@
 package FacadeGen.Panel;
 
+import FacadeGen.Panel.PanelBase.Base;
 import wblut.geom.WB_Polygon;
 
 import java.util.ArrayList;
@@ -14,6 +15,9 @@ import java.util.List;
 public class PanelGeo {
 
     private Panel panel;
+
+    private Base base;
+
 
     public PanelGeo(Panel panel) {
         this.panel = panel;

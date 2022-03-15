@@ -38,20 +38,27 @@ public class TianWindow extends Window {
         vertiBeamsDepth = 10;
     }
 
+    @Override
+    public void createBeams() {
+        horiBeam = new WindowBeam(this, 1, horiBeamsPos, horiBeamsWidth, horiBeamsDepth);
+        vertiBeam = new WindowBeam(this, 0, vertiBeamsPos, vertiBeamWidth, vertiBeamsDepth);
+    }
 
-    private void createFrame() {
+    @Override
+    public void iniFrame() {
         frame = new Frame(this, frameWidth, frameDepth);
-        System.out.println(frame);
     }
 
-    private void createBeams() {
-        horiBeam = new WindowBeam(this,1, horiBeamsPos, horiBeamsWidth, horiBeamsDepth);
-        vertiBeam = new WindowBeam(this,0, vertiBeamsPos, vertiBeamWidth, vertiBeamsDepth);
+    @Override
+    public void iniGlass() {
+        glass = new Glass(this);
     }
 
-    private void iniComponent() {
+    @Override
+    public void iniComponent() {
         iniBasicParas();
-        createFrame();
+        iniFrame();
+        iniGlass();
         createBeams();
     }
 

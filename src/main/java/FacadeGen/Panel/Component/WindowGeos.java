@@ -25,6 +25,7 @@ public class WindowGeos {
     private List<WB_PolyLine> vertiBeamLine2D;
     private List<WB_PolyLine> horiBeamLine2D;
     private List<WB_PolyLine> all2DBeams;
+    private WB_Polygon glassShape;
 
     public WindowGeos(Window window) {
         this.window = window;
@@ -41,15 +42,11 @@ public class WindowGeos {
         vertiBeamLine2D = vertiBeam.getbLines();
         horiBeamLine2D = horiBeam.getbLines();
         iniAllBeamLines();
+        glassShape = window.getGlass().getShape();
     }
 
     private WB_Polygon calFrameBase() {
         WB_Polygon boundary = frame.getFrameBoundary();
-        System.out.println(boundary.getPoint(0));
-        System.out.println(boundary.getPoint(1));
-        System.out.println(boundary.getPoint(2));
-        System.out.println(boundary.getPoint(3));
-        System.out.println(frame.getFrameWidth());
         return GeoTools.getPolygonWithHoles(boundary, frame.getFrameWidth());
     }
 
@@ -71,31 +68,23 @@ public class WindowGeos {
         return frameBase2D;
     }
 
-    public void setFrameBase2D(WB_Polygon frameBase2D) {
-        this.frameBase2D = frameBase2D;
-    }
 
     public List<WB_PolyLine> getVertiBeamLine2D() {
         return vertiBeamLine2D;
     }
 
-    public void setVertiBeamLine2D(List<WB_PolyLine> vertiBeamLine2D) {
-        this.vertiBeamLine2D = vertiBeamLine2D;
-    }
 
     public List<WB_PolyLine> getHoriBeamLine2D() {
         return horiBeamLine2D;
     }
 
-    public void setHoriBeamLine2D(List<WB_PolyLine> horiBeamLine2D) {
-        this.horiBeamLine2D = horiBeamLine2D;
-    }
 
     public List<WB_PolyLine> getAll2DBeams() {
         return all2DBeams;
     }
 
-    public void setAll2DBeams(List<WB_PolyLine> all2DBeams) {
-        this.all2DBeams = all2DBeams;
+
+    public WB_Polygon getGlassShape() {
+        return glassShape;
     }
 }

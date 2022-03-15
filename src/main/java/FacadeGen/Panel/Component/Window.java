@@ -34,25 +34,28 @@ public abstract class Window extends PanelComponent {
 
     //窗框
     public Frame frame;
+
     //横向分隔
     public WindowBeam horiBeam;
     //纵向分隔
     public WindowBeam vertiBeam;
 
+    //用于渲染的管理物件
     private WindowGeos windowGeos;
 
-
-    public Window(WB_Polygon shape) {
-        super(shape);
-    }
+    public Glass glass;
 
     public Window(WB_Polygon shape, Base base) {
         super(shape, base);
     }
 
-    public Window(WB_Polygon shape, Base base, int material) {
-        super(shape, base, material);
-    }
+    public abstract void createBeams();
+
+    public abstract void iniFrame();
+
+    public abstract void iniGlass();
+
+    public abstract void iniComponent();
 
     public WindowBeam getHoriBeam() {
         return horiBeam;
@@ -77,6 +80,15 @@ public abstract class Window extends PanelComponent {
     public void setWindowGeos(WindowGeos windowGeos) {
         this.windowGeos = windowGeos;
     }
+
+    public Glass getGlass() {
+        return glass;
+    }
+
+    public void setGlass(Glass glass) {
+        this.glass = glass;
+    }
+
 
 
 }
