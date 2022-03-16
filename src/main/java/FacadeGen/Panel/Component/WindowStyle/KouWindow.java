@@ -1,15 +1,17 @@
-package FacadeGen.Panel.Component;
+package FacadeGen.Panel.Component.WindowStyle;
 
+import FacadeGen.Panel.Component.*;
 import FacadeGen.Panel.PanelBase.Base;
 import wblut.geom.WB_Polygon;
 
 /**
  * @auther Alessio
- * @date 2022/3/3
+ * @date 2022/3/16
  **/
-public class TianWindow extends Window {
+public class KouWindow extends Window {
 
-    public TianWindow(WB_Polygon shape, Base base) {
+
+    public KouWindow(WB_Polygon shape, Base base) {
         super(shape, base);
         iniComponent();
 
@@ -19,19 +21,19 @@ public class TianWindow extends Window {
 
     private void iniBasicParas() {
         //边框宽度
-        frameWidth = 30;
+        frameWidth = 70;
         //边框深度
-        frameDepth = 70;
+        frameDepth = 50;
 
         //水平向分隔中心线位置(横向)
-        horiBeamsPos = new double[]{0.2, 0.5, 0.8};
+        horiBeamsPos = new double[]{};
         //水平向分隔宽度（在buffer的时候需要距离减半，双向buffer）
         horiBeamsWidth = 20;
         //水平向分隔深度
         horiBeamsDepth = 20;
 
         //竖直向分隔中心线位置（纵向）
-        vertiBeamsPos = new double[]{0.5};
+        vertiBeamsPos = new double[]{};
         //竖直向分隔宽度（在buffer的时候需要距离减半，双向buffer）
         vertiBeamWidth = 10;
         //竖直向分隔深度
@@ -61,6 +63,5 @@ public class TianWindow extends Window {
         iniGlass();
         createBeams();
     }
-
 
 }

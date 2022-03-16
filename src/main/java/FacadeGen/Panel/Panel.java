@@ -22,6 +22,7 @@ public class Panel {
     private HashMap<Window, WB_Point> windows = new HashMap<>();
 
     public Panel() {
+
     }
 
     public Panel(Base base) {
@@ -29,7 +30,7 @@ public class Panel {
     }
 
     public void addComponents(PanelComponent component, WB_Point p) {
-
+        // TODO: 2022/3/16 更多种类的component
         if (component instanceof Window) {
             windows.put((Window) component, p);
         }

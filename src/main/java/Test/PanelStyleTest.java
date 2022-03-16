@@ -1,10 +1,10 @@
-package Client;
+package Test;
 
-import FacadeGen.Panel.Component.TianWindow;
 import FacadeGen.Panel.Component.Window;
 import FacadeGen.Panel.Component.WindowGeos;
 import FacadeGen.Panel.Panel;
 import FacadeGen.Panel.PanelBase.BasicBase;
+import FacadeGen.Panel.Style01Panel;
 import Tools.GeoTools;
 import guo_cam.CameraController;
 import processing.core.PApplet;
@@ -13,6 +13,7 @@ import wblut.geom.WB_PolyLine;
 import wblut.geom.WB_Polygon;
 import wblut.processing.WB_Render;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,18 +21,17 @@ import java.util.Map;
 
 /**
  * @auther Alessio
- * @date 2022/3/3
+ * @date 2022/3/16
  **/
-public class PanelTest extends PApplet {
-
+public class PanelStyleTest extends PApplet {
     public static void main(String[] args) {
-        PApplet.main("Client.PanelTest");
+        PApplet.main("Test.PanelStyleTest");
     }
 
-    Panel panel = new Panel();
     CameraController cameraController;
     WB_Render render;
-    HashMap<Window, WB_Point> comps;
+    Panel panel;
+    BasicBase base;
 
     List<WB_Polygon> frames = new LinkedList<>();
     List<WB_PolyLine> beams = new LinkedList<>();
@@ -42,55 +42,50 @@ public class PanelTest extends PApplet {
     }
 
     public void setup() {
-        cameraController = new CameraController(this, 100);
+        cameraController = new CameraController(this, 1000);
         render = new WB_Render(this);
+        iniPanel();
+        iniGeo();
+    }
 
-        WB_Polygon basePolygon = GeoTools.createRecPolygon(4000, 2000);
-        BasicBase base = new BasicBase(basePolygon);
+    private void iniPanel() {
+        WB_Polygon basePolygon = GeoTools.createRecPolygon(6000, 3000);
+        base = new BasicBase(basePolygon);
+        panel = new Style01Panel(base);
+    }
 
-        WB_Polygon winPolygon1 = GeoTools.createRecPolygon(300, 1000);
-        WB_Polygon winPolygon2 = GeoTools.createRecPolygon(500, 800);
-        WB_Polygon winPolygon3 = GeoTools.createRecPolygon(800, 1000);
-        TianWindow window1 = new TianWindow(winPolygon1, base);
-        TianWindow window2 = new TianWindow(winPolygon2, base);
-        TianWindow window3 = new TianWindow(winPolygon3, base);
-        WB_Point pos1 = new WB_Point(0, 0);
-        WB_Point pos2 = new WB_Point(1000, 300);
-        WB_Point pos3 = new WB_Point(2500, 300);
-
-
-        panel.setBase(base);
-        panel.addComponents(window1, pos1);
-        panel.addComponents(window2, pos2);
-        panel.addComponents(window3, pos3);
-
-        comps = panel.getWindows();
-
+    private void iniGeo() {
+        HashMap<Window, WB_Point> comps = panel.getWindows();
         for (Map.Entry<Window, WB_Point> entry : comps.entrySet()) {
             Window win = entry.getKey();
             WindowGeos geos = win.getWindowGeos();
-
             frames.add(GeoTools.movePolygon(geos.getFrameBase2D(), entry.getValue()));
-
             glass.add(GeoTools.movePolygon(geos.getGlassShape(), entry.getValue()));
 
             List<WB_PolyLine> rawBeams = geos.getAll2DBeams();
             for (WB_PolyLine l : rawBeams) {
                 beams.add(GeoTools.movePolyline(l, entry.getValue()));
             }
-
         }
     }
-
 
     public void draw() {
         background(255);
         //绘制panel面板边界
-        render.drawPolygonEdges(panel.getBase().getBasicShape());
 
+        panelRender();
         beamRender();
         frameRender();
         glassRender();
+    }
+
+    private void panelRender() {
+        pushStyle();
+        noFill();
+        stroke(150);
+        strokeWeight(2);
+        render.drawPolygonEdges(panel.getBase().getBasicShape());
+        popStyle();
     }
 
     private void beamRender() {
@@ -121,6 +116,5 @@ public class PanelTest extends PApplet {
         }
         popStyle();
     }
-
 
 }
