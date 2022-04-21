@@ -21,7 +21,7 @@ public class WindowGeos {
     private WindowBeam vertiBeam;
     private WindowBeam horiBeam;
 
-    private WB_Polygon frameBoundary;
+    private final WB_Polygon frameBoundary;
     private WB_Polygon frameBase2D;
     private List<WB_PolyLine> vertiBeamLine2D;
     private List<WB_PolyLine> horiBeamLine2D;

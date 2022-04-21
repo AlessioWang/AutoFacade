@@ -43,6 +43,8 @@ public class Style01Panel extends Panel {
         addComponents(w1, pos1);
         addComponents(w2, pos2);
         addComponents(w3, pos3);
+
+
     }
 
     @Override

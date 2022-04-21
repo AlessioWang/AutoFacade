@@ -61,6 +61,7 @@ public class PanelStyleTest extends PApplet {
         for (Map.Entry<Window, WB_Point> entry : comps.entrySet()) {
             Window win = entry.getKey();
             WindowGeos windowGeos = win.getWindowGeos();
+
             frames.add(GeoTools.movePolygon(windowGeos.getFrameBase2D(), entry.getValue()));
             glass.add(GeoTools.movePolygon(windowGeos.getGlassShape(), entry.getValue()));
 
@@ -78,6 +79,10 @@ public class PanelStyleTest extends PApplet {
         cameraController.drawSystem(1000);
         //绘制panel面板边界
 
+        renderAll();
+    }
+
+    private void renderAll(){
         panelRender();
         frameRender();
 //        beamRender();

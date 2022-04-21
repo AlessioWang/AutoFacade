@@ -2,7 +2,6 @@ package FacadeGen.Panel;
 
 import FacadeGen.Panel.Component.Window;
 import FacadeGen.Panel.Component.WindowGeos;
-import FacadeGen.Panel.PanelBase.Base;
 import Tools.GeoTools;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_PolyLine;
@@ -17,7 +16,7 @@ import java.util.*;
  * @auther Alessio
  * @date 2022/3/4
  **/
-public class PanelGeo {
+public class PanelGeos {
     public Panel panel;
     //基点位置
     public final WB_Point pos;
@@ -32,9 +31,9 @@ public class PanelGeo {
     public List<WB_Polygon> winBoundaries = new LinkedList<>();
     public List<WB_Polygon> frames = new LinkedList<>();
     public List<WB_PolyLine> beams = new LinkedList<>();
-    public List<WB_Polygon> glass = new LinkedList<>();
+    public List<WB_Polygon> glasses = new LinkedList<>();
 
-    public PanelGeo(Panel panel, WB_Point pos, WB_Vector direction) {
+    public PanelGeos(Panel panel, WB_Point pos, WB_Vector direction) {
         this.panel = panel;
         this.pos = pos;
         this.direction = direction;
@@ -51,19 +50,26 @@ public class PanelGeo {
         for (Map.Entry<Window, WB_Point> entry : windowComps.entrySet()) {
             Window win = entry.getKey();
             WindowGeos windowGeos = win.getWindowGeos();
-            winBoundaries.add(GeoTools.movePolygon(windowGeos.getFrameBoundary(), entry.getValue()));
-            frames.add(GeoTools.movePolygon(windowGeos.getFrameBase2D(), entry.getValue()));
-            glass.add(GeoTools.movePolygon(windowGeos.getGlassShape(), entry.getValue()));
+
+            //获取图元相对于panel的相对位置（未进行三维转换）
+            WB_Polygon rawFrame = GeoTools.movePolygon(windowGeos.getFrameBase2D(), entry.getValue());
+            WB_Polygon rawBoundary = GeoTools.movePolygon(windowGeos.getFrameBoundary(), entry.getValue());
+            WB_Polygon rawGlass = GeoTools.movePolygon(windowGeos.getGlassShape(), entry.getValue());
+
+            frames.add(GeoTools.transferPolygon3D(rawFrame, pos, direction));
+            winBoundaries.add(GeoTools.transferPolygon3D(rawBoundary, pos, direction));
+            glasses.add(GeoTools.transferPolygon3D(rawGlass, pos, direction));
 
             List<WB_PolyLine> rawBeams = windowGeos.getAll2DBeams();
             for (WB_PolyLine l : rawBeams) {
-                beams.add(GeoTools.movePolyline(l, entry.getValue()));
+                WB_PolyLine rawL = GeoTools.movePolyline(l, entry.getValue());
+                beams.add(GeoTools.transferPolyline3D(rawL, pos, direction));
             }
         }
-        wallGeo = GeoTools.getPolygonWithHoles(panel.getBase().getBasicShape(), winBoundaries);
+
+        WB_Polygon baseShape = panel.getBase().getBasicShape();
+        wallGeo = GeoTools.getPolygonWithHoles(GeoTools.transferPolygon3D(baseShape, pos, direction), winBoundaries);
     }
-
-
 
 
 }

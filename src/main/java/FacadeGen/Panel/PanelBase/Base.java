@@ -42,10 +42,11 @@ public abstract class Base {
     }
 
     private void iniShape(WB_Polygon shape) {
-        if (checkShape(0.1)) {
-            this.basicShape = shape;
-        } else
-            throw new IllegalArgumentException("传入的shape不是矩形");
+//        if (checkShape(0.1)) {
+//            this.basicShape = shape;
+//        } else
+//            throw new IllegalArgumentException("传入的shape不是矩形");
+        this.basicShape = shape;
     }
 
     public WB_Polygon getBasicShape() {

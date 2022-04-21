@@ -572,7 +572,8 @@ public class GeoTools {
         WB_Point p1 = new WB_Point(width, 0);
         WB_Point p2 = new WB_Point(width, height);
         WB_Point p3 = new WB_Point(0, height);
-        return new WB_Polygon(p0, p1, p2, p3);
+        WB_Point p4 = new WB_Point(0, 0);
+        return new WB_Polygon(p0, p1, p2, p3, p4);
     }
 
 
@@ -644,18 +645,35 @@ public class GeoTools {
         return result;
     }
 
-    public static WB_Polygon movePolygon(WB_Polygon origin, WB_Point dir) {
+    public static WB_Polygon movePolygon(WB_Polygon origin, WB_Point pos) {
         WB_Transform2D transform2D = new WB_Transform2D();
-        transform2D.addTranslate2D(dir);
+        transform2D.addTranslate2D(pos);
         return (WB_Polygon) origin.apply2D(transform2D);
     }
 
-    public static WB_PolyLine movePolyline(WB_PolyLine origin, WB_Point dir) {
+    public static WB_PolyLine movePolyline(WB_PolyLine origin, WB_Point pos) {
         WB_Transform2D transform2D = new WB_Transform2D();
-        transform2D.addTranslate2D(dir);
+        transform2D.addTranslate2D(pos);
         return origin.apply2D(transform2D);
     }
 
+    public static WB_Polygon transferPolygon3D(WB_Polygon origin, WB_Point pos, WB_Vector dir){
+        WB_Transform3D transform3D = new WB_Transform3D();
+        WB_CoordinateSystem system = new WB_CoordinateSystem();
+        system.setOrigin(pos);
+        system.setZ(dir);
+        transform3D.addFromWorldToCS(system);
+        return origin.apply(transform3D);
+    }
+
+    public static WB_PolyLine transferPolyline3D(WB_PolyLine origin, WB_Point pos, WB_Vector dir){
+        WB_Transform3D transform3D = new WB_Transform3D();
+        WB_CoordinateSystem system = new WB_CoordinateSystem();
+        system.setOrigin(pos);
+        system.setZ(dir);
+        transform3D.addFromWorldToCS(system);
+        return origin.apply(transform3D);
+    }
 
 
 }

@@ -21,6 +21,8 @@ public abstract class Panel {
 
     private HashMap<Window, WB_Point> windowsComps = new HashMap<>();
 
+    private PanelGeos panelGeos;
+
     public Panel() {
 
     }
