@@ -1,9 +1,10 @@
-package FacadeGen.Panel;
+package FacadeGen.Panel.panelStyle;
 
 import FacadeGen.Panel.Component.Window;
 import FacadeGen.Panel.Component.WindowStyle.KouWindow;
 import FacadeGen.Panel.Component.WindowStyle.SimpleWindow;
 import FacadeGen.Panel.Component.WindowStyle.TianWindow;
+import FacadeGen.Panel.Panel;
 import FacadeGen.Panel.PanelBase.Base;
 import Tools.GeoTools;
 import wblut.geom.WB_Point;
@@ -15,6 +16,10 @@ import wblut.geom.WB_Polygon;
  **/
 public class Style01Panel extends Panel {
     private Base base;
+
+    public Style01Panel(){
+
+    }
 
     public Style01Panel(Base base) {
         this.base = base;

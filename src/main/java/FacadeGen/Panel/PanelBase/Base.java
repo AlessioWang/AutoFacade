@@ -13,7 +13,7 @@ public abstract class Base {
     public WB_Polygon inputShape;
     //基本形状
     public WB_Polygon basicShape;
-
+    //去掉窗洞的墙体形状
     public WB_Polygon shapeWithHoles;
 
     //材质

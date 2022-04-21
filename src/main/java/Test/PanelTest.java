@@ -5,6 +5,7 @@ import FacadeGen.Panel.Component.Window;
 import FacadeGen.Panel.Component.WindowGeos;
 import FacadeGen.Panel.Panel;
 import FacadeGen.Panel.PanelBase.BasicBase;
+import FacadeGen.Panel.panelStyle.Style01Panel;
 import Tools.GeoTools;
 import guo_cam.CameraController;
 import processing.core.PApplet;
@@ -28,7 +29,7 @@ public class PanelTest extends PApplet {
         PApplet.main("Test.PanelTest");
     }
 
-    Panel panel = new Panel();
+    Panel panel = new Style01Panel();
     CameraController cameraController;
     WB_Render render;
     HashMap<Window, WB_Point> comps;
@@ -64,7 +65,7 @@ public class PanelTest extends PApplet {
         panel.addComponents(window2, pos2);
         panel.addComponents(window3, pos3);
 
-        comps = panel.getWindows();
+        comps = panel.getWindowsComps();
 
         for (Map.Entry<Window, WB_Point> entry : comps.entrySet()) {
             Window win = entry.getKey();

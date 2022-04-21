@@ -211,19 +211,41 @@ public class GeoTools {
 
     //创建带洞多边形
     public static WB_Polygon getPolygonWithHoles(WB_Polygon polygon, double depth) {
-        WB_Coord[] shell = polygon.getPoints().toArray();   //边缘
+        WB_Coord[] shell = polygonFaceUp(polygon).getPoints().toArray();   //边缘
         WB_Coord[][] holeCoordsList = null;
         List<WB_Polygon> holeList = wbgf.createBufferedPolygons(polygon, depth * (-1));
         for (int i = 0; i < holeList.size(); i++) {
             holeCoordsList = new WB_Coord[holeList.size()][holeList.get(i).getPoints().size()];    //创建洞的点集
             for (int j = 0; j < holeList.size(); j++) {
-                WB_Coord[] hole = holeList.get(j).getPoints().toArray();
-                WB_Coord[] reverse = GeoTools.reserve(hole);
-                holeCoordsList[j] = reverse;
+                WB_Coord[] hole = polygonFaceDown(holeList.get(j)).getPoints().toArray();
+                holeCoordsList[j] = hole;
             }
         }
         return new WB_Polygon(wbgf.createPolygonWithHoles(shell, holeCoordsList));
     }
+
+    /**
+     * 创建带有多个洞的多边形
+     *
+     * @param base
+     * @param holes
+     * @return
+     */
+    public static WB_Polygon getPolygonWithHoles(WB_Polygon base, List<WB_Polygon> holes) {
+        if (holes.isEmpty()) {
+            return base;
+        }
+        WB_Coord[] shell = polygonFaceUp(base).getPoints().toArray();
+        WB_Coord[][] holesList = new WB_Coord[holes.size()][];
+        int i = 0;
+        for (WB_Polygon hole : holes) {
+            holesList[i] = polygonFaceDown(hole).getPoints().toArray();
+            i++;
+        }
+
+        return new WB_Polygon(wbgf.createPolygonWithHoles(shell, holesList));
+    }
+
 
     //线切割polygon，得到切割后的List<polygon>
     public static List<WB_Polygon> splitPolygonWithPolylineList(List<WB_Polygon> back, List<WB_PolyLine> cutters) {
@@ -633,6 +655,8 @@ public class GeoTools {
         transform2D.addTranslate2D(dir);
         return origin.apply2D(transform2D);
     }
+
+
 
 }
 

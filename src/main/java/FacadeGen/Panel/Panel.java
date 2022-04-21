@@ -11,7 +11,7 @@ import java.util.HashMap;
  * @auther Alessio
  * @date 2022/3/3
  **/
-public class Panel {
+public abstract class Panel {
 
     private int index;
 
@@ -19,7 +19,7 @@ public class Panel {
 
     private HashMap<PanelComponent, WB_Point> components = new HashMap<>();
 
-    private HashMap<Window, WB_Point> windows = new HashMap<>();
+    private HashMap<Window, WB_Point> windowsComps = new HashMap<>();
 
     public Panel() {
 
@@ -32,7 +32,7 @@ public class Panel {
     public void addComponents(PanelComponent component, WB_Point p) {
         // TODO: 2022/3/16 更多种类的component
         if (component instanceof Window) {
-            windows.put((Window) component, p);
+            windowsComps.put((Window) component, p);
         }
     }
 
@@ -56,8 +56,8 @@ public class Panel {
         return components;
     }
 
-    public HashMap<Window, WB_Point> getWindows() {
-        return windows;
+    public HashMap<Window, WB_Point> getWindowsComps() {
+        return windowsComps;
     }
 
     public void setComponents(HashMap<PanelComponent, WB_Point> components) {

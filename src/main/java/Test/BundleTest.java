@@ -1,6 +1,5 @@
 package Test;
 
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 /**
@@ -9,7 +8,7 @@ import java.util.ResourceBundle;
  **/
 public class BundleTest {
     public static void main(String[] args) {
-        ResourceBundle bundle = ResourceBundle.getBundle("Property/test");
+        ResourceBundle bundle = ResourceBundle.getBundle("property/test");
 
         String name = bundle.getString("name");
         String no = bundle.getString("no");

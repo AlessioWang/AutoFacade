@@ -21,6 +21,7 @@ public class WindowGeos {
     private WindowBeam vertiBeam;
     private WindowBeam horiBeam;
 
+    private WB_Polygon frameBoundary;
     private WB_Polygon frameBase2D;
     private List<WB_PolyLine> vertiBeamLine2D;
     private List<WB_PolyLine> horiBeamLine2D;
@@ -30,12 +31,15 @@ public class WindowGeos {
     public WindowGeos(Window window) {
         this.window = window;
         frame = window.frame;
+        frameBoundary = frame.getFrameBoundary();
         vertiBeam = window.vertiBeam;
         horiBeam = window.horiBeam;
 
         //初始化2维基准线
         ini2DGeos();
     }
+
+
 
     private void ini2DGeos() {
         frameBase2D = calFrameBase();
@@ -49,6 +53,7 @@ public class WindowGeos {
         WB_Polygon boundary = frame.getFrameBoundary();
         return GeoTools.getPolygonWithHoles(boundary, frame.getFrameWidth());
     }
+
 
     private void iniAllBeamLines() {
         all2DBeams = new LinkedList<>();
@@ -86,5 +91,9 @@ public class WindowGeos {
 
     public WB_Polygon getGlassShape() {
         return glassShape;
+    }
+
+    public WB_Polygon getFrameBoundary() {
+        return frameBoundary;
     }
 }
