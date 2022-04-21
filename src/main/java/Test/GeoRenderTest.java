@@ -3,6 +3,7 @@ package Test;
 import FacadeGen.Panel.Panel;
 import FacadeGen.Panel.PanelBase.BasicBase;
 import FacadeGen.Panel.PanelGeos;
+import FacadeGen.Panel.PanelRender;
 import FacadeGen.Panel.panelStyle.Style01Panel;
 import Tools.GeoTools;
 import guo_cam.CameraController;
@@ -12,6 +13,8 @@ import wblut.geom.WB_PolyLine;
 import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Vector;
 import wblut.processing.WB_Render;
+
+import java.util.Arrays;
 
 /**
  * @auther Alessio
@@ -26,6 +29,7 @@ public class GeoRenderTest extends PApplet {
     WB_Render render;
     Panel panel;
     PanelGeos panelGeos;
+    PanelRender panelRender;
 
     public void settings() {
         size(800, 800, P3D);
@@ -35,6 +39,7 @@ public class GeoRenderTest extends PApplet {
         cameraController = new CameraController(this, 1000);
         render = new WB_Render(this);
         iniPanel();
+        panelRender = new PanelRender(this, render, Arrays.asList(panelGeos));
     }
 
     private void iniPanel() {
@@ -46,63 +51,9 @@ public class GeoRenderTest extends PApplet {
     public void draw() {
         background(255);
         cameraController.drawSystem(1000);
-//        renderAll(panelGeos);
-        renderT(panelGeos);
+        panelRender.renderAll();
     }
 
-    private void renderAll(PanelGeos panelGeos) {
-        panelRender(panelGeos);
-        frameRender(panelGeos);
-        beamRender(panelGeos);
-        glassRender(panelGeos);
-    }
-
-    private void renderT(PanelGeos panelGeos) {
-        pushStyle();
-        stroke(80, 50, 20);
-        strokeWeight(3);
-        for (WB_PolyLine l : panelGeos.winBoundaries) {
-            render.drawPolylineEdges(l);
-        }
-        popStyle();
-    }
-
-    private void panelRender(PanelGeos panelGeos) {
-        pushStyle();
-        noFill();
-        stroke(100);
-        render.drawPolylineEdges(panelGeos.wallGeo);
-        popStyle();
-    }
-
-    private void beamRender(PanelGeos panelGeos) {
-        pushStyle();
-        stroke(80, 50, 20);
-        strokeWeight(3);
-        for (WB_PolyLine l : panelGeos.beams) {
-            render.drawPolylineEdges(l);
-        }
-        popStyle();
-    }
-
-    private void frameRender(PanelGeos panelGeos) {
-        pushStyle();
-        stroke(10, 50, 130);
-        strokeWeight(3);
-        for (WB_Polygon p : panelGeos.frames) {
-            render.drawPolygonEdges(p);
-        }
-        popStyle();
-    }
-
-    private void glassRender(PanelGeos panelGeos) {
-        pushStyle();
-        fill(84, 192, 235);
-        for (WB_Polygon p : panelGeos.glasses) {
-            render.drawPolygonEdges(p);
-        }
-        popStyle();
-    }
 
 
 }
