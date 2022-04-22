@@ -72,5 +72,9 @@ public class SpringClient {
         service.selectByStyle("StyleA");
     }
 
+    @Test
+    public void selectByIndex(){
+        service.selectByIndex(1);
+    }
 
 }

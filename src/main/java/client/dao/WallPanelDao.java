@@ -16,6 +16,8 @@ public interface WallPanelDao {
 
     void batchAdd(List<Object[]> args);
 
+    WallPanelEntity selectByIndex(int index);
+
     List<WallPanelEntity> selectAll();
 
     List<WallPanelEntity> selectByStyle(String type);

@@ -19,9 +19,9 @@ import java.util.*;
 public class PanelGeos {
     public Panel panel;
     //基点位置
-    public final WB_Point pos;
+    public WB_Point pos;
     //朝向
-    public final WB_Vector direction;
+    public WB_Vector direction;
 
     //窗户的位置信息
     public HashMap<Window, WB_Point> windowComps;
@@ -33,6 +33,10 @@ public class PanelGeos {
     public List<WB_PolyLine> beams = new LinkedList<>();
     public List<WB_Polygon> glasses = new LinkedList<>();
 
+    public PanelGeos() {
+
+    }
+
     public PanelGeos(Panel panel, WB_Point pos, WB_Vector direction) {
         this.panel = panel;
         this.pos = pos;
@@ -41,6 +45,13 @@ public class PanelGeos {
         //获取窗户的位置信息
         windowComps = panel.getWindowsComps();
 
+        //初始化各种图元信息
+        iniGeo();
+    }
+
+    public void iniPanel() {
+        //获取窗户的位置信息
+        windowComps = panel.getWindowsComps();
         //初始化各种图元信息
         iniGeo();
     }
@@ -73,5 +84,15 @@ public class PanelGeos {
         wallGeo = GeoTools.transferPolygon3D(GeoTools.getPolygonWithHoles(baseShape, winBoundaries), pos, direction);
     }
 
+    public void setPanel(Panel panel) {
+        this.panel = panel;
+    }
 
+    public void setPos(WB_Point pos) {
+        this.pos = pos;
+    }
+
+    public void setDirection(WB_Vector direction) {
+        this.direction = direction;
+    }
 }

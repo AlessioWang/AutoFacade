@@ -37,7 +37,6 @@ public class GeoRenderTest extends PApplet {
 
     List<PanelGeos> geos;
 
-
     PanelRender panelRender;
 
     public void settings() {

@@ -44,6 +44,15 @@ public class WallPanelImp implements WallPanelDao {
     }
 
     @Override
+    public WallPanelEntity selectByIndex(int index) {
+        String sql = "select * from wall_info where w_index = ?";
+        Object[] args = {index};
+        WallPanelEntity entity = jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(WallPanelEntity.class), args);
+        System.out.println(entity);
+        return entity;
+    }
+
+    @Override
     public List<WallPanelEntity> selectAll() {
         String sql = "select * from wall_info";
         List<WallPanelEntity> entities = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(WallPanelEntity.class));

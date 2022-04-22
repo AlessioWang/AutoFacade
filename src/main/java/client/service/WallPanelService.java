@@ -45,12 +45,15 @@ public class WallPanelService {
         wallPanelDao.batchAdd(args);
     }
 
-    public List<WallPanelEntity> selectAll(){
+    public List<WallPanelEntity> selectAll() {
         return wallPanelDao.selectAll();
     }
 
-    public List<WallPanelEntity> selectByStyle(String type){
+    public List<WallPanelEntity> selectByStyle(String type) {
         return wallPanelDao.selectByStyle(type);
     }
 
+    public WallPanelEntity selectByIndex(int index) {
+        return wallPanelDao.selectByIndex(index);
+    }
 }
