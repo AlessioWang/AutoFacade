@@ -1,4 +1,4 @@
-package Geo;
+package FacadeGen.Geo;
 
 import FacadeGen.Facade.Facade;
 

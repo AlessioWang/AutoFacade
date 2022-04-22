@@ -1,7 +1,7 @@
 package FacadeGen.Unit;
 
 import FacadeGen.Panel.Panel;
-import Geo.Cell;
+import FacadeGen.Geo.Cell;
 
 import Tools.Douglas;
 import wblut.geom.WB_GeometryFactory;

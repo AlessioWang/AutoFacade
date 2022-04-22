@@ -1,7 +1,5 @@
-package Geo;
+package FacadeGen.Geo;
 
-import FacadeGen.Facade.Facade;
-import processing.core.PApplet;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
 

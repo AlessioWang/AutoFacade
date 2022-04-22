@@ -18,7 +18,8 @@ public class SimpleWindow extends Window {
         setWindowGeos(g);
     }
 
-    private void iniBasicParas() {
+    @Override
+    public void iniBasicParas() {
         //边框宽度
         frameWidth = 50;
         //边框深度

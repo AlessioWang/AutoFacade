@@ -1,7 +1,7 @@
 package FacadeGen;
 
-import Geo.Cell;
-import Geo.Grid;
+import FacadeGen.Geo.Cell;
+import FacadeGen.Geo.Grid;
 import processing.core.PApplet;
 import wblut.geom.WB_Polygon;
 import wblut.processing.WB_Render;

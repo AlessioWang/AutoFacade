@@ -1,10 +1,9 @@
 package FacadeGen.Facade;
 
-import FacadeGen.Unit.ClassUnit;
 import FacadeGen.Unit.Unit;
 import FacadeGen.Vol;
-import Geo.Cell;
-import Geo.Grid;
+import FacadeGen.Geo.Cell;
+import FacadeGen.Geo.Grid;
 import wblut.geom.*;
 
 import java.util.ArrayList;

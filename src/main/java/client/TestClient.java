@@ -1,11 +1,11 @@
-package Client;
+package client;
 
 import FacadeGen.Building;
-import Geo.Cell;
+import FacadeGen.Geo.Cell;
 import FacadeGen.Facade.Facade;
 import FacadeGen.Facade.Wall;
 import FacadeGen.Vol;
-import Geo.Grid;
+import FacadeGen.Geo.Grid;
 import Tools.GeoTools;
 import wblut.geom.WB_Polygon;
 

@@ -18,7 +18,8 @@ public class TianWindow extends Window {
         setWindowGeos(g);
     }
 
-    private void iniBasicParas() {
+    @Override
+    public void iniBasicParas() {
         //边框宽度
         frameWidth = 30;
         //边框深度

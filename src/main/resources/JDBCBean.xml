@@ -11,7 +11,7 @@
     <context:property-placeholder location="classpath:property/JDBC.properties"/>
 
     <!--设置自动装配扫描文件夹-->
-    <context:component-scan base-package="java.*"/>
+    <context:component-scan base-package="client.*"/>
 
     <!--配置连接池-->
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">

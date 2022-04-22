@@ -57,7 +57,8 @@ public class PanelGeos {
             WB_Polygon rawGlass = GeoTools.movePolygon(windowGeos.getGlassShape(), entry.getValue());
 
             frames.add(GeoTools.transferPolygon3D(rawFrame, pos, direction));
-            winBoundaries.add(GeoTools.transferPolygon3D(rawBoundary, pos, direction));
+//            winBoundaries.add(GeoTools.transferPolygon3D(rawBoundary, pos, direction));
+            winBoundaries.add(rawBoundary);
             glasses.add(GeoTools.transferPolygon3D(rawGlass, pos, direction));
 
             List<WB_PolyLine> rawBeams = windowGeos.getAll2DBeams();
@@ -68,7 +69,8 @@ public class PanelGeos {
         }
 
         WB_Polygon baseShape = panel.getBase().getBasicShape();
-        wallGeo = GeoTools.getPolygonWithHoles(GeoTools.transferPolygon3D(baseShape, pos, direction), winBoundaries);
+//        wallGeo = GeoTools.getPolygonWithHoles(GeoTools.transferPolygon3D(baseShape, pos, direction), winBoundaries);
+        wallGeo = GeoTools.transferPolygon3D(GeoTools.getPolygonWithHoles(baseShape, winBoundaries), pos, direction);
     }
 
 

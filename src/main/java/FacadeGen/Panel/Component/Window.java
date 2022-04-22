@@ -49,6 +49,8 @@ public abstract class Window extends PanelComponent {
         super(shape, base);
     }
 
+    public abstract void iniBasicParas();
+
     public abstract void createBeams();
 
     public abstract void iniFrame();

@@ -1,13 +1,11 @@
-package Client;
+package client;
 
 import processing.core.PApplet;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
 
-import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  * @auther Alessio

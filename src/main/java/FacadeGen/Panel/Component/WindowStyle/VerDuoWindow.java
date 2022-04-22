@@ -6,15 +6,14 @@ import wblut.geom.WB_Polygon;
 
 /**
  * @auther Alessio
- * @date 2022/3/16
+ * @date 2022/4/21
  **/
-public class KouWindow extends Window {
+public class VerDuoWindow extends Window {
 
-
-    public KouWindow(WB_Polygon shape, Base base) {
+    public VerDuoWindow(WB_Polygon shape, Base base) {
         super(shape, base);
-        iniComponent();
 
+        iniComponent();
         WindowGeos g = new WindowGeos(this);
         setWindowGeos(g);
     }
@@ -22,12 +21,12 @@ public class KouWindow extends Window {
     @Override
     public void iniBasicParas() {
         //边框宽度
-        frameWidth = 70;
+        frameWidth = 30;
         //边框深度
-        frameDepth = 50;
+        frameDepth = 70;
 
         //水平向分隔中心线位置(横向)
-        horiBeamsPos = new double[]{};
+        horiBeamsPos = new double[]{0.25};
         //水平向分隔宽度（在buffer的时候需要距离减半，双向buffer）
         horiBeamsWidth = 20;
         //水平向分隔深度
@@ -64,5 +63,4 @@ public class KouWindow extends Window {
         iniGlass();
         createBeams();
     }
-
 }
