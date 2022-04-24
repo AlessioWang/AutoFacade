@@ -1,6 +1,6 @@
 package client.dao;
 
-import client.entity.WallPanelEntity;
+import client.model.WallPanelEntity;
 
 import java.util.List;
 

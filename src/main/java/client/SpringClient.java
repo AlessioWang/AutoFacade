@@ -1,6 +1,6 @@
 package client;
 
-import client.entity.WallPanelEntity;
+import client.model.WallPanelEntity;
 import client.service.WallPanelService;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
@@ -57,8 +57,8 @@ public class SpringClient {
     @Test
     public void batchAdd() {
         List<Object[]> args = new ArrayList<>();
-        args.add(new Object[]{11, "StyleC", 4000, 6000, 0, 1, 0, 0});
-        args.add(new Object[]{12, "StyleB", 8000, 6000, 0, 1, 0, 0});
+        args.add(new Object[]{1, "StyleC", 4500, -7800, 0, 0, 1, 0});
+        args.add(new Object[]{2, "StyleB", 0, -7800, 0, 0, 1, 0});
         service.batchAdd(args);
     }
 

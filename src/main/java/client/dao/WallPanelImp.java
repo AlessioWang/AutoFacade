@@ -1,6 +1,6 @@
 package client.dao;
 
-import client.entity.WallPanelEntity;
+import client.model.WallPanelEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;

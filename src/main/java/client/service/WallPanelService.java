@@ -1,6 +1,6 @@
 package client.service;
 
-import client.entity.WallPanelEntity;
+import client.model.WallPanelEntity;
 import client.dao.WallPanelDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,7 +37,7 @@ public class WallPanelService {
 
     public void transTestAdd(WallPanelEntity entity) {
         wallPanelDao.addPanel(entity);
-//        int i = 10 / 0;
+        int i = 10 / 0;
         wallPanelDao.addPanel(entity);
     }
 

@@ -3,7 +3,7 @@ package Test;
 import FacadeGen.Panel.PanelGeos;
 import FacadeGen.Panel.PanelRender;
 import FacadeGen.PanelFac;
-import client.entity.WallPanelEntity;
+import client.model.WallPanelEntity;
 import client.service.WallPanelService;
 import guo_cam.CameraController;
 import org.springframework.context.ApplicationContext;
@@ -55,22 +55,32 @@ public class SQLRenderTest extends PApplet {
         JDBCcontext = new ClassPathXmlApplicationContext("JDBCBean.xml");
         beanContext = new ClassPathXmlApplicationContext("BeanRender.xml");
         service = JDBCcontext.getBean(WallPanelService.class);
-//        fac = beanContext.getBean(PanelFac.class);
-        fac = new PanelFac(4500,3900);
+        fac = beanContext.getBean(PanelFac.class);
+//        fac = new PanelFac(4500, 3900);
         fac.init();
     }
 
-    private void iniPanel() {
-        List<WallPanelEntity> entities = service.selectAll();
-        for (WallPanelEntity e : entities) {
-            geos.add(transEntity2Geos(e));
-        }
-    }
-
+//    //渲染所有的panel
 //    private void iniPanel() {
-//        WallPanelEntity entity = service.selectByIndex(1);
-//        geos.add(transEntity2Geos(entity));
+//        List<WallPanelEntity> entities = service.selectAll();
+//        for (WallPanelEntity e : entities) {
+//            geos.add(transEntity2Geos(e));
+//        }
 //    }
+
+    //按照类型渲染
+//    private void iniPanel() {
+//        List<WallPanelEntity> entities = service.selectByStyle("StyleA");
+//        for (WallPanelEntity e : entities) {
+//            geos.add(transEntity2Geos(e));
+//        }
+//    }
+
+    //渲染指定编号的panel
+    private void iniPanel() {
+        WallPanelEntity entity = service.selectByIndex(1);
+        geos.add(transEntity2Geos(entity));
+    }
 
     public PanelGeos transEntity2Geos(WallPanelEntity entity) {
         PanelGeos geo = new PanelGeos();

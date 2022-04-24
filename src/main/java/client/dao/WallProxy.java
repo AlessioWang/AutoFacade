@@ -1,10 +1,7 @@
 package client.dao;
 
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.*;
 import org.springframework.stereotype.Component;
 
 /**
@@ -23,6 +20,11 @@ public class WallProxy {
     @Before(value = "addPanelAsp()")
     public void beforeMtd(){
         System.out.println("before");
+    }
+
+    @After(value = "addPanelAsp()")
+    public void afterMtd (){
+        System.out.println("after");
     }
 
     @Around(value = "addPanelAsp()")

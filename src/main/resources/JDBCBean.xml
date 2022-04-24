@@ -34,8 +34,4 @@
     <!--开启事务注解-->
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
-    <bean id="panelFac" class="FacadeGen.PanelFac">
-        <property name="width" value="4500"/>
-        <property name="height" value="3900"/>
-    </bean>
 </beans>

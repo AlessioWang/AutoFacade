@@ -1,4 +1,4 @@
-package client.entity;
+package client.model;
 
 /**
  * @auther Alessio
