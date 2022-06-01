@@ -24,5 +24,4 @@ public class BasicBase extends Base{
     }
 
 
-
 }
