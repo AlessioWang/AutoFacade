@@ -3,6 +3,7 @@ package FacadeGen.Panel;
 import FacadeGen.Panel.Component.Window;
 import FacadeGen.Panel.Component.WindowGeos;
 import Tools.GeoTools;
+import wblut.external.poly2Tri.splayTree.SplayTreeItem;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_PolyLine;
 import wblut.geom.WB_Polygon;
@@ -34,7 +35,6 @@ public class PanelGeos {
     public List<WB_Polygon> glasses = new LinkedList<>();
 
     public PanelGeos() {
-
     }
 
     public PanelGeos(Panel panel, WB_Point pos, WB_Vector direction) {
@@ -63,12 +63,14 @@ public class PanelGeos {
             WindowGeos windowGeos = win.getWindowGeos();
 
             //获取图元相对于panel的相对位置（未进行三维转换）
+//            System.out.println("pt : " + entry.getValue());
+//            System.out.println("boundary : " + windowGeos.getFrameBoundary().getPoint(0));
             WB_Polygon rawFrame = GeoTools.movePolygon(windowGeos.getFrameBase2D(), entry.getValue());
             WB_Polygon rawBoundary = GeoTools.movePolygon(windowGeos.getFrameBoundary(), entry.getValue());
             WB_Polygon rawGlass = GeoTools.movePolygon(windowGeos.getGlassShape(), entry.getValue());
+//            System.out.println("geo0 : " + rawBoundary.getPoint(0));
 
             frames.add(GeoTools.transferPolygon3D(rawFrame, pos, direction));
-//            winBoundaries.add(GeoTools.transferPolygon3D(rawBoundary, pos, direction));
             winBoundaries.add(rawBoundary);
             glasses.add(GeoTools.transferPolygon3D(rawGlass, pos, direction));
 
@@ -80,7 +82,6 @@ public class PanelGeos {
         }
 
         WB_Polygon baseShape = panel.getBase().getBasicShape();
-//        wallGeo = GeoTools.getPolygonWithHoles(GeoTools.transferPolygon3D(baseShape, pos, direction), winBoundaries);
         wallGeo = GeoTools.transferPolygon3D(GeoTools.getPolygonWithHoles(baseShape, winBoundaries), pos, direction);
     }
 

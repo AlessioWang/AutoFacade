@@ -39,8 +39,6 @@ public class WindowGeos {
         ini2DGeos();
     }
 
-
-
     private void ini2DGeos() {
         frameBase2D = calFrameBase();
         vertiBeamLine2D = vertiBeam.getbLines();
