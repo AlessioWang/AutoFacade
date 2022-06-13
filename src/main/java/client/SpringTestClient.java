@@ -13,7 +13,7 @@ import java.util.List;
  * @auther Alessio
  * @date 2022/4/20
  **/
-public class SpringClient {
+public class SpringTestClient {
 
     ApplicationContext context = new ClassPathXmlApplicationContext("JDBCBean.xml");
     WallPanelService service = context.getBean(WallPanelService.class);

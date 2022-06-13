@@ -18,7 +18,7 @@ import wblut.geom.WB_Polygon;
 public class RenderClient extends PApplet {
 
     public static void main(String[] args) {
-        PApplet.main("Client.RenderClient");
+        PApplet.main("client.RenderClient");
     }
 
     RenderMgr renderManger;

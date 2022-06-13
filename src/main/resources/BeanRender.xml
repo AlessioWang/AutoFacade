@@ -3,7 +3,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="panelFac" class="FacadeGen.PanelFac">
+    <bean id="panelFac" class="FacadeGen.PanelFac" >
         <property name="width" value="4500"/>
         <property name="height" value="3900"/>
     </bean>

@@ -5,6 +5,7 @@ import wblut.geom.WB_PolyLine;
 import wblut.geom.WB_Polygon;
 import wblut.processing.WB_Render;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -13,17 +14,41 @@ import java.util.List;
  **/
 public class PanelRender {
 
-    PApplet applet;
-    WB_Render render;
-    List<PanelGeos> panelGeoList;
+    private PApplet applet;
 
-    public PanelRender(PApplet applet,WB_Render render,List<PanelGeos> panels) {
+    private WB_Render render;
+
+    private List<PanelGeos> panelGeoList;
+
+    /**
+     * 渲染多个图元的构造方法
+     *
+     * @param applet
+     * @param render
+     * @param panels 需要渲染的诸多Panel图元
+     */
+    public PanelRender(PApplet applet, WB_Render render, List<PanelGeos> panels) {
         this.applet = applet;
         this.render = render;
         this.panelGeoList = panels;
     }
 
-    public void renderAll(){
+    /**
+     * 渲染一组Panel的构造方法
+     *
+     * @param applet
+     * @param render
+     * @param panel
+     */
+    public PanelRender(PApplet applet, WB_Render render, PanelGeos... panel) {
+        this.applet = applet;
+        this.render = render;
+        panelGeoList = new LinkedList<>();
+        this.panelGeoList.addAll(List.of(panel));
+    }
+
+
+    public void renderAll() {
         for (PanelGeos geos : panelGeoList) {
             panelRender(geos);
             frameRender(geos);
@@ -31,6 +56,7 @@ public class PanelRender {
             glassRender(geos);
         }
     }
+
     private void panelRender(PanelGeos panelGeos) {
         applet.pushStyle();
         applet.noFill();

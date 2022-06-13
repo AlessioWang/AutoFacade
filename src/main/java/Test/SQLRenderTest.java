@@ -56,7 +56,6 @@ public class SQLRenderTest extends PApplet {
         beanContext = new ClassPathXmlApplicationContext("BeanRender.xml");
         service = JDBCcontext.getBean(WallPanelService.class);
         fac = beanContext.getBean(PanelFac.class);
-//        fac = new PanelFac(4500, 3900);
         fac.init();
     }
 
