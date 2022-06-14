@@ -55,13 +55,4 @@ public class SimpleWindow extends Window {
     public void iniGlass() {
         glass = new Glass(this);
     }
-
-    @Override
-    public void iniComponent() {
-        iniBasicParas();
-        iniFrame();
-        iniGlass();
-        createBeams();
-    }
-
 }

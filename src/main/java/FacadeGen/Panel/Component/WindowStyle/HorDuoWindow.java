@@ -56,11 +56,4 @@ public class HorDuoWindow extends Window {
         glass = new Glass(this);
     }
 
-    @Override
-    public void iniComponent() {
-        iniBasicParas();
-        iniFrame();
-        iniGlass();
-        createBeams();
-    }
 }

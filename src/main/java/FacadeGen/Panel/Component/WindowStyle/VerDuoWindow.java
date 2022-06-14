@@ -44,6 +44,7 @@ public class VerDuoWindow extends Window {
     public void createBeams() {
         horiBeam = new WindowBeam(this, 1, horiBeamsPos, horiBeamsWidth, horiBeamsDepth);
         vertiBeam = new WindowBeam(this, 0, vertiBeamsPos, vertiBeamWidth, vertiBeamsDepth);
+        
     }
 
     @Override
@@ -56,11 +57,4 @@ public class VerDuoWindow extends Window {
         glass = new Glass(this);
     }
 
-    @Override
-    public void iniComponent() {
-        iniBasicParas();
-        iniFrame();
-        iniGlass();
-        createBeams();
-    }
 }

@@ -49,7 +49,7 @@ public class GeoTools {
     }
 
     //polygon判断是否相交（相交是false，相交是true）
-    public static boolean checkInRedLine(WB_Polygon a, WB_Polygon b) {
+    public static boolean checkIntersection(WB_Polygon a, WB_Polygon b) {
         List<WB_Segment> as = a.toSegments();
         List<WB_Segment> bs = b.toSegments();
         for (WB_Segment s : as) {
@@ -486,21 +486,6 @@ public class GeoTools {
     }
 
 
-//    /**
-//     * 计算两个向量之间的角度，取0-Pi， 去掉向量之间的顺序的影响
-//     *
-//     * @param v0
-//     * @param v1
-//     * @return
-//     */
-//    public static double calAngle(WB_Vector v0, WB_Vector v1) {
-//        if (v0.cross(v1).zd() < 0) {
-//            return (Math.PI - v0.getAngle(v1));
-//        } else {
-//            return v0.getAngle(v1);
-//        }
-//    }
-
     /**
      * 计算两个向量之间的角度，取0-Pi， 去掉向量之间的顺序的影响
      *
@@ -657,7 +642,7 @@ public class GeoTools {
         return origin.apply2D(transform2D);
     }
 
-    public static WB_Polygon transferPolygon3D(WB_Polygon origin, WB_Point pos, WB_Vector dir){
+    public static WB_Polygon transferPolygon3D(WB_Polygon origin, WB_Point pos, WB_Vector dir) {
         WB_Transform3D transform3D = new WB_Transform3D();
         WB_CoordinateSystem system = new WB_CoordinateSystem();
         system.setOrigin(pos);
@@ -666,7 +651,7 @@ public class GeoTools {
         return origin.apply(transform3D);
     }
 
-    public static WB_PolyLine transferPolyline3D(WB_PolyLine origin, WB_Point pos, WB_Vector dir){
+    public static WB_PolyLine transferPolyline3D(WB_PolyLine origin, WB_Point pos, WB_Vector dir) {
         WB_Transform3D transform3D = new WB_Transform3D();
         WB_CoordinateSystem system = new WB_CoordinateSystem();
         system.setOrigin(pos);
@@ -674,7 +659,6 @@ public class GeoTools {
         transform3D.addFromWorldToCS(system);
         return origin.apply(transform3D);
     }
-
 
 }
 

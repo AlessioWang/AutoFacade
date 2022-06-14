@@ -32,6 +32,11 @@ public abstract class Window extends PanelComponent {
     //竖直向分隔深度
     public double vertiBeamsDepth;
 
+    //自定义分割宽度
+    public double customBeamsDepth;
+    //自定义分割深度
+    public double customBeamsWidth;
+
     //窗框
     public Frame frame;
 
@@ -39,6 +44,8 @@ public abstract class Window extends PanelComponent {
     public WindowBeam horiBeam;
     //纵向分隔
     public WindowBeam vertiBeam;
+    //自由分割
+    public WindowBeam customBeam;
 
     //用于渲染的管理物件
     private WindowGeos windowGeos;
@@ -57,7 +64,12 @@ public abstract class Window extends PanelComponent {
 
     public abstract void iniGlass();
 
-    public abstract void iniComponent();
+    public void iniComponent() {
+        iniBasicParas();
+        iniFrame();
+        iniGlass();
+        createBeams();
+    }
 
     public WindowBeam getHoriBeam() {
         return horiBeam;

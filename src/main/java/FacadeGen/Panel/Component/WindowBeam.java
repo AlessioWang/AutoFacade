@@ -32,6 +32,19 @@ public class WindowBeam {
         bLines = createBLines();
     }
 
+    /**
+     * 用于直接输入polyline来创建beam
+     *
+     * @param window
+     * @param bLines
+     */
+    public WindowBeam(Window window, List<WB_PolyLine> bLines, double width, double depth) {
+        this.window = window;
+        this.bLines = bLines;
+        this.width = width;
+        this.depth = depth;
+    }
+
     private List<WB_PolyLine> createBLines() {
         WB_Segment baseLine;
         WB_Segment dirLine;
@@ -69,10 +82,6 @@ public class WindowBeam {
 
     public void setType(int type) {
         this.type = type;
-    }
-
-    public double[] getPos() {
-        return pos;
     }
 
     public void setPos(double[] pos) {

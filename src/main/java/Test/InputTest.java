@@ -6,7 +6,7 @@ import FacadeGen.Panel.PanelBase.Base;
 import FacadeGen.Panel.PanelBase.BasicBase;
 import FacadeGen.Panel.PanelGeos;
 import FacadeGen.Panel.PanelRender;
-import FacadeGen.Panel.panelStyle.StyleInput;
+import FacadeGen.Panel.panelStyle.StyleCustom;
 import guo_cam.CameraController;
 import processing.core.PApplet;
 import wblut.geom.WB_Point;
@@ -48,7 +48,7 @@ public class InputTest extends PApplet {
         WB_Polygon basePolygon = dxfInput.getPanelBounds().get(0);
         Base base = new BasicBase(basePolygon);
 
-        Panel panel = new StyleInput(base, dxfInput);
+        Panel panel = new StyleCustom(base, dxfInput);
         PanelGeos panelGeos = new PanelGeos(panel, new WB_Point(0, 0, 0), new WB_Vector(0, 1, 0));
         PanelGeos panelGeos1 = new PanelGeos(panel, new WB_Point(0, -4000, 0), new WB_Vector(0, 1, 0));
         PanelGeos panelGeos2 = new PanelGeos(panel, new WB_Point(0, -8000, 0), new WB_Vector(0, 1, 0));

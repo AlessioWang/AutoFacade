@@ -2,27 +2,24 @@ package FacadeGen.Panel.panelStyle;
 
 import Convertor.DxfInput;
 import FacadeGen.Panel.Component.Window;
-import FacadeGen.Panel.Component.WindowStyle.HorDuoWindow;
 import FacadeGen.Panel.Component.WindowStyle.VerDuoWindow;
 import FacadeGen.Panel.Panel;
 import FacadeGen.Panel.PanelBase.Base;
-import Tools.GeoTools;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @auther Alessio
  * @date 2022/6/13
  **/
-public class StyleInput extends Panel {
+public class StyleCustom extends Panel {
     public Base base;
 
     private final DxfInput dxfInput;
 
-    public StyleInput(Base base, DxfInput dxfInput) {
+    public StyleCustom(Base base, DxfInput dxfInput) {
         this.base = base;
         this.dxfInput = dxfInput;
         styleFromDxf();

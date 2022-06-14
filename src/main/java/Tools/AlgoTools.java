@@ -1,5 +1,7 @@
 package Tools;
 
+import wblut.geom.WB_Coord;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,4 +30,17 @@ public class AlgoTools {
         return target;
     }
 
+    /**
+     * 数组反转
+     *
+     * @param arr
+     * @return
+     */
+    public static WB_Coord[] reserve(WB_Coord[] arr) {
+        WB_Coord[] arr1 = new WB_Coord[arr.length];
+        for (int x = 0; x < arr.length; x++) {
+            arr1[x] = arr[arr.length - x - 1];
+        }
+        return arr1;
+    }
 }
