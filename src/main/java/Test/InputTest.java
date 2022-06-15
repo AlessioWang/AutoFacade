@@ -6,7 +6,7 @@ import FacadeGen.Panel.PanelBase.Base;
 import FacadeGen.Panel.PanelBase.BasicBase;
 import FacadeGen.Panel.PanelGeos;
 import FacadeGen.Panel.PanelRender;
-import FacadeGen.Panel.panelStyle.StyleCustom;
+import FacadeGen.Panel.PanelStyle.StyleCustom;
 import guo_cam.CameraController;
 import processing.core.PApplet;
 import wblut.geom.WB_Point;

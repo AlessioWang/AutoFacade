@@ -137,4 +137,16 @@ public class DxfInput {
     public List<WB_Polygon> getWindowsBounds() {
         return windowsBounds;
     }
+
+    public List<WB_PolyLine> getOriBeamsBounds() {
+        return oriBeamsBounds;
+    }
+
+    public List<WB_PolyLine> getBeamBounds() {
+        return beamBounds;
+    }
+
+    public List<Map<WB_Polygon, List<WB_PolyLine>>> getWinBeamMaps() {
+        return winBeamMaps;
+    }
 }

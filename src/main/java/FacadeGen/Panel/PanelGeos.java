@@ -63,12 +63,9 @@ public class PanelGeos {
             WindowGeos windowGeos = win.getWindowGeos();
 
             //获取图元相对于panel的相对位置（未进行三维转换）
-//            System.out.println("pt : " + entry.getValue());
-//            System.out.println("boundary : " + windowGeos.getFrameBoundary().getPoint(0));
             WB_Polygon rawFrame = GeoTools.movePolygon(windowGeos.getFrameBase2D(), entry.getValue());
             WB_Polygon rawBoundary = GeoTools.movePolygon(windowGeos.getFrameBoundary(), entry.getValue());
             WB_Polygon rawGlass = GeoTools.movePolygon(windowGeos.getGlassShape(), entry.getValue());
-//            System.out.println("geo0 : " + rawBoundary.getPoint(0));
 
             frames.add(GeoTools.transferPolygon3D(rawFrame, pos, direction));
             winBoundaries.add(rawBoundary);

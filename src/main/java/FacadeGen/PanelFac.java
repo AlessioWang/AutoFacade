@@ -2,11 +2,10 @@ package FacadeGen;
 
 import FacadeGen.Panel.Panel;
 import FacadeGen.Panel.PanelBase.BasicBase;
-import FacadeGen.Panel.panelStyle.StyleA;
-import FacadeGen.Panel.panelStyle.StyleB;
-import FacadeGen.Panel.panelStyle.StyleC;
+import FacadeGen.Panel.PanelStyle.StyleA;
+import FacadeGen.Panel.PanelStyle.StyleB;
+import FacadeGen.Panel.PanelStyle.StyleC;
 import Tools.GeoTools;
-import wblut.geom.WB_Polygon;
 
 /**
  * @auther Alessio

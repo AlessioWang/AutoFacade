@@ -1,4 +1,4 @@
-package FacadeGen.Panel.panelStyle;
+package FacadeGen.Panel.PanelStyle;
 
 import FacadeGen.Panel.Component.Window;
 import FacadeGen.Panel.Component.WindowStyle.VerDuoWindow;

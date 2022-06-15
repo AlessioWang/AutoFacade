@@ -48,7 +48,7 @@ public class PanelRender {
     }
 
 
-    public void renderAll() {
+    public void renderAll () {
         for (PanelGeos geos : panelGeoList) {
             panelRender(geos);
             frameRender(geos);
