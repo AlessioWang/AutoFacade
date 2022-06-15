@@ -54,8 +54,7 @@ public class GeoTools {
         List<WB_Segment> bs = b.toSegments();
         for (WB_Segment s : as) {
             for (WB_Segment s1 : bs) {
-                if (WB_GeometryOp2D.getIntersection2D(s, s1).intersection)
-                    return false;
+                if (WB_GeometryOp2D.getIntersection2D(s, s1).intersection) return false;
             }
         }
         return true;
@@ -97,6 +96,16 @@ public class GeoTools {
             points[i] = new WB_Point(p.getCoordinates()[i].x, p.getCoordinates()[i].y, p.getCoordinates()[i].z);
         }
         return new WB_Polygon(points).getSimplePolygon();
+    }
+
+    public static LineString WB_polylineToJtsLinestring(WB_PolyLine wb_polyLine) {
+        int num = wb_polyLine.getNumberOfPoints();
+        var pts = wb_polyLine.getPoints().toList();
+        Coordinate[] coordinates = new Coordinate[num];
+        for (int i = 0; i < num; i++) {
+            coordinates[i] = new Coordinate(pts.get(i).xd(), pts.get(i).yd());
+        }
+        return gf.createLineString(coordinates);
     }
 
     public static WB_Point wb_point2Coord(WB_Coord coord) {

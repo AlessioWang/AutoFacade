@@ -1,6 +1,9 @@
 package Convertor;
 
 import Tools.DxfReader.DXFImporter;
+import Tools.GeoTools;
+import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.geom.Polygon;
 import wblut.geom.*;
 
 import java.util.HashMap;
@@ -32,14 +35,16 @@ public class DxfInput {
         winBeamMaps = new LinkedList<>();
 
         initGeo2Zero();
-        initWinBeamMap();
+        initWinMap();
+        System.out.println(winBeamMaps.get(0));
+        System.out.println(winBeamMaps.size());
     }
 
     private void initGeo2Zero() {
         oriPanelBounds = importer.getPolygons("bound");
         oriWindowsBounds = importer.getPolygons("windows");
         oriBeamsBounds = importer.getPolyLines("beams");
-        System.out.println("## " + oriBeamsBounds.size());
+        System.out.println("beam num : " + oriBeamsBounds.size());
 
         WB_Point v = oriPanelBounds.get(0).getPoint(0);
         panelBounds = (List<WB_Polygon>) geoTrans(oriPanelBounds, v);
@@ -53,32 +58,61 @@ public class DxfInput {
         for (WB_PolyLine p : polygons) {
             WB_Transform2D transform2D = new WB_Transform2D();
             transform2D.addTranslate2D(v.mul(-1));
-            var poly =  p.apply2D(transform2D);
+            var poly = p.apply2D(transform2D);
             result.add(poly);
         }
         return result;
     }
 
+    private void initWinMap() {
+        for (WB_Polygon panel : panelBounds) {
+
+            HashMap<WB_Polygon, List<WB_PolyLine>> map = new HashMap<>();
+            for (WB_Polygon winBound : windowsBounds) {
+                Polygon winJts = GeoTools.WB_PolygonToJtsPolygon(winBound);
+
+                List<WB_PolyLine> beamsList = new LinkedList<>();
+                for (WB_PolyLine l : beamBounds) {
+                    l.getNumberSegments();
+                    LineString beamLine = GeoTools.WB_polylineToJtsLinestring(l);
+                    if (winJts.covers(beamLine)) {
+                        beamsList.add(l);
+                    }
+                }
+                map.put(winBound, beamsList);
+            }
+
+            winBeamMaps.add(map);
+        }
+    }
+
     private void initWinBeamMap() {
         for (WB_Polygon winBound : windowsBounds) {
+            WB_Polygon temp = GeoTools.getBuffer(winBound, -50);
             for (WB_PolyLine l : beamBounds) {
-                List<WB_Segment> boundSegs = winBound.toSegments();
+                List<WB_Segment> boundSegs = temp.toSegments();
                 int num = l.getNumberSegments();
 
                 HashMap<WB_Polygon, List<WB_PolyLine>> map = new HashMap<>();
                 List<WB_PolyLine> beamLines = new LinkedList<>();
 
                 for (WB_Segment bs : boundSegs) {
+                    boolean breakFlag = false;
+
                     for (int i = 0; i < num; i++) {
                         WB_Segment beamSeg = l.getSegment(i);
                         System.out.println(WB_GeometryOp2D.getIntersection2D(bs, beamSeg).intersection);
                         if (WB_GeometryOp2D.getIntersection2D(bs, beamSeg).intersection) {
                             beamLines.add(l);
+                            breakFlag = true;
                             break;
                         }
                     }
+
                     map.put(winBound, beamLines);
                     winBeamMaps.add(map);
+                    if (breakFlag)
+                        break;
                 }
             }
         }
