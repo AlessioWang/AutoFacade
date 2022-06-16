@@ -29,22 +29,32 @@ public class DxfInput {
 
     private List<Map<WB_Polygon, List<WB_PolyLine>>> winBeamMaps;
 
+    //记录在一个dxf文件中的若干个panel边缘线与内部的窗户等其他图元的map映射关系
+    private Map<WB_Polygon, InputGeoGroup> panelGeoInput;
+
+    /**
+     * 从dxf文件中读取图元信息，进行整理
+     * 读取dxf的文件路径
+     *
+     * @param path
+     */
     public DxfInput(String path) {
         this.path = path;
         importer = new DXFImporter(path, DXFImporter.UTF_8);
         winBeamMaps = new LinkedList<>();
+        panelGeoInput = new HashMap<>();
 
         initGeo2Zero();
-        initWinMap();
-        System.out.println(winBeamMaps.get(0));
-        System.out.println(winBeamMaps.size());
+        initGeoMap();
     }
 
+    /**
+     * 将dxf中的物件图元进行坐标归零
+     */
     private void initGeo2Zero() {
         oriPanelBounds = importer.getPolygons("bound");
         oriWindowsBounds = importer.getPolygons("windows");
         oriBeamsBounds = importer.getPolyLines("beams");
-        System.out.println("beam num : " + oriBeamsBounds.size());
 
         WB_Point v = oriPanelBounds.get(0).getPoint(0);
         panelBounds = (List<WB_Polygon>) geoTrans(oriPanelBounds, v);
@@ -52,19 +62,20 @@ public class DxfInput {
         beamBounds = (List<WB_PolyLine>) geoTrans(oriBeamsBounds, v);
     }
 
-
     private List<? extends WB_PolyLine> geoTrans(List<? extends WB_PolyLine> polygons, WB_Vector v) {
         List<WB_PolyLine> result = new LinkedList<>();
         for (WB_PolyLine p : polygons) {
             WB_Transform2D transform2D = new WB_Transform2D();
             transform2D.addTranslate2D(v.mul(-1));
+
+            p = p instanceof WB_Polygon ? ((WB_Polygon) p) : p;
             var poly = p.apply2D(transform2D);
             result.add(poly);
         }
         return result;
     }
 
-    private void initWinMap() {
+    private void initGeoMap() {
         for (WB_Polygon panel : panelBounds) {
 
             HashMap<WB_Polygon, List<WB_PolyLine>> map = new HashMap<>();
@@ -82,39 +93,10 @@ public class DxfInput {
                 map.put(winBound, beamsList);
             }
 
+            InputGeoGroup inputGeoGroup = new InputGeoGroup(panel, windowsBounds, map);
+            panelGeoInput.put(panel, inputGeoGroup);
+
             winBeamMaps.add(map);
-        }
-    }
-
-    private void initWinBeamMap() {
-        for (WB_Polygon winBound : windowsBounds) {
-            WB_Polygon temp = GeoTools.getBuffer(winBound, -50);
-            for (WB_PolyLine l : beamBounds) {
-                List<WB_Segment> boundSegs = temp.toSegments();
-                int num = l.getNumberSegments();
-
-                HashMap<WB_Polygon, List<WB_PolyLine>> map = new HashMap<>();
-                List<WB_PolyLine> beamLines = new LinkedList<>();
-
-                for (WB_Segment bs : boundSegs) {
-                    boolean breakFlag = false;
-
-                    for (int i = 0; i < num; i++) {
-                        WB_Segment beamSeg = l.getSegment(i);
-                        System.out.println(WB_GeometryOp2D.getIntersection2D(bs, beamSeg).intersection);
-                        if (WB_GeometryOp2D.getIntersection2D(bs, beamSeg).intersection) {
-                            beamLines.add(l);
-                            breakFlag = true;
-                            break;
-                        }
-                    }
-
-                    map.put(winBound, beamLines);
-                    winBeamMaps.add(map);
-                    if (breakFlag)
-                        break;
-                }
-            }
         }
     }
 

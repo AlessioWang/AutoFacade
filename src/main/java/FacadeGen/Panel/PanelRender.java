@@ -48,7 +48,7 @@ public class PanelRender {
     }
 
 
-    public void renderAll () {
+    public void renderAll() {
         for (PanelGeos geos : panelGeoList) {
             panelRender(geos);
             frameRender(geos);
@@ -59,9 +59,8 @@ public class PanelRender {
 
     private void panelRender(PanelGeos panelGeos) {
         applet.pushStyle();
-        applet.noFill();
-        applet.strokeWeight(2);
-        render.drawPolylineEdges(panelGeos.wallGeo);
+        applet.fill(255, 130, 93);
+        render.drawPolygon(panelGeos.wallGeo);
         applet.popStyle();
     }
 

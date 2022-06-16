@@ -18,8 +18,10 @@ import java.util.Map;
 public class InputGeoGroup {
     private WB_Polygon panelBounds;
 
+    //panel内的windows边界
     private List<WB_Polygon> windowsBounds;
 
+    //每一个panel对应的window轮廓线以及beams基准
     private Map<WB_Polygon, List<WB_PolyLine>> winBeamMap;
 
     private final WB_Point pos;
@@ -56,5 +58,17 @@ public class InputGeoGroup {
 
     public void setWindowsBounds(List<WB_Polygon> windowsBounds) {
         this.windowsBounds = windowsBounds;
+    }
+
+    public Map<WB_Polygon, List<WB_PolyLine>> getWinBeamMap() {
+        return winBeamMap;
+    }
+
+    public void setWinBeamMap(Map<WB_Polygon, List<WB_PolyLine>> winBeamMap) {
+        this.winBeamMap = winBeamMap;
+    }
+
+    public WB_Point getPos() {
+        return pos;
     }
 }

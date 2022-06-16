@@ -1,6 +1,7 @@
 package Tools;
 
 
+import org.apache.batik.transcoder.keys.BooleanKey;
 import org.locationtech.jts.geom.*;
 import org.locationtech.jts.operation.polygonize.Polygonizer;
 import wblut.geom.*;
@@ -220,13 +221,13 @@ public class GeoTools {
 
     //创建带洞多边形
     public static WB_Polygon getPolygonWithHoles(WB_Polygon polygon, double depth) {
-        WB_Coord[] shell = polygonFaceUp(polygon).getPoints().toArray();   //边缘
+        WB_Coord[] shell = polygonFaceDown(polygon).getPoints().toArray();   //边缘
         WB_Coord[][] holeCoordsList = null;
         List<WB_Polygon> holeList = wbgf.createBufferedPolygons(polygon, depth * (-1));
         for (int i = 0; i < holeList.size(); i++) {
             holeCoordsList = new WB_Coord[holeList.size()][holeList.get(i).getPoints().size()];    //创建洞的点集
             for (int j = 0; j < holeList.size(); j++) {
-                WB_Coord[] hole = polygonFaceDown(holeList.get(j)).getPoints().toArray();
+                WB_Coord[] hole = polygonFaceUp(holeList.get(j)).getPoints().toArray();
                 holeCoordsList[j] = hole;
             }
         }
@@ -244,11 +245,12 @@ public class GeoTools {
         if (holes.isEmpty()) {
             return base;
         }
-        WB_Coord[] shell = polygonFaceUp(base).getPoints().toArray();
+
+        WB_Coord[] shell = polygonFaceDown(base).getPoints().toArray();
         WB_Coord[][] holesList = new WB_Coord[holes.size()][];
         int i = 0;
         for (WB_Polygon hole : holes) {
-            holesList[i] = polygonFaceDown(hole).getPoints().toArray();
+            holesList[i] = polygonFaceUp(hole).getPoints().toArray();
             i++;
         }
 
@@ -651,6 +653,14 @@ public class GeoTools {
         return origin.apply2D(transform2D);
     }
 
+    /**
+     * 将基准图元三维变换
+     *
+     * @param origin
+     * @param pos
+     * @param dir
+     * @return
+     */
     public static WB_Polygon transferPolygon3D(WB_Polygon origin, WB_Point pos, WB_Vector dir) {
         WB_Transform3D transform3D = new WB_Transform3D();
         WB_CoordinateSystem system = new WB_CoordinateSystem();
@@ -660,6 +670,14 @@ public class GeoTools {
         return origin.apply(transform3D);
     }
 
+    /**
+     * 将基准图元三维变换
+     *
+     * @param origin
+     * @param pos
+     * @param dir
+     * @return
+     */
     public static WB_PolyLine transferPolyline3D(WB_PolyLine origin, WB_Point pos, WB_Vector dir) {
         WB_Transform3D transform3D = new WB_Transform3D();
         WB_CoordinateSystem system = new WB_CoordinateSystem();
@@ -668,6 +686,21 @@ public class GeoTools {
         transform3D.addFromWorldToCS(system);
         return origin.apply(transform3D);
     }
+
+    /**
+     * 判断geo是否在shell内部
+     *
+     * @param shell
+     * @param geo
+     * @return
+     */
+    public static boolean ifCoverWB(WB_Polygon shell, WB_PolyLine geo) {
+        Polygon jtsShell = WB_PolygonToJtsPolygon(shell);
+        LineString lineString = WB_polylineToJtsLinestring(geo);
+        return jtsShell.covers(lineString);
+    }
+
+
 
 }
 

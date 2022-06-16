@@ -20,12 +20,16 @@ public class WindowGeos {
     private Frame frame;
     private WindowBeam vertiBeam;
     private WindowBeam horiBeam;
+    private WindowBeam customBeam;
 
     private final WB_Polygon frameBoundary;
     private WB_Polygon frameBase2D;
+
     private List<WB_PolyLine> vertiBeamLine2D;
     private List<WB_PolyLine> horiBeamLine2D;
+    private List<WB_PolyLine> customBeamLine2D;
     private List<WB_PolyLine> all2DBeams;
+
     private WB_Polygon glassShape;
 
     public WindowGeos(Window window) {
@@ -34,6 +38,7 @@ public class WindowGeos {
         frameBoundary = frame.getFrameBoundary();
         vertiBeam = window.vertiBeam;
         horiBeam = window.horiBeam;
+        customBeam = window.customBeam;
 
         //初始化2维基准线
         ini2DGeos();
@@ -41,8 +46,12 @@ public class WindowGeos {
 
     private void ini2DGeos() {
         frameBase2D = calFrameBase();
-        vertiBeamLine2D = vertiBeam.getbLines();
-        horiBeamLine2D = horiBeam.getbLines();
+        if (vertiBeam != null)
+            vertiBeamLine2D = vertiBeam.getbLines();
+        if (horiBeam != null)
+            horiBeamLine2D = horiBeam.getbLines();
+        if (customBeam != null)
+            customBeamLine2D = customBeam.getbLines();
         iniAllBeamLines();
         glassShape = window.getGlass().getShape();
     }
@@ -55,8 +64,12 @@ public class WindowGeos {
 
     private void iniAllBeamLines() {
         all2DBeams = new LinkedList<>();
-        all2DBeams.addAll(horiBeamLine2D);
-        all2DBeams.addAll(vertiBeamLine2D);
+        if (horiBeamLine2D != null)
+            all2DBeams.addAll(horiBeamLine2D);
+        if (vertiBeamLine2D != null)
+            all2DBeams.addAll(vertiBeamLine2D);
+        if (customBeamLine2D != null)
+            all2DBeams.addAll(customBeamLine2D);
     }
 
     public Frame getFrame() {
@@ -71,21 +84,17 @@ public class WindowGeos {
         return frameBase2D;
     }
 
-
     public List<WB_PolyLine> getVertiBeamLine2D() {
         return vertiBeamLine2D;
     }
-
 
     public List<WB_PolyLine> getHoriBeamLine2D() {
         return horiBeamLine2D;
     }
 
-
     public List<WB_PolyLine> getAll2DBeams() {
         return all2DBeams;
     }
-
 
     public WB_Polygon getGlassShape() {
         return glassShape;
