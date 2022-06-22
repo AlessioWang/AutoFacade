@@ -1,7 +1,6 @@
 package Tools;
 
 
-import org.apache.batik.transcoder.keys.BooleanKey;
 import org.locationtech.jts.geom.*;
 import org.locationtech.jts.operation.polygonize.Polygonizer;
 import wblut.geom.*;
@@ -700,8 +699,24 @@ public class GeoTools {
         return jtsShell.covers(lineString);
     }
 
+    /**
+     * 将多个polyLine沿着一个方向移动一定的长度
+     * @param polygons
+     * @param v
+     * @return
+     */
+    public static List<? extends WB_PolyLine> moveMultiPolys(List<? extends WB_PolyLine> polygons, WB_Vector v) {
+        List<WB_PolyLine> result = new LinkedList<>();
+        for (WB_PolyLine p : polygons) {
+            WB_Transform2D transform2D = new WB_Transform2D();
+            transform2D.addTranslate2D(v.mul(-1));
 
-
+            p = p instanceof WB_Polygon ? ((WB_Polygon) p) : p;
+            var poly = p.apply2D(transform2D);
+            result.add(poly);
+        }
+        return result;
+    }
 }
 
 

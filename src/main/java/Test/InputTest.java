@@ -53,7 +53,7 @@ public class InputTest extends PApplet {
         PanelGeos panelGeos1 = new PanelGeos(panel, new WB_Point(0, -4000, 0), new WB_Vector(0, 1, 0));
         PanelGeos panelGeos2 = new PanelGeos(panel, new WB_Point(0, -8000, 0), new WB_Vector(0, 1, 0));
 
-        panelRender = new PanelRender(this, render, panelGeos, panelGeos1, panelGeos2);
+        panelRender = new PanelRender(this, render, panelGeos);
     }
 
     public void draw() {

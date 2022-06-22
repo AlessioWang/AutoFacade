@@ -37,7 +37,7 @@ public class CustomWindow extends Window {
 
     @Override
     public void createBeams() {
-        List<WB_PolyLine> lines = dxfInput.getWinBeamMaps().get(0).get(super.getShape());
+        List<WB_PolyLine> lines = dxfInput.getPanelGeoInput().get(super.getBase().basicShape).getWinBeamMap().get(super.getShape());
         customBeam = new WindowBeam(this, lines, customBeamsWidth, customBeamsDepth);
     }
 

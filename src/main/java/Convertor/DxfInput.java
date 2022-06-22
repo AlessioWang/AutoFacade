@@ -6,10 +6,7 @@ import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.geom.Polygon;
 import wblut.geom.*;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @auther Alessio
@@ -27,7 +24,7 @@ public class DxfInput {
     private List<WB_Polygon> windowsBounds;
     private List<WB_PolyLine> beamBounds;
 
-    private List<Map<WB_Polygon, List<WB_PolyLine>>> winBeamMaps;
+    private Map<WB_Polygon, WB_Polygon> panelTrans2Origin;
 
     //记录在一个dxf文件中的若干个panel边缘线与内部的窗户等其他图元的map映射关系
     private Map<WB_Polygon, InputGeoGroup> panelGeoInput;
@@ -41,8 +38,8 @@ public class DxfInput {
     public DxfInput(String path) {
         this.path = path;
         importer = new DXFImporter(path, DXFImporter.UTF_8);
-        winBeamMaps = new LinkedList<>();
         panelGeoInput = new HashMap<>();
+        panelTrans2Origin = new HashMap<>();
 
         initGeo2Zero();
         initGeoMap();
@@ -56,30 +53,46 @@ public class DxfInput {
         oriWindowsBounds = importer.getPolygons("windows");
         oriBeamsBounds = importer.getPolyLines("beams");
 
-        WB_Point v = oriPanelBounds.get(0).getPoint(0);
-        panelBounds = (List<WB_Polygon>) geoTrans(oriPanelBounds, v);
-        windowsBounds = (List<WB_Polygon>) geoTrans(oriWindowsBounds, v);
-        beamBounds = (List<WB_PolyLine>) geoTrans(oriBeamsBounds, v);
+        transAbsToRelative();
     }
 
-    private List<? extends WB_PolyLine> geoTrans(List<? extends WB_PolyLine> polygons, WB_Vector v) {
-        List<WB_PolyLine> result = new LinkedList<>();
-        for (WB_PolyLine p : polygons) {
+    /**
+     * 把dxf的绝对坐标图元转为相对坐标图元
+     */
+    private void transAbsToRelative() {
+        WB_Point v = oriPanelBounds.get(0).getPoint(0);
+        initPanels(v);
+        windowsBounds = (List<WB_Polygon>) GeoTools.moveMultiPolys(oriWindowsBounds, v);
+        beamBounds = (List<WB_PolyLine>) GeoTools.moveMultiPolys(oriBeamsBounds, v);
+    }
+
+    private void initPanels(WB_Point v) {
+        List<WB_Polygon> result = new LinkedList<>();
+        for (WB_Polygon p : oriPanelBounds) {
             WB_Transform2D transform2D = new WB_Transform2D();
             transform2D.addTranslate2D(v.mul(-1));
-
-            p = p instanceof WB_Polygon ? ((WB_Polygon) p) : p;
             var poly = p.apply2D(transform2D);
-            result.add(poly);
+            panelTrans2Origin.put((WB_Polygon) poly, p);
+            result.add((WB_Polygon) poly);
         }
-        return result;
+        //给全局变量赋值
+        panelBounds = result;
     }
 
     private void initGeoMap() {
         for (WB_Polygon panel : panelBounds) {
+            //beams与窗框window的索引关系
+            HashMap<WB_Polygon, List<WB_PolyLine>> beamsMap = new HashMap<>();
 
-            HashMap<WB_Polygon, List<WB_PolyLine>> map = new HashMap<>();
-            for (WB_Polygon winBound : windowsBounds) {
+            //包含在panel内部的win边界线
+            List<WB_Polygon> windowInPanel = new LinkedList<>();
+            for (WB_Polygon win : windowsBounds) {
+                if (GeoTools.ifCoverWB(panel, win)) {
+                    windowInPanel.add(win);
+                }
+            }
+
+            for (WB_Polygon winBound : windowInPanel) {
                 Polygon winJts = GeoTools.WB_PolygonToJtsPolygon(winBound);
 
                 List<WB_PolyLine> beamsList = new LinkedList<>();
@@ -90,14 +103,19 @@ public class DxfInput {
                         beamsList.add(l);
                     }
                 }
-                map.put(winBound, beamsList);
+                beamsMap.put(winBound, beamsList);
             }
 
-            InputGeoGroup inputGeoGroup = new InputGeoGroup(panel, windowsBounds, map);
+            InputGeoGroup inputGeoGroup = new InputGeoGroup(panel, windowInPanel, beamsMap);
             panelGeoInput.put(panel, inputGeoGroup);
 
-            winBeamMaps.add(map);
         }
+    }
+
+    public List<WB_Polygon> getWindowByIndex(int index) {
+        List<InputGeoGroup> geoGroups = new ArrayList<>(panelGeoInput.values());
+        InputGeoGroup geos = geoGroups.get(index);
+        return geos.getWindowsBounds();
     }
 
     public String getPath() {
@@ -116,6 +134,7 @@ public class DxfInput {
         return panelBounds;
     }
 
+
     public List<WB_Polygon> getWindowsBounds() {
         return windowsBounds;
     }
@@ -128,7 +147,7 @@ public class DxfInput {
         return beamBounds;
     }
 
-    public List<Map<WB_Polygon, List<WB_PolyLine>>> getWinBeamMaps() {
-        return winBeamMaps;
+    public Map<WB_Polygon, InputGeoGroup> getPanelGeoInput() {
+        return panelGeoInput;
     }
 }

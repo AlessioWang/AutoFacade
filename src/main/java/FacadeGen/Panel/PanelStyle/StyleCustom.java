@@ -3,7 +3,6 @@ package FacadeGen.Panel.PanelStyle;
 import Convertor.DxfInput;
 import FacadeGen.Panel.Component.Window;
 import FacadeGen.Panel.Component.WindowStyle.CustomWindow;
-import FacadeGen.Panel.Component.WindowStyle.VerDuoWindow;
 import FacadeGen.Panel.Panel;
 import FacadeGen.Panel.PanelBase.Base;
 import wblut.geom.WB_Point;
@@ -23,11 +22,12 @@ public class StyleCustom extends Panel {
     public StyleCustom(Base base, DxfInput dxfInput) {
         this.base = base;
         this.dxfInput = dxfInput;
-        styleFromDxf();
+        styleFromDxfByIndex(0);
     }
 
-    private void styleFromDxf() {
-        List<WB_Polygon> windowPolygons = dxfInput.getWindowsBounds();
+    private void styleFromDxfByIndex(int index) {
+        List<WB_Polygon> windowPolygons = dxfInput.getWindowByIndex(index);
+        System.out.println(windowPolygons.size());
         for (WB_Polygon p : windowPolygons) {
             Window w = new CustomWindow(p, base, dxfInput);
 //            Window w = new VerDuoWindow(p, base);
