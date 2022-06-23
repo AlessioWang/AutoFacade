@@ -1,6 +1,6 @@
 package Test;
 
-import Convertor.DxfInput;
+import Convertor.DxfConvertor;
 import FacadeGen.Panel.Panel;
 import FacadeGen.Panel.PanelBase.Base;
 import FacadeGen.Panel.PanelBase.BasicBase;
@@ -30,7 +30,8 @@ public class InputTest extends PApplet {
 
     //panel相关
     PanelRender panelRender;
-    DxfInput dxfInput;
+//    DxfInput dxfInput;
+    DxfConvertor dxfConvertor;
 
     public void settings() {
         size(800, 800, P3D);
@@ -40,15 +41,21 @@ public class InputTest extends PApplet {
         cameraController = new CameraController(this, 1000);
         render = new WB_Render(this);
 
-        dxfInput = new DxfInput("E:\\INST.AAA\\SchoolProject\\dxf\\panelTest.dxf");
+        dxfConvertor = new DxfConvertor("E:\\INST.AAA\\SchoolProject\\dxf\\panelTest.dxf");
         initPanelGeo();
     }
 
     private void initPanelGeo() {
-        WB_Polygon basePolygon = dxfInput.getPanelBounds().get(0);
+        int index = 0;
+
+        //原始的dxf panel边缘线
+        WB_Polygon inputPolygon = dxfConvertor.getOriPanelBounds().get(index);
+
+        //访问索引坐标归零的panel边缘线
+        WB_Polygon basePolygon = dxfConvertor.getMapOfInputGeoGroup().get(inputPolygon).getPanelBounds();
         Base base = new BasicBase(basePolygon);
 
-        Panel panel = new StyleCustom(base, dxfInput);
+        Panel panel = new StyleCustom(base, dxfConvertor);
         PanelGeos panelGeos = new PanelGeos(panel, new WB_Point(0, 0, 0), new WB_Vector(0, 1, 0));
         PanelGeos panelGeos1 = new PanelGeos(panel, new WB_Point(0, -4000, 0), new WB_Vector(0, 1, 0));
         PanelGeos panelGeos2 = new PanelGeos(panel, new WB_Point(0, -8000, 0), new WB_Vector(0, 1, 0));

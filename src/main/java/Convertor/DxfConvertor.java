@@ -2,11 +2,9 @@ package Convertor;
 
 import Tools.DxfReader.DXFImporter;
 import Tools.GeoTools;
-import org.springframework.context.annotation.Bean;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_PolyLine;
 import wblut.geom.WB_Polygon;
-import wblut.geom.WB_Transform2D;
 
 import java.util.*;
 
@@ -32,7 +30,7 @@ public class DxfConvertor {
     private Map<WB_Polygon, WB_Polygon> panelTrans2Origin;
 
     //记录在一个dxf文件中的若干个panel边缘线与内部的窗户等其他图元的map映射关系
-    private Map<WB_Polygon, InputGeoGroup> panelGeoInput;
+    private Map<WB_Polygon, InputGeoGroup> mapOfInputGeoGroup;
 
     /**
      * 从dxf文件中读取图元信息，进行整理
@@ -45,7 +43,7 @@ public class DxfConvertor {
 
         //初始化基本变量
         importer = new DXFImporter(path, DXFImporter.UTF_8);
-        panelGeoInput = new HashMap<>();
+        mapOfInputGeoGroup = new HashMap<>();
         panelTrans2Origin = new HashMap<>();
 
         panelBounds = new LinkedList<>();
@@ -76,33 +74,71 @@ public class DxfConvertor {
             WB_Point v = oriPanelBound.getPoint(0);
             WB_Polygon panelAfter = GeoTools.movePolygon(oriPanelBound, v.mul(-1));
             panelBounds.add(panelAfter);
+            panelTrans2Origin.put(panelAfter, oriPanelBound);
 
             //处理winBounds
             List<WB_Polygon> winsInPanel = new LinkedList<>();
+            List<WB_Polygon> winsAfterTrans = new LinkedList<>();
             Map<WB_Polygon, List<WB_PolyLine>> winBeamMap = new HashMap<>();
 
             InputGeoGroup inputGeoGroup;
             for (WB_Polygon winBound : oriWindowsBounds) {
                 if (GeoTools.ifCoverWB(oriPanelBound, winBound)) {
                     winsInPanel.add(winBound);
-                    GeoTools.movePolygon(winBound, v.mul(-1));
 
                     //处理每一个win内部的beams
                     List<WB_PolyLine> beamList = new LinkedList<>();
                     for (WB_PolyLine beam : oriBeamsBounds) {
                         if (GeoTools.ifCoverWB(winBound, beam)) {
+                            beam = GeoTools.movePolyline(beam, v.mul(-1));
                             beamList.add(beam);
                         }
-
-                        beamList = (List<WB_PolyLine>) GeoTools.moveMultiPolys(beamList, v);
                     }
+
+                    winBound = GeoTools.movePolygon(winBound, v.mul(-1));
+                    winsAfterTrans.add(winBound);
+
+                    //加入map
                     winBeamMap.put(winBound, beamList);
                 }
             }
-
-            inputGeoGroup = new InputGeoGroup(panelAfter, winsInPanel, winBeamMap);
-            panelGeoInput.put(oriPanelBound, inputGeoGroup);
+            System.out.println("wins num of panel : " + winsAfterTrans.size());
+            inputGeoGroup = new InputGeoGroup(panelAfter, winsAfterTrans, winBeamMap);
+            mapOfInputGeoGroup.put(oriPanelBound, inputGeoGroup);
         }
+        System.out.println("map Size = " + mapOfInputGeoGroup.entrySet().size());
+    }
+
+    public List<WB_Polygon> getWindowsByIndex(int index) {
+        List<InputGeoGroup> geoGroups = new ArrayList<>(mapOfInputGeoGroup.values());
+        InputGeoGroup geos = geoGroups.get(index);
+        return geos.getWindowsBounds();
+    }
+
+    public List<WB_Polygon> getWindowsByOriPanel(WB_Polygon oriPanelBound) {
+        InputGeoGroup inputGeoGroup = mapOfInputGeoGroup.get(oriPanelBound);
+        return inputGeoGroup.getWindowsBounds();
+    }
+
+    public List<WB_Polygon> getWindowsByTransPanel(WB_Polygon transPanel) {
+        WB_Polygon ori = panelTrans2Origin.get(transPanel);
+        return getWindowsByOriPanel(ori);
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public List<WB_Polygon> getOriPanelBounds() {
+        return oriPanelBounds;
+    }
+
+    public Map<WB_Polygon, InputGeoGroup> getMapOfInputGeoGroup() {
+        return mapOfInputGeoGroup;
+    }
+
+    public Map<WB_Polygon, WB_Polygon> getPanelTrans2Origin() {
+        return panelTrans2Origin;
     }
 
 }

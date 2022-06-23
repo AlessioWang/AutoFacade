@@ -640,6 +640,12 @@ public class GeoTools {
         return result;
     }
 
+    public static WB_Polygon movePolygonNew(WB_Polygon origin, WB_Point pos) {
+        WB_Transform2D transform2D = new WB_Transform2D();
+        transform2D.addTranslate2D(pos);
+        return (WB_Polygon) origin.apply2D(transform2D);
+    }
+
     public static WB_Polygon movePolygon(WB_Polygon origin, WB_Point pos) {
         WB_Transform2D transform2D = new WB_Transform2D();
         transform2D.addTranslate2D(pos);

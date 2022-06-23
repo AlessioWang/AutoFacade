@@ -1,6 +1,6 @@
 package FacadeGen.Panel.PanelStyle;
 
-import Convertor.DxfInput;
+import Convertor.DxfConvertor;
 import FacadeGen.Panel.Component.Window;
 import FacadeGen.Panel.Component.WindowStyle.CustomWindow;
 import FacadeGen.Panel.Panel;
@@ -17,19 +17,20 @@ import java.util.List;
 public class StyleCustom extends Panel {
     public Base base;
 
-    private final DxfInput dxfInput;
+//    private final DxfInput dxfInput;
+    private final DxfConvertor dxfConvertor;
 
-    public StyleCustom(Base base, DxfInput dxfInput) {
+    public StyleCustom(Base base, DxfConvertor dxfConvertor) {
         this.base = base;
-        this.dxfInput = dxfInput;
-        styleFromDxfByIndex(0);
+        this.dxfConvertor = dxfConvertor;
+        styleFromDxf();
     }
 
-    private void styleFromDxfByIndex(int index) {
-        List<WB_Polygon> windowPolygons = dxfInput.getWindowByIndex(index);
-        System.out.println(windowPolygons.size());
+    private void styleFromDxf() {
+        List<WB_Polygon> windowPolygons = dxfConvertor.getWindowsByTransPanel(base.basicShape);
+
         for (WB_Polygon p : windowPolygons) {
-            Window w = new CustomWindow(p, base, dxfInput);
+            Window w = new CustomWindow(p, base, dxfConvertor);
 //            Window w = new VerDuoWindow(p, base);
             // TODO: 2022/6/13 留有相对位置转化问题
             WB_Point pt = new WB_Point(0, 0, 0);

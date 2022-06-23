@@ -1,6 +1,6 @@
 package FacadeGen.Panel.Component.WindowStyle;
 
-import Convertor.DxfInput;
+import Convertor.DxfConvertor;
 import FacadeGen.Panel.Component.*;
 import FacadeGen.Panel.PanelBase.Base;
 import wblut.geom.WB_PolyLine;
@@ -14,11 +14,12 @@ import java.util.List;
  **/
 public class CustomWindow extends Window {
 
-    private final DxfInput dxfInput;
+    //    private final DxfInput dxfInput;
+    private final DxfConvertor dxfConvertor;
 
-    public CustomWindow(WB_Polygon shape, Base base, DxfInput dxfInput) {
+    public CustomWindow(WB_Polygon shape, Base base, DxfConvertor dxfConvertor) {
         super(shape, base);
-        this.dxfInput = dxfInput;
+        this.dxfConvertor = dxfConvertor;
 
         iniComponent();
         WindowGeos g = new WindowGeos(this);
@@ -37,7 +38,11 @@ public class CustomWindow extends Window {
 
     @Override
     public void createBeams() {
-        List<WB_PolyLine> lines = dxfInput.getPanelGeoInput().get(super.getBase().basicShape).getWinBeamMap().get(super.getShape());
+        var p = dxfConvertor.getPanelTrans2Origin().get(super.getBase().basicShape);
+
+        var panelGeoInput = dxfConvertor.getMapOfInputGeoGroup().get(p);
+        var map = panelGeoInput.getWinBeamMap();
+        List<WB_PolyLine> lines = map.get(super.getShape());
         customBeam = new WindowBeam(this, lines, customBeamsWidth, customBeamsDepth);
     }
 

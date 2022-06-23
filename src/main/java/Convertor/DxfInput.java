@@ -14,7 +14,7 @@ import java.util.*;
  **/
 public class DxfInput {
     private final String path;
-    private DXFImporter importer;
+    private final DXFImporter importer;
 
     private List<WB_Polygon> oriPanelBounds;
     private List<WB_Polygon> oriWindowsBounds;
@@ -150,4 +150,5 @@ public class DxfInput {
     public Map<WB_Polygon, InputGeoGroup> getPanelGeoInput() {
         return panelGeoInput;
     }
+
 }
