@@ -109,20 +109,20 @@ public class DxfConvertor {
         System.out.println("map Size = " + mapOfInputGeoGroup.entrySet().size());
     }
 
-    public List<WB_Polygon> getWindowsByIndex(int index) {
+    public List<WB_Polygon> getWinPolysByIndex(int index) {
         List<InputGeoGroup> geoGroups = new ArrayList<>(mapOfInputGeoGroup.values());
         InputGeoGroup geos = geoGroups.get(index);
         return geos.getWindowsBounds();
     }
 
-    public List<WB_Polygon> getWindowsByOriPanel(WB_Polygon oriPanelBound) {
+    public List<WB_Polygon> getWinPolysByOriPanel(WB_Polygon oriPanelBound) {
         InputGeoGroup inputGeoGroup = mapOfInputGeoGroup.get(oriPanelBound);
         return inputGeoGroup.getWindowsBounds();
     }
 
-    public List<WB_Polygon> getWindowsByTransPanel(WB_Polygon transPanel) {
+    public List<WB_Polygon> getWinPolysByTransPanel(WB_Polygon transPanel) {
         WB_Polygon ori = panelTrans2Origin.get(transPanel);
-        return getWindowsByOriPanel(ori);
+        return getWinPolysByOriPanel(ori);
     }
 
     public String getPath() {

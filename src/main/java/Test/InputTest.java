@@ -30,7 +30,7 @@ public class InputTest extends PApplet {
 
     //panel相关
     PanelRender panelRender;
-//    DxfInput dxfInput;
+    //    DxfInput dxfInput;
     DxfConvertor dxfConvertor;
 
     public void settings() {
@@ -46,21 +46,31 @@ public class InputTest extends PApplet {
     }
 
     private void initPanelGeo() {
-        int index = 0;
+        //panel样式
+        Panel panel_01 = createPanelFromDxfByIndex(0);
+        Panel panel_02 = createPanelFromDxfByIndex(1);
+        Panel panel_03 = createPanelFromDxfByIndex(2);
+        Panel panel_04 = createPanelFromDxfByIndex(3);
 
-        //原始的dxf panel边缘线
+        //实际物理空间中的面板panel
+        PanelGeos panelGeos_01 = new PanelGeos(panel_01, new WB_Point(0, 0, 0), new WB_Vector(0, 1, 0));
+        PanelGeos panelGeos_02 = new PanelGeos(panel_02, new WB_Point(-6000, 0, 0), new WB_Vector(0, 1, 0));
+        PanelGeos panelGeos_03 = new PanelGeos(panel_03, new WB_Point(0, -4000, 0), new WB_Vector(0, 1, 0));
+        PanelGeos panelGeos_04 = new PanelGeos(panel_04, new WB_Point(-6000, -4000, 0), new WB_Vector(0, 1, 0));
+        PanelGeos panelGeos_05 = new PanelGeos(panel_04, new WB_Point(-12000, 0, 0), new WB_Vector(0, 1, 0));
+        PanelGeos panelGeos_06 = new PanelGeos(panel_01, new WB_Point(-12000, -4000, 0), new WB_Vector(0, 1, 0));
+
+        panelRender = new PanelRender(this, render, panelGeos_01, panelGeos_02, panelGeos_03, panelGeos_04, panelGeos_05,panelGeos_06);
+    }
+
+    private Panel createPanelFromDxfByIndex(int index) {
         WB_Polygon inputPolygon = dxfConvertor.getOriPanelBounds().get(index);
-
-        //访问索引坐标归零的panel边缘线
+        // TODO: 2022/6/24 hash比较方法需要复写
         WB_Polygon basePolygon = dxfConvertor.getMapOfInputGeoGroup().get(inputPolygon).getPanelBounds();
+        System.out.println("base " + basePolygon);
         Base base = new BasicBase(basePolygon);
 
-        Panel panel = new StyleCustom(base, dxfConvertor);
-        PanelGeos panelGeos = new PanelGeos(panel, new WB_Point(0, 0, 0), new WB_Vector(0, 1, 0));
-        PanelGeos panelGeos1 = new PanelGeos(panel, new WB_Point(0, -4000, 0), new WB_Vector(0, 1, 0));
-        PanelGeos panelGeos2 = new PanelGeos(panel, new WB_Point(0, -8000, 0), new WB_Vector(0, 1, 0));
-
-        panelRender = new PanelRender(this, render, panelGeos);
+        return new StyleCustom(base, dxfConvertor);
     }
 
     public void draw() {

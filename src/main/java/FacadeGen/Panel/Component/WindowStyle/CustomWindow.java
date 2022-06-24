@@ -39,7 +39,6 @@ public class CustomWindow extends Window {
     @Override
     public void createBeams() {
         var p = dxfConvertor.getPanelTrans2Origin().get(super.getBase().basicShape);
-
         var panelGeoInput = dxfConvertor.getMapOfInputGeoGroup().get(p);
         var map = panelGeoInput.getWinBeamMap();
         List<WB_PolyLine> lines = map.get(super.getShape());

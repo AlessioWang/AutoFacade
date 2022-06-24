@@ -26,8 +26,13 @@ public class StyleCustom extends Panel {
         styleFromDxf();
     }
 
+    public StyleCustom( DxfConvertor dxfConvertor) {
+        this.dxfConvertor = dxfConvertor;
+        styleFromDxf();
+    }
+
     private void styleFromDxf() {
-        List<WB_Polygon> windowPolygons = dxfConvertor.getWindowsByTransPanel(base.basicShape);
+        List<WB_Polygon> windowPolygons = dxfConvertor.getWinPolysByTransPanel(base.basicShape);
 
         for (WB_Polygon p : windowPolygons) {
             Window w = new CustomWindow(p, base, dxfConvertor);
@@ -41,5 +46,10 @@ public class StyleCustom extends Panel {
     @Override
     public Base getBase() {
         return base;
+    }
+
+    @Override
+    public void setBase(Base base) {
+        this.base = base;
     }
 }
