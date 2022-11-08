@@ -28,6 +28,7 @@ public class SQLRenderTest extends PApplet {
     //渲染器必要对象
     CameraController cameraController;
     WB_Render render;
+
     //bean对象
     WallPanelService service;
     ApplicationContext JDBCcontext;
@@ -46,6 +47,8 @@ public class SQLRenderTest extends PApplet {
         cameraController = new CameraController(this, 1000);
         render = new WB_Render(this);
         geos = new LinkedList<>();
+
+        //从数据库初始化面板
         iniPanel();
 
         panelRender = new PanelRender(this, render, geos);
@@ -59,13 +62,13 @@ public class SQLRenderTest extends PApplet {
         fac.init();
     }
 
-//    //渲染所有的panel
-//    private void iniPanel() {
-//        List<WallPanelEntity> entities = service.selectAll();
-//        for (WallPanelEntity e : entities) {
-//            geos.add(transEntity2Geos(e));
-//        }
-//    }
+    //渲染所有的panel
+    private void iniPanel() {
+        List<WallPanelEntity> entities = service.selectAll();
+        for (WallPanelEntity e : entities) {
+            geos.add(transEntity2Geos(e));
+        }
+    }
 
     //按照类型渲染
 //    private void iniPanel() {
@@ -75,14 +78,15 @@ public class SQLRenderTest extends PApplet {
 //        }
 //    }
 
-    //渲染指定编号的panel
-    private void iniPanel() {
-        WallPanelEntity entity = service.selectByIndex(1);
-        geos.add(transEntity2Geos(entity));
-    }
+//    //渲染指定编号的panel
+//    private void iniPanel() {
+//        WallPanelEntity entity = service.selectByIndex(1);
+//        geos.add(transEntity2Geos(entity));
+//    }
 
     public PanelGeos transEntity2Geos(WallPanelEntity entity) {
         PanelGeos geo = new PanelGeos();
+
         switch (entity.getPanel_style()) {
             case "StyleA":
                 geo.setPanel(fac.panelA);
@@ -94,6 +98,7 @@ public class SQLRenderTest extends PApplet {
                 geo.setPanel(fac.panelC);
                 break;
         }
+
         geo.setPos(new WB_Point(entity.getPosX(), entity.getPosY(), entity.getPosZ()));
         geo.setDirection(new WB_Vector(entity.getDirX(), entity.getDirY(), entity.getDirZ()));
         geo.iniPanel();

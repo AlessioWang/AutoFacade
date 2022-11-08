@@ -18,9 +18,12 @@ import java.util.*;
  * @date 2022/3/4
  **/
 public class PanelGeos {
+    //图元所在的panel
     public Panel panel;
+
     //基点位置
     public WB_Point pos;
+
     //朝向
     public WB_Vector direction;
 

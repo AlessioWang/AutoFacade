@@ -9,6 +9,8 @@ import wblut.geom.WB_Polygon;
 import java.util.*;
 
 /**
+ * 将Dxf文件转化为panel数据类型
+ *
  * @auther Alessio
  * @date 2022/6/22
  **/
@@ -62,7 +64,6 @@ public class DxfConvertor {
         oriPanelBounds = importer.getPolygons("bound");
         oriWindowsBounds = importer.getPolygons("windows");
         oriBeamsBounds = importer.getPolyLines("beams");
-
     }
 
     /**
@@ -102,10 +103,12 @@ public class DxfConvertor {
                     winBeamMap.put(winBound, beamList);
                 }
             }
+
             System.out.println("wins num of panel : " + winsAfterTrans.size());
             inputGeoGroup = new InputGeoGroup(panelAfter, winsAfterTrans, winBeamMap);
             mapOfInputGeoGroup.put(oriPanelBound, inputGeoGroup);
         }
+
         System.out.println("map Size = " + mapOfInputGeoGroup.entrySet().size());
     }
 

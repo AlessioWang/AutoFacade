@@ -14,12 +14,13 @@ import java.util.List;
  **/
 public class PanelRender {
 
+
     private PApplet applet;
 
     private WB_Render render;
 
     private List<PanelGeos> panelGeoList;
-
+    
     /**
      * 渲染多个图元的构造方法
      *
@@ -47,7 +48,9 @@ public class PanelRender {
         this.panelGeoList.addAll(List.of(panel));
     }
 
-
+    /**
+     * 调用渲染所有物件的方法
+     */
     public void renderAll() {
         for (PanelGeos geos : panelGeoList) {
             panelRender(geos);
@@ -57,6 +60,11 @@ public class PanelRender {
         }
     }
 
+    /**
+     * 绘制面板本身
+     *
+     * @param panelGeos
+     */
     private void panelRender(PanelGeos panelGeos) {
         applet.pushStyle();
         applet.fill(255, 130, 93);
@@ -64,6 +72,12 @@ public class PanelRender {
         applet.popStyle();
     }
 
+
+    /**
+     * 绘制窗户的分隔
+     *
+     * @param panelGeos
+     */
     private void beamRender(PanelGeos panelGeos) {
         applet.pushStyle();
         applet.noFill();
@@ -75,6 +89,11 @@ public class PanelRender {
         applet.popStyle();
     }
 
+    /**
+     * 绘制窗框
+     *
+     * @param panelGeos
+     */
     private void frameRender(PanelGeos panelGeos) {
         applet.pushStyle();
         applet.noFill();
@@ -86,6 +105,11 @@ public class PanelRender {
         applet.popStyle();
     }
 
+    /**
+     * 绘制窗户玻璃
+     *
+     * @param panelGeos
+     */
     private void glassRender(PanelGeos panelGeos) {
         applet.pushStyle();
         applet.fill(84, 192, 235);

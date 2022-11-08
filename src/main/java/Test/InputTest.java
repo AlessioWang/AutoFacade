@@ -15,6 +15,7 @@ import wblut.geom.WB_Vector;
 import wblut.processing.WB_Render;
 
 /**
+ * 测试一组使用代码动态地初始化一面墙的方法
  * @auther Alessio
  * @date 2022/6/10
  **/
@@ -51,6 +52,7 @@ public class InputTest extends PApplet {
         Panel panel_02 = createPanelFromDxfByIndex(1);
         Panel panel_03 = createPanelFromDxfByIndex(2);
         Panel panel_04 = createPanelFromDxfByIndex(3);
+        Panel panel_05 = createPanelFromDxfByIndex(4);
 
         //实际物理空间中的面板panel
         PanelGeos panelGeos_01 = new PanelGeos(panel_01, new WB_Point(0, 0, 0), new WB_Vector(0, 1, 0));
@@ -59,8 +61,9 @@ public class InputTest extends PApplet {
         PanelGeos panelGeos_04 = new PanelGeos(panel_04, new WB_Point(-6000, -4000, 0), new WB_Vector(0, 1, 0));
         PanelGeos panelGeos_05 = new PanelGeos(panel_04, new WB_Point(-12000, 0, 0), new WB_Vector(0, 1, 0));
         PanelGeos panelGeos_06 = new PanelGeos(panel_01, new WB_Point(-12000, -4000, 0), new WB_Vector(0, 1, 0));
+        PanelGeos panelGeos_07 = new PanelGeos(panel_05, new WB_Point(-30000, -4000, 0), new WB_Vector(0, 1, 0));
 
-        panelRender = new PanelRender(this, render, panelGeos_01, panelGeos_02, panelGeos_03, panelGeos_04, panelGeos_05,panelGeos_06);
+        panelRender = new PanelRender(this, render, panelGeos_01, panelGeos_02, panelGeos_03, panelGeos_04, panelGeos_05,panelGeos_06,panelGeos_07);
     }
 
     private Panel createPanelFromDxfByIndex(int index) {
