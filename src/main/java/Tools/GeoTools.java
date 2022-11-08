@@ -16,14 +16,26 @@ public class GeoTools {
     private static GeometryFactory gf = new GeometryFactory();
     private static WB_GeometryFactory wbgf = new WB_GeometryFactory();
 
-    //计算两点的距离
-    static public double getDistance(WB_Point a, WB_Point b) {
+    /**
+     * 计算两点距离
+     *
+     * @param a
+     * @param b
+     * @return
+     */
+    public static double getDistance(WB_Point a, WB_Point b) {
         return Math.sqrt((a.xd() - b.xd()) * (a.xd() - b.xd()) + (a.yd() - b.yd()) * (a.yd() - b.yd()));
     }
 
-
-    //以基点及长宽画polygon
-    static public WB_Polygon getPolygon(WB_Point pt, double width, double height) {
+    /**
+     * 以基点及长宽得到矩形
+     *
+     * @param pt
+     * @param width
+     * @param height
+     * @return
+     */
+    public static WB_Polygon getRecByWidthHeight(WB_Point pt, double width, double height) {
         WB_Vector vWidth = new WB_Vector(width, 0);
         WB_Vector vHeight = new WB_Vector(0, height);
         WB_Point p1 = pt.add(vWidth);
@@ -33,12 +45,29 @@ public class GeoTools {
     }
 
     /**
-     * 计算建筑的长宽比
+     * 由基准线、偏移宽度以及偏移方向得到矩形
+     *
+     * @param segment
+     * @param width
+     * @param dir
+     * @return
+     */
+    public static WB_Polygon getRecBySegAndWidth(WB_Segment segment, double width, WB_Vector dir) {
+        WB_Point p0 = (WB_Point) segment.getOrigin();
+        WB_Point p1 = (WB_Point) segment.getEndpoint();
+        WB_Point p2 = p1.add(dir.mul(width));
+        WB_Point p3 = p0.add(dir.mul(width));
+
+        return new WB_Polygon(p0, p1, p2, p3);
+    }
+
+    /**
+     * 计算长宽比
      *
      * @param polygon
      * @return
      */
-    static public double getProportion(WB_Polygon polygon) {
+    public static double getProportion(WB_Polygon polygon) {
         WB_AABB aabb = polygon.getAABB();
         return aabb.getWidth() / aabb.getHeight();
     }
@@ -204,21 +233,33 @@ public class GeoTools {
         }
     }
 
-    //缩短polyline
-    public static List<WB_PolyLine> getShortedPolylines(List<WB_PolyLine> lines, double tol) {
+    /**
+     * 缩短polyline
+     *
+     * @param lines
+     * @param distance
+     * @return
+     */
+    public static List<WB_PolyLine> getShortedPolylines(List<WB_PolyLine> lines, double distance) {
         List<WB_PolyLine> out = new ArrayList<>();
         for (WB_PolyLine l : lines) {
             WB_Vector v1 = getUnitVector(l.getPoint(0), l.getPoint(1));
             WB_Vector v2 = getUnitVector(l.getPoint(1), l.getPoint(0));
-            WB_Point p1 = l.getPoint(0).add((v2).mul(tol));
-            WB_Point p2 = l.getPoint(1).add((v1).mul(tol));
+            WB_Point p1 = l.getPoint(0).add((v2).mul(distance));
+            WB_Point p2 = l.getPoint(1).add((v1).mul(distance));
             WB_PolyLine newL = new WB_PolyLine(p1, p2);
             out.add(newL);
         }
         return out;
     }
 
-    //创建带洞多边形
+    /**
+     * 创建带洞多边形
+     *
+     * @param polygon
+     * @param depth
+     * @return
+     */
     public static WB_Polygon getPolygonWithHoles(WB_Polygon polygon, double depth) {
         WB_Coord[] shell = polygonFaceDown(polygon).getPoints().toArray();   //边缘
         WB_Coord[][] holeCoordsList = null;
@@ -707,6 +748,7 @@ public class GeoTools {
 
     /**
      * 将多个polyLine沿着一个方向移动一定的长度
+     *
      * @param polygons
      * @param v
      * @return
@@ -723,6 +765,7 @@ public class GeoTools {
         }
         return result;
     }
+
 }
 
 
