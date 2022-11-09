@@ -18,9 +18,9 @@ public class Building {
     private int id;
 
     //房屋平面图的基准线
-    private WB_Polygon baseline;
+    private final WB_Polygon baseline;
     //房屋的高度
-    private double height;
+    private final double height;
 
     //每个立面的平面基准线集合
     private List<WB_Segment> lineList;
@@ -62,4 +62,23 @@ public class Building {
     }
 
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public List<WB_Segment> getLineList() {
+        return lineList;
+    }
+
+    public List<WB_Polygon> getFacadeGeos() {
+        return facadeGeos;
+    }
+
+    public List<Facade> getFacadeList() {
+        return facadeList;
+    }
 }
