@@ -27,6 +27,9 @@ public class Building {
 
     private List<WB_Polygon> facadeGeos;
 
+    //基准线的方向，楼的方向（一般是（0,0,1））
+    private WB_Vector vec;
+
     //存储所有的立面以及屋顶的List
     private List<Facade> facadeList;
 
@@ -44,10 +47,11 @@ public class Building {
         lineList = baseline.toSegments();
         facadeList = new LinkedList<>();
         facadeGeos = new LinkedList<>();
+        vec = new WB_Vector(0, 0, 1);
 
         //获取每个立面的几何形态
         for (WB_Segment segment : lineList) {
-            WB_Polygon geo = GeoTools.getRecBySegAndWidth(segment, height, new WB_Vector(0, 0, 1));
+            WB_Polygon geo = GeoTools.getRecBySegAndWidth(segment, height, vec);
             facadeGeos.add(geo);
         }
     }

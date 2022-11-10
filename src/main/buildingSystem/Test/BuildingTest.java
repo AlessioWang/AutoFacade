@@ -4,6 +4,7 @@ import Tools.GeoTools;
 import construction.Building;
 import guo_cam.CameraController;
 import processing.core.PApplet;
+import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
 import wblut.processing.WB_Render;
 
@@ -38,7 +39,7 @@ public class BuildingTest extends PApplet {
 
         render = new WB_Render(this);
 
-        baseline = GeoTools.createRecPolygon(15000, 30000);
+        initBaseLine();
 
         building = new Building(baseline, 6000);
 
@@ -51,11 +52,21 @@ public class BuildingTest extends PApplet {
 
         for (WB_Polygon polygon : geos) {
             pushStyle();
-            fill(0, 100, 0,20);
+            fill(0, 100, 0, 20);
             stroke(100, 0, 0);
             render.drawPolygonEdges(polygon);
             popStyle();
         }
+    }
+
+    public void initBaseLine() {
+        WB_Point p0 = new WB_Point(0, 0);
+        WB_Point p1 = new WB_Point(30000, 0);
+        WB_Point p2 = new WB_Point(30000, 40000);
+        WB_Point p3 = new WB_Point(20000, 40000);
+        WB_Point p4 = new WB_Point(20000, 20000);
+        WB_Point p5 = new WB_Point(0, 20000);
+        baseline = new WB_Polygon(p0, p1, p2, p3, p4, p5);
     }
 
 }
