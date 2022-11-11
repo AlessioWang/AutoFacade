@@ -23,9 +23,14 @@ public abstract class Face {
     //几何中点
     private WB_Point midPos;
 
+    private boolean ifPanel;
+
     public Face(Unit unit, WB_Polygon shape) {
         this.unit = unit;
         this.shape = shape;
     }
 
+    public WB_Polygon getShape() {
+        return shape;
+    }
 }

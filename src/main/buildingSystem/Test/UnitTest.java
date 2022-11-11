@@ -9,6 +9,7 @@ import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
 import wblut.processing.WB_Render;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -44,6 +45,14 @@ public class UnitTest extends PApplet {
 
         rndShapes = new LinkedList<>();
 
+        List<Face> rndFaces = unit.getRndFaces();
+        for (Face face : rndFaces) {
+            rndShapes.add(face.getShape());
+        }
+
+        System.out.println(rndShapes.size());
+        WB_Polygon p = rndShapes.get(1);
+        System.out.println(Arrays.toString(p.getPoints().toArray()));
     }
 
     public void draw() {
@@ -51,7 +60,10 @@ public class UnitTest extends PApplet {
         cameraController.drawSystem(1000);
 
         pushStyle();
-
+        fill(0, 100, 0, 30);
+        for (WB_Polygon p : rndShapes) {
+            render.drawPolygon(p);
+        }
         popStyle();
 
     }
