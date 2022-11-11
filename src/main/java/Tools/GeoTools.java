@@ -693,6 +693,12 @@ public class GeoTools {
         return (WB_Polygon) origin.apply2D(transform2D);
     }
 
+    public static WB_Polygon movePolygon3D(WB_Polygon origin, WB_Point pos) {
+        WB_Transform3D transform3D = new WB_Transform3D();
+        transform3D.addTranslate(pos);
+        return origin.apply(transform3D);
+    }
+
     public static WB_PolyLine movePolyline(WB_PolyLine origin, WB_Point pos) {
         WB_Transform2D transform2D = new WB_Transform2D();
         transform2D.addTranslate2D(pos);
@@ -700,14 +706,14 @@ public class GeoTools {
     }
 
     /**
-     * 将基准图元三维变换
+     * 将基准图元三维变换,矢量方向以Z轴位基准
      *
      * @param origin
      * @param pos
      * @param dir
      * @return
      */
-    public static WB_Polygon transferPolygon3D(WB_Polygon origin, WB_Point pos, WB_Vector dir) {
+    public static WB_Polygon transferPolygon3DByZ(WB_Polygon origin, WB_Point pos, WB_Vector dir) {
         WB_Transform3D transform3D = new WB_Transform3D();
         WB_CoordinateSystem system = new WB_CoordinateSystem();
         system.setOrigin(pos);
@@ -717,14 +723,31 @@ public class GeoTools {
     }
 
     /**
-     * 将基准图元三维变换
+     * 将基准图元三维变换,矢量方向以X轴位基准
      *
      * @param origin
      * @param pos
      * @param dir
      * @return
      */
-    public static WB_PolyLine transferPolyline3D(WB_PolyLine origin, WB_Point pos, WB_Vector dir) {
+    public static WB_Polygon transferPolygon3DByX(WB_Polygon origin, WB_Point pos, WB_Vector dir) {
+        WB_Transform3D transform3D = new WB_Transform3D();
+        WB_CoordinateSystem system = new WB_CoordinateSystem();
+        system.setOrigin(pos.mul(-1));
+        system.setX(dir);
+        transform3D.addFromWorldToCS(system);
+        return origin.apply(transform3D);
+    }
+
+    /**
+     * 将基准图元三维变换,以Z轴为基准
+     *
+     * @param origin
+     * @param pos
+     * @param dir
+     * @return
+     */
+    public static WB_PolyLine transferPolyline3DByZ(WB_PolyLine origin, WB_Point pos, WB_Vector dir) {
         WB_Transform3D transform3D = new WB_Transform3D();
         WB_CoordinateSystem system = new WB_CoordinateSystem();
         system.setOrigin(pos);

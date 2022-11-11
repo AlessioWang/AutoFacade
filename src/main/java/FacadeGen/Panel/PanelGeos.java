@@ -3,7 +3,6 @@ package FacadeGen.Panel;
 import FacadeGen.Panel.Component.Window;
 import FacadeGen.Panel.Component.WindowGeos;
 import Tools.GeoTools;
-import wblut.external.poly2Tri.splayTree.SplayTreeItem;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_PolyLine;
 import wblut.geom.WB_Polygon;
@@ -70,19 +69,19 @@ public class PanelGeos {
             WB_Polygon rawBoundary = GeoTools.movePolygon(windowGeos.getFrameBoundary(), entry.getValue());
             WB_Polygon rawGlass = GeoTools.movePolygon(windowGeos.getGlassShape(), entry.getValue());
 
-            frames.add(GeoTools.transferPolygon3D(rawFrame, pos, direction));
+            frames.add(GeoTools.transferPolygon3DByZ(rawFrame, pos, direction));
             winBoundaries.add(rawBoundary);
-            glasses.add(GeoTools.transferPolygon3D(rawGlass, pos, direction));
+            glasses.add(GeoTools.transferPolygon3DByZ(rawGlass, pos, direction));
 
             List<WB_PolyLine> rawBeams = windowGeos.getAll2DBeams();
             for (WB_PolyLine l : rawBeams) {
                 WB_PolyLine rawL = GeoTools.movePolyline(l, entry.getValue());
-                beams.add(GeoTools.transferPolyline3D(rawL, pos, direction));
+                beams.add(GeoTools.transferPolyline3DByZ(rawL, pos, direction));
             }
         }
 
         WB_Polygon baseShape = panel.getBase().getBasicShape();
-        wallGeo = GeoTools.transferPolygon3D(GeoTools.getPolygonWithHoles(baseShape, winBoundaries), pos, direction);
+        wallGeo = GeoTools.transferPolygon3DByZ(GeoTools.getPolygonWithHoles(baseShape, winBoundaries), pos, direction);
     }
 
     public void setPanel(Panel panel) {

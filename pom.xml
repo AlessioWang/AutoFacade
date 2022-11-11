@@ -58,7 +58,8 @@
             <groupId>com.github.archialgo</groupId>
             <artifactId>iGeo-maven-lib</artifactId>
             <version>0.9.4.1</version>
-        </dependency> 出现的存在这种
+        </dependency>
+
         <dependency>
             <groupId>com.groupdocs</groupId>
             <artifactId>groupdocs-viewer</artifactId>
@@ -68,7 +69,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <version>5.3.16</version>
+            <version>5.3.19</version>
         </dependency>
 
         <dependency>

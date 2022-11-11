@@ -6,10 +6,11 @@ import processing.core.PApplet;
 import unit2Vol.Unit;
 import unit2Vol.face.Face;
 import wblut.geom.WB_Point;
+import wblut.geom.WB_PolyLine;
 import wblut.geom.WB_Polygon;
+import wblut.geom.WB_Vector;
 import wblut.processing.WB_Render;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,6 +32,10 @@ public class UnitTest extends PApplet {
 
     List<WB_Polygon> rndShapes;
 
+    WB_Polygon topShape;
+
+    WB_Polygon bottomShape;
+
     public void settings() {
         size(800, 800, P3D);
     }
@@ -38,10 +43,11 @@ public class UnitTest extends PApplet {
     public void setup() {
         cameraController = new CameraController(this, 1000);
         render = new WB_Render(this);
-        WB_Point pos = new WB_Point(0, 0, 0);
+        WB_Point pos = new WB_Point(1000, 0, 2000);
         WB_Polygon base = GeoTools.createRecPolygon(12000, 8000);
+        WB_Vector dir = new WB_Vector(2, 1, 0);
 
-        unit = new Unit(pos, base, 3500);
+        unit = new Unit(pos, base, dir, 3500);
 
         rndShapes = new LinkedList<>();
 
@@ -50,9 +56,10 @@ public class UnitTest extends PApplet {
             rndShapes.add(face.getShape());
         }
 
-        System.out.println(rndShapes.size());
-        WB_Polygon p = rndShapes.get(1);
-        System.out.println(Arrays.toString(p.getPoints().toArray()));
+        topShape = unit.getTopFace().getShape();
+
+        bottomShape = unit.getBottomFace().getShape();
+
     }
 
     public void draw() {
@@ -62,8 +69,18 @@ public class UnitTest extends PApplet {
         pushStyle();
         fill(0, 100, 0, 30);
         for (WB_Polygon p : rndShapes) {
-            render.drawPolygon(p);
+            render.drawPolygonEdges(p);
         }
+        popStyle();
+
+        pushStyle();
+        fill(100,0,0,50);
+        render.drawPolygonEdges(topShape);
+        popStyle();
+
+        pushStyle();
+        fill(0,0,100,50);
+        render.drawPolygonEdges(bottomShape);
         popStyle();
 
     }
