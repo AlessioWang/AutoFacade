@@ -2,11 +2,11 @@ package Test;
 
 import Tools.GeoTools;
 import guo_cam.CameraController;
+import org.junit.Test;
 import processing.core.PApplet;
 import unit2Vol.Unit;
 import unit2Vol.face.Face;
 import wblut.geom.WB_Point;
-import wblut.geom.WB_PolyLine;
 import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Vector;
 import wblut.processing.WB_Render;
@@ -36,6 +36,8 @@ public class UnitTest extends PApplet {
 
     WB_Polygon bottomShape;
 
+    List<WB_Point> midPts;
+
     public void settings() {
         size(800, 800, P3D);
     }
@@ -43,17 +45,21 @@ public class UnitTest extends PApplet {
     public void setup() {
         cameraController = new CameraController(this, 1000);
         render = new WB_Render(this);
+
+        midPts = new LinkedList<>();
+        rndShapes = new LinkedList<>();
+
         WB_Point pos = new WB_Point(1000, 0, 2000);
         WB_Polygon base = GeoTools.createRecPolygon(12000, 8000);
         WB_Vector dir = new WB_Vector(2, 1, 0);
 
         unit = new Unit(pos, base, dir, 3500);
 
-        rndShapes = new LinkedList<>();
 
         List<Face> rndFaces = unit.getRndFaces();
         for (Face face : rndFaces) {
             rndShapes.add(face.getShape());
+            midPts.add(face.getMidPos());
         }
 
         topShape = unit.getTopFace().getShape();
@@ -74,14 +80,22 @@ public class UnitTest extends PApplet {
         popStyle();
 
         pushStyle();
-        fill(100,0,0,50);
+        fill(100, 0, 0, 50);
         render.drawPolygonEdges(topShape);
         popStyle();
 
         pushStyle();
-        fill(0,0,100,50);
+        fill(0, 0, 100, 50);
         render.drawPolygonEdges(bottomShape);
         popStyle();
 
+
+        pushStyle();
+        fill(255, 0, 100, 80);
+
+        for (WB_Point p : midPts) {
+            render.drawPoint(p, 50);
+        }
+        popStyle();
     }
 }

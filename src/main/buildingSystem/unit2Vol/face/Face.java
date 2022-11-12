@@ -3,6 +3,7 @@ package unit2Vol.face;
 import unit2Vol.Unit;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
+import wblut.geom.WB_Segment;
 import wblut.geom.WB_Vector;
 
 /**
@@ -12,7 +13,7 @@ import wblut.geom.WB_Vector;
 public abstract class Face {
 
     //所属的单元
-    private Unit unit;
+    private final Unit unit;
 
     //几何形状
     private WB_Polygon shape;
@@ -28,9 +29,29 @@ public abstract class Face {
     public Face(Unit unit, WB_Polygon shape) {
         this.unit = unit;
         this.shape = shape;
+
+        dir = shape.getNormal();
+        midPos = shape.getCenter();
     }
 
     public WB_Polygon getShape() {
         return shape;
     }
+
+    public Unit getUnit() {
+        return unit;
+    }
+
+    public WB_Vector getDir() {
+        return dir;
+    }
+
+    public WB_Point getMidPos() {
+        return midPos;
+    }
+
+    public boolean isIfPanel() {
+        return ifPanel;
+    }
+
 }

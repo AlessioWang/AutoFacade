@@ -54,6 +54,7 @@ public class Unit {
         rndFaces = new LinkedList<>();
 
         initRealBase();
+
         initFaces();
     }
 
@@ -77,7 +78,8 @@ public class Unit {
         }
 
         //初始化底面
-        bottomFace = new BottomFace(this, realBase);
+        WB_Polygon reversePolygon = GeoTools.reversePolygon(realBase);
+        bottomFace = new BottomFace(this, reversePolygon);
 
         //初始化顶面
         WB_Polygon topShape = GeoTools.movePolygon3D(realBase, new WB_Point(0, 0, 1).mul(height));

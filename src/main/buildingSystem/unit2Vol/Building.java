@@ -21,8 +21,10 @@ public class Building {
 
     public Building() {
         unitList = new LinkedList<>();
-
     }
 
+    public Building(List<Unit> unitList) {
+        this.unitList = unitList;
+    }
 
 }
