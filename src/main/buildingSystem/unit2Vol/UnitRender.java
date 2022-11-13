@@ -29,6 +29,8 @@ public class UnitRender {
 
     private List<WB_Point> midPts;
 
+    private WB_Point posPt;
+
 
     public UnitRender(PApplet applet, Unit unit) {
         this.applet = applet;
@@ -51,30 +53,33 @@ public class UnitRender {
 
         topShape = unit.getTopFace().getShape();
         bottomShape = unit.getBottomFace().getShape();
+        posPt = unit.getMidPt();
     }
 
-    /**
-     * 渲染图元
-     */
-    public void renderAll() {
+    private void rendRndShape() {
         applet.pushStyle();
         applet.fill(0, 100, 0, 30);
         for (WB_Polygon p : rndShapes) {
             render.drawPolygonEdges(p);
         }
         applet.popStyle();
+    }
 
+    private void rendTopShape() {
         applet.pushStyle();
         applet.fill(100, 0, 0, 50);
         render.drawPolygonEdges(topShape);
         applet.popStyle();
+    }
 
+    private void rendBottomShape() {
         applet.pushStyle();
         applet.fill(0, 0, 100, 50);
         render.drawPolygonEdges(bottomShape);
         applet.popStyle();
+    }
 
-
+    private void rendFaceMidPt() {
         applet.pushStyle();
         applet.fill(255, 0, 100, 80);
         for (WB_Point p : midPts) {
@@ -83,5 +88,24 @@ public class UnitRender {
         applet.popStyle();
     }
 
+    private void rendPosPt() {
+        applet.pushStyle();
+        applet.fill(0, 0, 200, 50);
+        render.drawPoint(posPt,100);
+        applet.popStyle();
+    }
+
+
+    /**
+     * 渲染图元
+     */
+    public void renderAll() {
+        rendRndShape();
+        rendRndShape();
+        rendTopShape();
+        rendBottomShape();
+        rendFaceMidPt();
+        rendPosPt();
+    }
 
 }

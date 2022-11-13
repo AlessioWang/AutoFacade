@@ -44,6 +44,8 @@ public class Unit {
 
     private Face bottomFace;
 
+    //几何体的形体中心点
+    private WB_Point midPt;
 
     public Unit(WB_Point pos, WB_Polygon oriBase, WB_Vector dir, double height) {
         this.pos = pos;
@@ -56,6 +58,25 @@ public class Unit {
         initRealBase();
 
         initFaces();
+
+        initMidPt();
+    }
+
+    private void initNeighbor() {
+
+    }
+
+    /**
+     * 初始化形体中心
+     */
+    private void initMidPt() {
+        WB_Point temp = new WB_Point(0,0,0);
+
+        for (Face face : rndFaces) {
+            temp = temp.add(face.getMidPos());
+        }
+
+        midPt = temp.div(rndFaces.size());
     }
 
     /**
@@ -85,6 +106,10 @@ public class Unit {
         WB_Polygon topShape = GeoTools.movePolygon3D(realBase, new WB_Point(0, 0, 1).mul(height));
         topFace = new TopFace(this, topShape);
 
+    }
+
+    public WB_Point getMidPt() {
+        return midPt;
     }
 
     public List<Face> getRndFaces() {

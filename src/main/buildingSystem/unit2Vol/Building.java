@@ -23,8 +23,33 @@ public class Building {
         unitList = new LinkedList<>();
     }
 
+
+
     public Building(List<Unit> unitList) {
         this.unitList = unitList;
     }
 
+    public List<Unit> getUnitList() {
+        return unitList;
+    }
+
+    public void setUnitList(List<Unit> unitList) {
+        this.unitList = unitList;
+    }
+
+    public int getLayerNumber() {
+        return layerNumber;
+    }
+
+    public void setLayerNumber(int layerNumber) {
+        this.layerNumber = layerNumber;
+    }
+
+    public double getHeight() {
+        return height;
+    }
+
+    public void setHeight(double height) {
+        this.height = height;
+    }
 }
