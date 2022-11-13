@@ -31,7 +31,6 @@ public class UnitRender {
 
     private WB_Point posPt;
 
-
     public UnitRender(PApplet applet, Unit unit) {
         this.applet = applet;
         this.unit = unit;
@@ -41,7 +40,7 @@ public class UnitRender {
         initGeos();
     }
 
-    private void initGeos() {
+    public void initGeos() {
         midPts = new LinkedList<>();
         rndShapes = new LinkedList<>();
 
@@ -56,7 +55,7 @@ public class UnitRender {
         posPt = unit.getMidPt();
     }
 
-    private void rendRndShape() {
+    public void rendRndShape() {
         applet.pushStyle();
         applet.fill(0, 100, 0, 30);
         for (WB_Polygon p : rndShapes) {
@@ -65,21 +64,21 @@ public class UnitRender {
         applet.popStyle();
     }
 
-    private void rendTopShape() {
+    public void rendTopShape() {
         applet.pushStyle();
         applet.fill(100, 0, 0, 50);
         render.drawPolygonEdges(topShape);
         applet.popStyle();
     }
 
-    private void rendBottomShape() {
+    public void rendBottomShape() {
         applet.pushStyle();
         applet.fill(0, 0, 100, 50);
         render.drawPolygonEdges(bottomShape);
         applet.popStyle();
     }
 
-    private void rendFaceMidPt() {
+    public void rendFaceMidPt() {
         applet.pushStyle();
         applet.fill(255, 0, 100, 80);
         for (WB_Point p : midPts) {
@@ -88,10 +87,10 @@ public class UnitRender {
         applet.popStyle();
     }
 
-    private void rendPosPt() {
+    public void rendPosPt() {
         applet.pushStyle();
         applet.fill(0, 0, 200, 50);
-        render.drawPoint(posPt,100);
+        render.drawPoint(posPt, 100);
         applet.popStyle();
     }
 

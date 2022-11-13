@@ -14,7 +14,11 @@ import java.util.List;
  * @auther Alessio
  * @date 2022/11/9
  **/
+
 public class Unit {
+
+    //唯一编号
+    private int id;
 
     //相对世界坐标的位置坐标
     private final WB_Point pos;
@@ -55,22 +59,20 @@ public class Unit {
 
         rndFaces = new LinkedList<>();
 
-        initRealBase();
-
-        initFaces();
-
-        initMidPt();
+        init();
     }
 
-    private void initNeighbor() {
-
+    private void init() {
+        initRealBase();
+        initFaces();
+        initMidPt();
     }
 
     /**
      * 初始化形体中心
      */
     private void initMidPt() {
-        WB_Point temp = new WB_Point(0,0,0);
+        WB_Point temp = new WB_Point(0, 0, 0);
 
         for (Face face : rndFaces) {
             temp = temp.add(face.getMidPos());
@@ -156,4 +158,19 @@ public class Unit {
         this.right = right;
     }
 
+    public double getHeight() {
+        return height;
+    }
+
+    public WB_Polygon getOriBase() {
+        return oriBase;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }
