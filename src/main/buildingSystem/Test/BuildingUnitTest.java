@@ -47,28 +47,35 @@ public class BuildingUnitTest extends PApplet {
         unitRenders = new LinkedList<>();
 
         initUnits();
-        build = new Building(units);
-        System.out.println("unit num : " + build.getUnitList().size());
+        initBuilding();
     }
 
     private void initBuilding() {
+        build = new Building(units);
+        System.out.println("unit num : " + build.getUnitList().size());
 
+        Unit unit = build.getUnitList().get(4);
+
+        System.out.println("id : " + unit.getId() + " MidPos--> " + unit.getTopFace().getMidPos());
+
+        System.out.println("upper id : " + unit.getUpper().getId());
+        System.out.println("Lower id : " + unit.getLower().getId());
+        System.out.println("Left id : " + unit.getLeft().getId());
+        System.out.println("Right id : " + unit.getRight().getId());
     }
 
     private void initUnits() {
-
         WB_Point pos = new WB_Point(1000, 0, 2000);
         WB_Polygon base = GeoTools.createRecPolygon(12000, 8000);
         WB_Vector dir = new WB_Vector(1, 1, 0);
 
         units = new LinkedList<>();
 
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 4; j++) {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
                 dir.normalizeSelf();
-                WB_Vector increase = dir;
                 WB_Vector horDirNor = new WB_Point(1, 0, 0).mul(gap).mul(i);
-                WB_Vector v = increase.mul(horDirNor.getLength());
+                WB_Vector v = dir.mul(horDirNor.getLength());
 
                 WB_Point p = pos.add(v.add(new WB_Point(0, 0, 1).mul(height).mul(j)));
 
@@ -85,6 +92,7 @@ public class BuildingUnitTest extends PApplet {
 
         for (UnitRender ur : unitRenders) {
             ur.renderAll();
+            ur.rendId();
         }
     }
 

@@ -17,14 +17,24 @@ public class GeoTools {
     private static WB_GeometryFactory wbgf = new WB_GeometryFactory();
 
     /**
-     * 计算两点距离
+     * 2D计算两点距离
      *
      * @param a
      * @param b
      * @return
      */
-    public static double getDistance(WB_Point a, WB_Point b) {
+    public static double getDistance2D(WB_Point a, WB_Point b) {
         return Math.sqrt((a.xd() - b.xd()) * (a.xd() - b.xd()) + (a.yd() - b.yd()) * (a.yd() - b.yd()));
+    }
+
+    /**
+     * 3D计算两点距离
+     * @param a
+     * @param b
+     * @return
+     */
+    public static double getDistance3D(WB_Point a, WB_Point b) {
+        return Math.sqrt((a.xd() - b.xd()) * (a.xd() - b.xd()) + (a.yd() - b.yd()) * (a.yd() - b.yd())+ (a.zd()- b.zd())*(a.zd()-b.zd()));
     }
 
     /**

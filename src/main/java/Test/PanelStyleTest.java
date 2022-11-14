@@ -1,10 +1,10 @@
 package Test;
 
-import FacadeGen.Panel.Component.Window;
-import FacadeGen.Panel.Component.WindowGeos;
-import FacadeGen.Panel.Panel;
-import FacadeGen.Panel.PanelBase.BasicBase;
-import FacadeGen.Panel.PanelStyle.Style01Panel;
+import facadeGen.Panel.Component.Window;
+import facadeGen.Panel.Component.WindowGeos;
+import facadeGen.Panel.Panel;
+import facadeGen.Panel.PanelBase.BasicBase;
+import facadeGen.Panel.PanelStyle.Style01Panel;
 import Tools.GeoTools;
 import guo_cam.CameraController;
 import processing.core.PApplet;

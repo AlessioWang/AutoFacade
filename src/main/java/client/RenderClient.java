@@ -1,11 +1,11 @@
 package client;
 
-import FacadeGen.Building;
-import FacadeGen.Facade.Facade;
-import FacadeGen.Facade.Wall;
-import FacadeGen.RenderMgr;
-import FacadeGen.Vol;
-import FacadeGen.Geo.Grid;
+import facadeGen.Building;
+import facadeGen.Facade.Facade;
+import facadeGen.Facade.Wall;
+import facadeGen.RenderMgr;
+import facadeGen.Vol;
+import facadeGen.Geo.Grid;
 import Tools.GeoTools;
 import guo_cam.CameraController;
 import processing.core.PApplet;

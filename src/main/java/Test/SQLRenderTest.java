@@ -1,8 +1,8 @@
 package Test;
 
-import FacadeGen.Panel.PanelGeos;
-import FacadeGen.Panel.PanelRender;
-import FacadeGen.PanelFac;
+import facadeGen.Panel.PanelGeos;
+import facadeGen.Panel.PanelRender;
+import facadeGen.PanelFac;
 import client.model.WallPanelEntity;
 import client.service.WallPanelService;
 import guo_cam.CameraController;

@@ -1,12 +1,12 @@
 package Test;
 
-import Convertor.DxfConvertor;
-import FacadeGen.Panel.Panel;
-import FacadeGen.Panel.PanelBase.Base;
-import FacadeGen.Panel.PanelBase.BasicBase;
-import FacadeGen.Panel.PanelGeos;
-import FacadeGen.Panel.PanelRender;
-import FacadeGen.Panel.PanelStyle.StyleCustom;
+import convertor.DxfConvertor;
+import facadeGen.Panel.Panel;
+import facadeGen.Panel.PanelBase.Base;
+import facadeGen.Panel.PanelBase.BasicBase;
+import facadeGen.Panel.PanelGeos;
+import facadeGen.Panel.PanelRender;
+import facadeGen.Panel.PanelStyle.StyleCustom;
 import guo_cam.CameraController;
 import processing.core.PApplet;
 import wblut.geom.WB_Point;

@@ -24,8 +24,14 @@ public class Building {
         unitList = new LinkedList<>();
 
         initUnitIndex();
+        initUnitsPosNeighbor();
+    }
 
+    public Building(List<Unit> unitList) {
+        this.unitList = unitList;
 
+        initUnitIndex();
+        initUnitsPosNeighbor();
     }
 
     /**
@@ -60,11 +66,11 @@ public class Building {
      */
     private List<Unit> getNeighborUnits(Unit target, List<Unit> unitList) {
         List<Unit> neighbors = new LinkedList<>();
-        double threshold = calculateDisThreshold(target, 1.5);
+        double threshold = calculateDisThreshold(target, 1);
 
         for (Unit other : unitList) {
             if (other.getId() != target.getId()) {
-                double dis = GeoTools.getDistance(target.getMidPt(), other.getMidPt());
+                double dis = GeoTools.getDistance3D(target.getMidPt(), other.getMidPt());
                 if (dis < threshold) {
                     neighbors.add(other);
                 }
@@ -87,7 +93,7 @@ public class Building {
         WB_Point topPt = target.getTopFace().getMidPos();
         for (Unit unit : neighbors) {
             WB_Point btmPts = unit.getBottomFace().getMidPos();
-            if (GeoTools.getDistance(topPt, btmPts) <= threshold) {
+            if (GeoTools.getDistance3D(topPt, btmPts) <= threshold) {
                 target.setUpper(unit);
                 break;
             }
@@ -101,10 +107,10 @@ public class Building {
      * @param neighbors
      */
     private void setUnitRight(Unit target, List<Unit> neighbors) {
-        WB_Point oriPt = target.getRndFaces().get(1).getMidPos();
+        WB_Point oriPt = target.getRndFaces().get(0).getMidPos();
         for (Unit unit : neighbors) {
-            WB_Point otherPt = unit.getRndFaces().get(3).getMidPos();
-            if (GeoTools.getDistance(oriPt, otherPt) <= threshold) {
+            WB_Point otherPt = unit.getRndFaces().get(2).getMidPos();
+            if (GeoTools.getDistance3D(oriPt, otherPt) <= threshold) {
                 target.setRight(unit);
                 break;
             }
@@ -118,10 +124,10 @@ public class Building {
      * @param neighbors
      */
     private void setUnitLeft(Unit target, List<Unit> neighbors) {
-        WB_Point oriPt = target.getRndFaces().get(3).getMidPos();
+        WB_Point oriPt = target.getRndFaces().get(2).getMidPos();
         for (Unit unit : neighbors) {
-            WB_Point otherPt = unit.getRndFaces().get(1).getMidPos();
-            if (GeoTools.getDistance(oriPt, otherPt) <= threshold) {
+            WB_Point otherPt = unit.getRndFaces().get(0).getMidPos();
+            if (GeoTools.getDistance3D(oriPt, otherPt) <= threshold) {
                 target.setLeft(unit);
                 break;
             }
@@ -138,7 +144,7 @@ public class Building {
         WB_Point btmPt = target.getBottomFace().getMidPos();
         for (Unit unit : neighbors) {
             WB_Point topPt = unit.getTopFace().getMidPos();
-            if (GeoTools.getDistance(btmPt, topPt) <= threshold) {
+            if (GeoTools.getDistance3D(btmPt, topPt) <= threshold) {
                 target.setLower(unit);
                 break;
             }
@@ -161,16 +167,12 @@ public class Building {
     /**
      * 建立unit之间的单元索引关系
      */
-    private void initUnits() {
+    private void initUnitsPosNeighbor() {
         for (Unit target : unitList) {
             List<Unit> neighbors = getNeighborUnits(target, unitList);
-
+            System.out.println(neighbors.size());
             setNeighborDetail(target, neighbors);
         }
-    }
-
-    public Building(List<Unit> unitList) {
-        this.unitList = unitList;
     }
 
     public List<Unit> getUnitList() {

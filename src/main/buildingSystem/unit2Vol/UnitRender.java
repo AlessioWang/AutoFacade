@@ -40,6 +40,10 @@ public class UnitRender {
         initGeos();
     }
 
+    private void fontSetting(){
+
+    }
+
     public void initGeos() {
         midPts = new LinkedList<>();
         rndShapes = new LinkedList<>();
@@ -94,6 +98,16 @@ public class UnitRender {
         applet.popStyle();
     }
 
+    public void rendId() {
+        applet.pushStyle();
+        String context = String.valueOf(unit.getId());
+        applet.fill(255,255,0);
+        applet.strokeWeight(3);
+        applet.textSize(500);
+        applet.textMode(PApplet.SHAPE);
+        applet.text(context, posPt.xf(),posPt.yf(), posPt.zf());
+        applet.popStyle();
+    }
 
     /**
      * 渲染图元
@@ -105,6 +119,7 @@ public class UnitRender {
         rendBottomShape();
         rendFaceMidPt();
         rendPosPt();
+//        rendId();
     }
 
 }
