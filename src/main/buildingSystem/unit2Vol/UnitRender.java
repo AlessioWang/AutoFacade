@@ -15,11 +15,11 @@ import java.util.List;
  **/
 public class UnitRender {
 
-    private PApplet applet;
+    private final PApplet applet;
 
-    private WB_Render render;
+    private final WB_Render render;
 
-    private Unit unit;
+    private final Unit unit;
 
     private List<WB_Polygon> rndShapes;
 
@@ -40,7 +40,7 @@ public class UnitRender {
         initGeos();
     }
 
-    private void fontSetting(){
+    private void initFaceInfo() {
 
     }
 
@@ -101,13 +101,18 @@ public class UnitRender {
     public void rendId() {
         applet.pushStyle();
         String context = String.valueOf(unit.getId());
-        applet.fill(255,255,0);
+        applet.fill(255, 255, 0);
         applet.strokeWeight(3);
         applet.textSize(500);
         applet.textMode(PApplet.SHAPE);
-        applet.text(context, posPt.xf(),posPt.yf(), posPt.zf());
+        applet.text(context, posPt.xf(), posPt.yf(), posPt.zf());
         applet.popStyle();
     }
+
+    public void renderFaceDir() {
+
+    }
+
 
     /**
      * 渲染图元

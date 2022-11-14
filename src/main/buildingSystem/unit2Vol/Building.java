@@ -2,6 +2,7 @@ package unit2Vol;
 
 import Tools.GeoTools;
 import wblut.geom.WB_Point;
+import wblut.geom.WB_Polygon;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -16,9 +17,14 @@ public class Building {
 
     private List<Unit> unitList;
 
+    //层数
     private int layerNumber;
 
+    //总的建筑高度（各层层高相加）
     private double height;
+
+    //各层平面的组合（即合并每一层的unit的底面单元）
+    private List<WB_Polygon> planList;
 
     public Building() {
         unitList = new LinkedList<>();
@@ -170,7 +176,6 @@ public class Building {
     private void initUnitsPosNeighbor() {
         for (Unit target : unitList) {
             List<Unit> neighbors = getNeighborUnits(target, unitList);
-            System.out.println(neighbors.size());
             setNeighborDetail(target, neighbors);
         }
     }

@@ -2,7 +2,6 @@ package Test;
 
 import Tools.GeoTools;
 import guo_cam.CameraController;
-import org.junit.Test;
 import processing.core.PApplet;
 import unit2Vol.Building;
 import unit2Vol.Unit;
@@ -16,25 +15,29 @@ import java.util.List;
 
 /**
  * @auther Alessio
- * @date 2022/11/12
+ * @date 2022/11/14
  **/
-public class BuildingUnitTest extends PApplet {
+public class SchoolTest extends PApplet {
 
     public static void main(String[] args) {
-        PApplet.main(BuildingUnitTest.class.getName());
+        PApplet.main(SchoolTest.class.getName());
     }
 
     private CameraController cameraController;
 
     private List<UnitRender> unitRenders;
 
-    private Building build;
+    private Building building01;
+
+    private Building building02;
 
     private double height = 3500;
 
     private double gap = 8000;
 
-    private List<Unit> units;
+    private List<Unit> units01;
+
+    private List<Unit> units02;
 
 
     public void settings() {
@@ -46,32 +49,25 @@ public class BuildingUnitTest extends PApplet {
         cameraController = new CameraController(this, 50000);
         unitRenders = new LinkedList<>();
 
+        units01 = new LinkedList<>();
+        units02 = new LinkedList<>();
+
         initUnits();
         initBuilding();
     }
 
     private void initBuilding() {
-        build = new Building(units);
-        System.out.println("unit num : " + build.getUnitList().size());
+        building01 = new Building(units01);
+        System.out.println("unit num : " + building01.getUnitList().size());
 
-        Unit unit = build.getUnitList().get(4);
-
-        System.out.println("id : " + unit.getId() + " MidPos--> " + unit.getTopFace().getMidPos());
-
-        System.out.println("upper id : " + unit.getUpper().getId());
-        System.out.println("Lower id : " + unit.getLower().getId());
-        System.out.println("Left id : " + unit.getLeft().getId());
-        System.out.println("Right id : " + unit.getRight().getId());
     }
 
     private void initUnits() {
-        WB_Point pos = new WB_Point(1000, 0, 2000);
-        WB_Polygon base = GeoTools.createRecPolygon(12000, 8000);
-        WB_Vector dir = new WB_Vector(1, 1, 0);
+        WB_Point pos = new WB_Point(0, 0, 0);
+        WB_Polygon base = GeoTools.createRecPolygon(8000, 6000);
+        WB_Vector dir = new WB_Vector(1, 0, 0);
 
-        units = new LinkedList<>();
-
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 3; j++) {
                 dir.normalizeSelf();
                 WB_Vector horDirNor = new WB_Point(1, 0, 0).mul(gap).mul(i);
@@ -80,10 +76,17 @@ public class BuildingUnitTest extends PApplet {
                 WB_Point p = pos.add(v.add(new WB_Point(0, 0, 1).mul(height).mul(j)));
 
                 Unit u = new Unit(p, base, dir, height);
-                units.add(u);
+                units01.add(u);
                 unitRenders.add(new UnitRender(this, u));
             }
         }
+
+        WB_Point cPos = new WB_Point(0, 6000);
+        WB_Polygon cBase = GeoTools.createRecPolygon(32000, 2000);
+        Unit corridor = new Unit(cPos, cBase, dir, height);
+
+        units01.add(corridor);
+        unitRenders.add(new UnitRender(this, corridor));
     }
 
 
@@ -96,6 +99,5 @@ public class BuildingUnitTest extends PApplet {
             ur.rendId();
         }
     }
-
 
 }
