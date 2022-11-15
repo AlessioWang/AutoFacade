@@ -33,8 +33,6 @@ public class SchoolTest extends PApplet {
 
     private double height = 3500;
 
-    private double gap = 8000;
-
     private List<Unit> units01;
 
     private List<Unit> units02;
@@ -62,31 +60,41 @@ public class SchoolTest extends PApplet {
 
     }
 
+    private void initBuildingLayer(List<Unit> target, List<UnitRender> renders, WB_Point pos, WB_Polygon base, WB_Vector dir, double gap, int horNum, int layerNum) {
+        for (int i = 0; i < horNum; i++) {
+            for (int j = 0; j < layerNum; j++) {
+                dir.normalizeSelf();
+
+                WB_Vector horDirNor = new WB_Point(1, 0, 0).mul(gap).mul(i);
+                WB_Vector v = dir.mul(horDirNor.getLength());
+                WB_Point p = pos.add(v.add(new WB_Point(0, 0, 1).mul(height).mul(j)));
+
+                Unit u = new Unit(p, base, dir, height);
+                target.add(u);
+                renders.add(new UnitRender(this, u));
+            }
+        }
+    }
+
     private void initUnits() {
         WB_Point pos = new WB_Point(0, 0, 0);
         WB_Polygon base = GeoTools.createRecPolygon(8000, 6000);
         WB_Vector dir = new WB_Vector(1, 0, 0);
-
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 3; j++) {
-                dir.normalizeSelf();
-                WB_Vector horDirNor = new WB_Point(1, 0, 0).mul(gap).mul(i);
-                WB_Vector v = dir.mul(horDirNor.getLength());
-
-                WB_Point p = pos.add(v.add(new WB_Point(0, 0, 1).mul(height).mul(j)));
-
-                Unit u = new Unit(p, base, dir, height);
-                units01.add(u);
-                unitRenders.add(new UnitRender(this, u));
-            }
-        }
+        initBuildingLayer(units01, unitRenders, pos, base, dir, 8000, 4, 3);
 
         WB_Point cPos = new WB_Point(0, 6000);
         WB_Polygon cBase = GeoTools.createRecPolygon(32000, 2000);
-        Unit corridor = new Unit(cPos, cBase, dir, height);
+        initBuildingLayer(units01, unitRenders, cPos, cBase, dir, 0, 1, 3);
 
-        units01.add(corridor);
-        unitRenders.add(new UnitRender(this, corridor));
+        WB_Point pos02 = new WB_Point(24000, 14000);
+        WB_Polygon base02 = GeoTools.createRecPolygon(6000, 8000);
+        WB_Vector dir02 = new WB_Vector(0, 1, 0);
+        initBuildingLayer(units02, unitRenders, pos02, base02, dir02, 6000, 3, 5);
+
+        WB_Point cPos02 = new WB_Point(24000, 8000);
+        WB_Polygon cBase02 = GeoTools.createRecPolygon(18000, 2000);
+        WB_Vector cDir02 = new WB_Vector(0, -1, 0);
+        initBuildingLayer(units02, unitRenders, cPos02, cBase02, cDir02, 0, 1, 5);
     }
 
 
