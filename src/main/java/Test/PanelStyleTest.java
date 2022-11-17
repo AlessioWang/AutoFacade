@@ -85,8 +85,8 @@ public class PanelStyleTest extends PApplet {
     private void renderAll(){
         panelRender();
         frameRender();
-//        beamRender();
-//        glassRender();
+        beamRender();
+        glassRender();
     }
 
     private void panelRender() {

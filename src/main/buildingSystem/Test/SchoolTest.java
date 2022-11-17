@@ -56,7 +56,25 @@ public class SchoolTest extends PApplet {
 
     private void initBuilding() {
         building01 = new Building(units01);
-        System.out.println("unit num : " + building01.getUnitList().size());
+        building02 = new Building(units02);
+
+        System.out.println("building 01 unit num : " + building01.getUnitList().size());
+        System.out.println("building 02 unit num : " + building02.getUnitList().size());
+
+        checkInfo();
+    }
+
+    private void checkInfo() {
+        Unit unit = building01.getUnitList().get(4);
+        System.out.println("upper id : " + unit.getUpper().getId());
+        System.out.println("Lower id : " + unit.getLower().getId());
+        if (unit.getLeft() != null) {
+            System.out.println("Left id : " + unit.getLeft().getId());
+        }
+
+        if (unit.getRight() != null) {
+            System.out.println("Right id : " + unit.getRight().getId());
+        }
 
     }
 
