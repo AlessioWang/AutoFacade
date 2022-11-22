@@ -38,8 +38,8 @@ public class RenderClient extends PApplet {
         wall = building.getVolList().get(0).getWalls().get(0);
 
         grid = wall.getGrid();
-        grid.changeCellAvail(3,5,false);
-        grid.closeCells(2,2,20,10);
+        grid.changeCellAvail(3, 5, false);
+        grid.closeCells(2, 2, 20, 10);
     }
 
     public void draw() {

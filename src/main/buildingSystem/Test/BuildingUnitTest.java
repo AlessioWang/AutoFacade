@@ -2,11 +2,10 @@ package Test;
 
 import Tools.GeoTools;
 import guo_cam.CameraController;
-import org.junit.Test;
 import processing.core.PApplet;
 import unit2Vol.Building;
 import unit2Vol.Unit;
-import unit2Vol.UnitRender;
+import renders.UnitRender;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Vector;

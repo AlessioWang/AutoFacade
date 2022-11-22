@@ -1,6 +1,7 @@
-package unit2Vol;
+package renders;
 
 import processing.core.PApplet;
+import unit2Vol.Unit;
 import unit2Vol.face.Face;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
@@ -31,6 +32,8 @@ public class UnitRender {
 
     private WB_Point posPt;
 
+    private WB_Point topPt;
+
     public UnitRender(PApplet applet, Unit unit) {
         this.applet = applet;
         this.unit = unit;
@@ -57,6 +60,7 @@ public class UnitRender {
         topShape = unit.getTopFace().getShape();
         bottomShape = unit.getBottomFace().getShape();
         posPt = unit.getMidPt();
+        topPt = unit.getTopFace().getMidPos();
     }
 
     public void rendRndShape() {
@@ -101,16 +105,12 @@ public class UnitRender {
     public void rendId() {
         applet.pushStyle();
         String context = String.valueOf(unit.getId());
-        applet.fill(255, 255, 0);
+        applet.fill(0, 0, 0);
         applet.strokeWeight(3);
-        applet.textSize(500);
+        applet.textSize(1300);
         applet.textMode(PApplet.SHAPE);
-        applet.text(context, posPt.xf(), posPt.yf(), posPt.zf());
+        applet.text(context, topPt.xf(), topPt.yf(), topPt.zf());
         applet.popStyle();
-    }
-
-    public void renderFaceDir() {
-
     }
 
 
@@ -124,7 +124,7 @@ public class UnitRender {
         rendBottomShape();
         rendFaceMidPt();
         rendPosPt();
-//        rendId();
+        rendId();
     }
 
 }
