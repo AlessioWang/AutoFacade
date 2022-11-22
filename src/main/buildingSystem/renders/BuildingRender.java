@@ -15,12 +15,18 @@ import java.util.List;
 public class BuildingRender {
     private List<Unit> unitList;
 
+    @SafeVarargs
     public BuildingRender(List<Unit>... units) {
-        this.unitList = new LinkedList<>();
+        if (units.length != 0) {
+            this.unitList = new LinkedList<>();
 
-        for (List<Unit> u : units) {
-            unitList.addAll(u);
+            for (List<Unit> u : units) {
+                unitList.addAll(u);
+            }
+        } else {
+            System.out.println("No units in target building");
         }
+
     }
 
 
