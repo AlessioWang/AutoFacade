@@ -3,6 +3,7 @@ package Test;
 import Tools.GeoTools;
 import guo_cam.CameraController;
 import processing.core.PApplet;
+import renders.BuildingRender;
 import unit2Vol.Building;
 import unit2Vol.Unit;
 import renders.UnitRender;
@@ -38,10 +39,10 @@ public class SchoolTest extends PApplet {
     private List<Unit> units02;
 
 
+    private BuildingRender buildingRender;
     public void settings() {
         size(800, 800, P3D);
     }
-
 
     public void setup() {
         cameraController = new CameraController(this, 50000);
@@ -62,6 +63,9 @@ public class SchoolTest extends PApplet {
         System.out.println("building 02 unit num : " + building02.getUnitList().size());
 
         checkInfo();
+
+//        buildingRender = new BuildingRender(this, units01, units02);
+        buildingRender = new BuildingRender(this, building01, building02);
     }
 
     private void checkInfo() {
@@ -120,10 +124,12 @@ public class SchoolTest extends PApplet {
         background(255);
         cameraController.drawSystem(1000);
 
-        for (UnitRender ur : unitRenders) {
-            ur.renderAll();
-            ur.rendId();
-        }
+//        for (UnitRender ur : unitRenders) {
+//            ur.renderAll();
+//            ur.rendId();
+//        }
+
+        buildingRender.rendAll();
     }
 
 }
