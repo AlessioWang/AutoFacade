@@ -66,10 +66,21 @@ public class Unit {
         init();
     }
 
+    /**
+     * 初始化基本变量信息
+     */
     private void init() {
         initRealBase();
         initFaces();
         initMidPt();
+    }
+
+    /**
+     * 初始化每个面的ifPanel字段的值
+     * 需要Building实例在初始化unit周边信息，外部调用
+     */
+    public void initFacePanelStatus() {
+
     }
 
     /**
