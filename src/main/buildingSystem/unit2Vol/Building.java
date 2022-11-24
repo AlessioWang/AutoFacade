@@ -1,6 +1,7 @@
 package unit2Vol;
 
 import Tools.GeoTools;
+import org.apache.logging.log4j.core.appender.rewrite.RewriteAppender;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
 
@@ -15,6 +16,7 @@ import java.util.List;
  **/
 public class Building {
 
+    //存储的Unit
     private List<Unit> unitList;
 
     //层数
@@ -26,18 +28,49 @@ public class Building {
     //各层平面的组合（即合并每一层的unit的底面单元）
     private List<WB_Polygon> planList;
 
-    public Building() {
-        unitList = new LinkedList<>();
-
-        initUnitIndex();
-        initUnitsPosNeighbor();
-    }
-
     public Building(List<Unit> unitList) {
         this.unitList = unitList;
 
+        init();
+    }
+
+    /**
+     * 初始化各种基本变量信息
+     */
+    private void init() {
+        initUnitBuildingInfo();
         initUnitIndex();
         initUnitsPosNeighbor();
+        initHeight();
+    }
+
+    /**
+     * 给building中所有的unit赋值building信息
+     */
+    private void initUnitBuildingInfo() {
+        for (Unit u : unitList) {
+            u.setBuilding(this);
+        }
+    }
+
+    /**
+     * 初始化高度数据
+     * 最高的unit的TopFace - 最低的unit的bottomFace
+     */
+    private void initHeight() {
+        double top = Integer.MIN_VALUE;
+        double bottom = Integer.MAX_VALUE;
+
+        for (Unit unit : unitList) {
+            double tempTop = unit.getTopFace().getMidPos().zd();
+            double tempBot = unit.getBottomFace().getMidPos().zd();
+
+            if (top < tempTop) top = tempTop;
+
+            if (bottom > tempBot) bottom = tempBot;
+        }
+
+        height = Math.abs(top - bottom);
     }
 
     /**
@@ -99,8 +132,26 @@ public class Building {
         WB_Point topPt = target.getTopFace().getMidPos();
         for (Unit unit : neighbors) {
             WB_Point btmPts = unit.getBottomFace().getMidPos();
+            //如果该unit一定距离内存在其他的unit底面的中点
             if (GeoTools.getDistance3D(topPt, btmPts) <= threshold) {
                 target.setUpper(unit);
+                break;
+            }
+        }
+    }
+
+    /**
+     * 检索并设置Lower Unit
+     *
+     * @param target
+     * @param neighbors
+     */
+    private void setUnitLower(Unit target, List<Unit> neighbors) {
+        WB_Point btmPt = target.getBottomFace().getMidPos();
+        for (Unit unit : neighbors) {
+            WB_Point topPt = unit.getTopFace().getMidPos();
+            if (GeoTools.getDistance3D(btmPt, topPt) <= threshold) {
+                target.setLower(unit);
                 break;
             }
         }
@@ -140,22 +191,6 @@ public class Building {
         }
     }
 
-    /**
-     * 检索并设置Lower Unit
-     *
-     * @param target
-     * @param neighbors
-     */
-    private void setUnitLower(Unit target, List<Unit> neighbors) {
-        WB_Point btmPt = target.getBottomFace().getMidPos();
-        for (Unit unit : neighbors) {
-            WB_Point topPt = unit.getTopFace().getMidPos();
-            if (GeoTools.getDistance3D(btmPt, topPt) <= threshold) {
-                target.setLower(unit);
-                break;
-            }
-        }
-    }
 
     /**
      * 调用设置的方法

@@ -40,6 +40,7 @@ public class SchoolTest extends PApplet {
 
 
     private BuildingRender buildingRender;
+
     public void settings() {
         size(800, 800, P3D);
     }
@@ -53,6 +54,9 @@ public class SchoolTest extends PApplet {
 
         initUnits();
         initBuilding();
+
+        //测试信息方法
+        checkInfo();
     }
 
     private void initBuilding() {
@@ -62,12 +66,14 @@ public class SchoolTest extends PApplet {
         System.out.println("building 01 unit num : " + building01.getUnitList().size());
         System.out.println("building 02 unit num : " + building02.getUnitList().size());
 
-        checkInfo();
 
 //        buildingRender = new BuildingRender(this, units01, units02);
         buildingRender = new BuildingRender(this, building01, building02);
     }
 
+    /**
+     * test building information
+     */
     private void checkInfo() {
         Unit unit = building01.getUnitList().get(4);
         System.out.println("upper id : " + unit.getUpper().getId());
@@ -79,6 +85,9 @@ public class SchoolTest extends PApplet {
         if (unit.getRight() != null) {
             System.out.println("Right id : " + unit.getRight().getId());
         }
+
+        System.out.println("building01 h : " + building01.getHeight());
+        System.out.println("building02 h : " + building02.getHeight());
 
     }
 

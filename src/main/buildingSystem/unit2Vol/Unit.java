@@ -20,6 +20,9 @@ public class Unit {
     //唯一编号
     private int id;
 
+    //unit所属的building
+    private Building building;
+
     //相对世界坐标的位置坐标
     private final WB_Point pos;
 
@@ -50,6 +53,7 @@ public class Unit {
 
     //几何体的形体中心点
     private WB_Point midPt;
+
 
     public Unit(WB_Point pos, WB_Polygon oriBase, WB_Vector dir, double height) {
         this.pos = pos;
@@ -107,6 +111,14 @@ public class Unit {
         //初始化顶面
         WB_Polygon topShape = GeoTools.movePolygon3D(realBase, new WB_Point(0, 0, 1).mul(height));
         topFace = new TopFace(this, topShape);
+
+    }
+
+    /**
+     * 检测unit的每个face的类型
+     * 给ifPanel属性进行赋值
+     */
+    private void checkIfPanel() {
 
     }
 
@@ -172,5 +184,13 @@ public class Unit {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public Building getBuilding() {
+        return building;
+    }
+
+    public void setBuilding(Building building) {
+        this.building = building;
     }
 }

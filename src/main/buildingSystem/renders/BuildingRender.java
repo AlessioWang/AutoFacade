@@ -18,7 +18,7 @@ import java.util.List;
  * @date 2022/11/22
  **/
 public class BuildingRender {
-    private PApplet applet;
+    private final PApplet applet;
 
     private List<Unit> unitList;
 
@@ -72,5 +72,4 @@ public class BuildingRender {
             ur.renderAll();
         }
     }
-
 }

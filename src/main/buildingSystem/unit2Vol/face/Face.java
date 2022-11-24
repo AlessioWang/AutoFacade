@@ -54,4 +54,7 @@ public abstract class Face {
         return ifPanel;
     }
 
+    public void setIfPanel(boolean ifPanel) {
+        this.ifPanel = ifPanel;
+    }
 }
