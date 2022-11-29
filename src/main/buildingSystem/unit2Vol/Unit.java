@@ -7,6 +7,7 @@ import unit2Vol.face.RndFace;
 import unit2Vol.face.TopFace;
 import wblut.geom.*;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -44,6 +45,10 @@ public class Unit {
     private Unit left;
     private Unit right;
 
+    private HashMap<WB_Vector, List<Unit>> rndUnitMap;
+    private HashMap<WB_Vector, Face> faceDirMap;
+
+
     //Unit周围的面,不包括上下两个底面
     private List<Face> rndFaces;
 
@@ -53,7 +58,6 @@ public class Unit {
 
     //几何体的形体中心点
     private WB_Point midPt;
-
 
     public Unit(WB_Point pos, WB_Polygon oriBase, WB_Vector dir, double height) {
         this.pos = pos;
@@ -73,15 +77,56 @@ public class Unit {
         initRealBase();
         initFaces();
         initMidPt();
+        initRndUnitMap();
+    }
+
+    /**
+     * 初始化RndUnitMap
+     * 将周边的每个面的vector作为key，value为一个空List
+     */
+    private void initRndUnitMap() {
+        rndUnitMap = new HashMap<>();
+        faceDirMap = new HashMap<>();
+
+        for (Face face : rndFaces) {
+            WB_Vector dir = face.getDir();
+            rndUnitMap.put(dir, new LinkedList<>());
+            faceDirMap.put(dir, face);
+        }
     }
 
     /**
      * 初始化每个面的ifPanel字段的值
      * 需要Building实例在初始化unit周边信息，外部调用
+     * 调用时需要初始化this unit周边unit的信息
      */
     public void initFacePanelStatus() {
-
+        initTopBotIfPanel();
+        initRndIfPanel();
     }
+
+    /**
+     * 初始化rndFaces的ifPanel字段的值
+     */
+    private void initRndIfPanel() {
+        for (Face face : rndFaces) {
+
+        }
+    }
+
+    /**
+     * 初始化top和bottom face的ifPanel字段的值
+     * 根据每个unit周边的unit信息
+     */
+    private void initTopBotIfPanel() {
+        Face top = this.getTopFace();
+        Face bottom = this.getBottomFace();
+
+        if (this.getUpper() == null) top.setIfPanel(true);
+
+        if (this.getLower() == null) bottom.setIfPanel(true);
+    }
+
 
     /**
      * 初始化形体中心
@@ -203,5 +248,13 @@ public class Unit {
 
     public void setBuilding(Building building) {
         this.building = building;
+    }
+
+    public HashMap<WB_Vector, List<Unit>> getRndUnitMap() {
+        return rndUnitMap;
+    }
+
+    public HashMap<WB_Vector, Face> getFaceDirMap() {
+        return faceDirMap;
     }
 }

@@ -2,11 +2,17 @@ package unit2Vol;
 
 import Tools.GeoTools;
 import org.apache.logging.log4j.core.appender.rewrite.RewriteAppender;
+import org.junit.Test;
+import unit2Vol.face.Face;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
+import wblut.geom.WB_Segment;
+import wblut.geom.WB_Vector;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 记录Unit之间的关系
@@ -28,6 +34,9 @@ public class Building {
     //各层平面的组合（即合并每一层的unit的底面单元）
     private List<WB_Polygon> planList;
 
+    // TODO: 2022/11/13 需要研究更加合理地定义阈值方式
+    private double threshold = 10;
+
     public Building(List<Unit> unitList) {
         this.unitList = unitList;
 
@@ -42,6 +51,9 @@ public class Building {
         initUnitIndex();
         initUnitsPosNeighbor();
         initHeight();
+
+        //给Unit的rndUnitMap赋值
+        setNeiUnitMap();
     }
 
     /**
@@ -119,8 +131,89 @@ public class Building {
         return neighbors;
     }
 
-    // TODO: 2022/11/13 需要研究更加合理地定义阈值方式
-    private double threshold = 10;
+    /**
+     * 初始化每一个unit的rndUnitMap信息
+     */
+    private void setNeiUnitMap() {
+        for (Unit target : unitList) {
+            HashMap map = target.getRndUnitMap();
+            List<Unit> neighbors = getNeighborUnits(target, unitList);
+
+            List<WB_Vector> vectors = new LinkedList<>();
+            target.getRndFaces().forEach(face -> vectors.add(face.getDir()));
+
+            for (WB_Vector vector : vectors) {
+                List<Unit> neiList = (List<Unit>) map.get(vector);
+                neiList.addAll(checkNeiUnitByVec(target, vector, neighbors));
+            }
+        }
+    }
+
+    /**
+     * 通过指定的unit和vec在List中寻找相邻的units
+     *
+     * @param target
+     * @param vector
+     * @param neighbors
+     * @return
+     */
+    private List<Unit> checkNeiUnitByVec(Unit target, WB_Vector vector, List<Unit> neighbors) {
+        System.out.println("nei num : " + neighbors.size());
+
+        List<Unit> result = new LinkedList<>();
+        Face face = target.getFaceDirMap().get(vector);
+
+        for (Unit unit : neighbors) {
+            HashMap<WB_Vector, List<Unit>> rndUnitMap = unit.getRndUnitMap();
+            HashMap<WB_Vector, Face> dirFaceMap = unit.getFaceDirMap();
+
+            Set<WB_Vector> vectors =  rndUnitMap.keySet();
+            for (WB_Vector v : vectors) {
+                //找到与目标dir相反的unit face
+                if (v == vector.mul(-1)) {
+                    System.out.println("&&&&");
+                    Face f = dirFaceMap.get(v);
+                    //判断面是否相互包含
+                    if (checkFaceNeighbor(face, f)) {
+                        result.add(unit);
+                        System.out.println("***");
+                        break;
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * 检测两个face是否相邻
+     * 通过判断两个face的中心点的向量到水平与数值方向的投影长度与两边长和的关系
+     *
+     * @param face1
+     * @param face2
+     * @return
+     */
+    private boolean checkFaceNeighbor(Face face1, Face face2) {
+        WB_Point p1 = face1.getMidPos();
+        WB_Point p2 = face2.getMidPos();
+
+        WB_Vector vp = new WB_Vector(p1, p2);
+
+        List<WB_Segment> segmentList1 = face1.getShape().toSegments();
+        List<WB_Segment> segmentList2 = face2.getShape().toSegments();
+
+        WB_Vector vHor = (WB_Vector) segmentList1.get(0).getDirection();
+        vHor.normalizeSelf();
+        WB_Vector vVer = (WB_Vector) segmentList1.get(1).getDirection();
+        vVer.normalizeSelf();
+
+        double horDistance = (segmentList1.get(0).getLength() + segmentList2.get(0).getLength()) * 0.5;
+        double verDistance = (segmentList1.get(1).getLength() + segmentList2.get(1).getLength()) * 0.5;
+
+        return vp.dot(vHor) < horDistance && vp.dot(vVer) < verDistance;
+    }
+
 
     /**
      * 检索并设置Upper Unit
@@ -207,6 +300,7 @@ public class Building {
 
     /**
      * 建立unit之间的单元索引关系
+     * 遍历每个unit，循环调用set方法
      */
     private void initUnitsPosNeighbor() {
         for (Unit target : unitList) {

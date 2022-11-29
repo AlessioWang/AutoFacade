@@ -11,8 +11,10 @@ import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Vector;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @auther Alessio
@@ -76,8 +78,10 @@ public class SchoolTest extends PApplet {
      */
     private void checkInfo() {
         Unit unit = building01.getUnitList().get(4);
+
         System.out.println("upper id : " + unit.getUpper().getId());
         System.out.println("Lower id : " + unit.getLower().getId());
+
         if (unit.getLeft() != null) {
             System.out.println("Left id : " + unit.getLeft().getId());
         }
@@ -89,6 +93,12 @@ public class SchoolTest extends PApplet {
         System.out.println("building01 h : " + building01.getHeight());
         System.out.println("building02 h : " + building02.getHeight());
 
+        HashMap<WB_Vector, List<Unit>> map = unit.getRndUnitMap();
+        for (Map.Entry<WB_Vector, List<Unit>> entry: map.entrySet()){
+            System.out.println(entry.getKey());
+
+            entry.getValue().forEach(e -> System.out.println(e.getId()));
+        }
     }
 
     private void initBuildingLayer(List<Unit> target, List<UnitRender> renders, WB_Point pos, WB_Polygon base, WB_Vector dir, double gap, int horNum, int layerNum) {
