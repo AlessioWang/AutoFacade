@@ -769,6 +769,7 @@ public class GeoTools {
 
     /**
      * 判断geo是否在shell内部
+     * 只适用于二维
      *
      * @param shell
      * @param geo
