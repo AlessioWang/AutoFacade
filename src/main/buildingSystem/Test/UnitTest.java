@@ -55,7 +55,6 @@ public class UnitTest extends PApplet {
 
         unit = new Unit(pos, base, dir, 3500);
 
-
         List<Face> rndFaces = unit.getRndFaces();
         for (Face face : rndFaces) {
             rndShapes.add(face.getShape());
@@ -63,7 +62,6 @@ public class UnitTest extends PApplet {
         }
 
         topShape = unit.getTopFace().getShape();
-
         bottomShape = unit.getBottomFace().getShape();
 
     }

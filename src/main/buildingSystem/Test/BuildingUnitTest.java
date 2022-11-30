@@ -10,8 +10,10 @@ import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Vector;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @auther Alessio
@@ -31,7 +33,7 @@ public class BuildingUnitTest extends PApplet {
 
     private double height = 3500;
 
-    private double gap = 8000;
+    private double gap = 12000;
 
     private List<Unit> units;
 
@@ -51,27 +53,32 @@ public class BuildingUnitTest extends PApplet {
 
     private void initBuilding() {
         build = new Building(units);
+
+        checkInfo();
+    }
+
+    private void checkInfo() {
         System.out.println("unit num : " + build.getUnitList().size());
 
         Unit unit = build.getUnitList().get(4);
 
-        System.out.println("id : " + unit.getId() + " MidPos--> " + unit.getTopFace().getMidPos());
+        HashMap<WB_Vector, List<Unit>> map = unit.getRndUnitMap();
 
-        System.out.println("upper id : " + unit.getUpper().getId());
-        System.out.println("Lower id : " + unit.getLower().getId());
-        System.out.println("Left id : " + unit.getLeft().getId());
-        System.out.println("Right id : " + unit.getRight().getId());
+        for (Map.Entry<WB_Vector, List<Unit>> entry : map.entrySet()) {
+            System.out.println("face vec : " + entry.getKey());
+            entry.getValue().forEach(e -> System.out.println(e.getId()));
+        }
     }
 
     private void initUnits() {
         WB_Point pos = new WB_Point(1000, 0, 2000);
         WB_Polygon base = GeoTools.createRecPolygon(12000, 8000);
-        WB_Vector dir = new WB_Vector(1, 1, 0);
+        WB_Vector dir = new WB_Vector(1, 0, 0);
 
         units = new LinkedList<>();
 
         for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
+            for (int j = 0; j < 4; j++) {
                 dir.normalizeSelf();
                 WB_Vector horDirNor = new WB_Point(1, 0, 0).mul(gap).mul(i);
                 WB_Vector v = dir.mul(horDirNor.getLength());

@@ -29,12 +29,13 @@ public class GeoTools {
 
     /**
      * 3D计算两点距离
+     *
      * @param a
      * @param b
      * @return
      */
     public static double getDistance3D(WB_Point a, WB_Point b) {
-        return Math.sqrt((a.xd() - b.xd()) * (a.xd() - b.xd()) + (a.yd() - b.yd()) * (a.yd() - b.yd())+ (a.zd()- b.zd())*(a.zd()-b.zd()));
+        return Math.sqrt((a.xd() - b.xd()) * (a.xd() - b.xd()) + (a.yd() - b.yd()) * (a.yd() - b.yd()) + (a.zd() - b.zd()) * (a.zd() - b.zd()));
     }
 
     /**
@@ -773,11 +774,25 @@ public class GeoTools {
      * @param geo
      * @return
      */
-    public static boolean ifCoverWB(WB_Polygon shell, WB_PolyLine geo) {
+    public static boolean ifPolyCoverPoly2D(WB_Polygon shell, WB_PolyLine geo) {
         Polygon jtsShell = WB_PolygonToJtsPolygon(shell);
         LineString lineString = WB_polylineToJtsLinestring(geo);
         return jtsShell.covers(lineString);
     }
+
+    /**
+     * 检测点在不在polygon内
+     *
+     * @param shell
+     * @param pt
+     * @return
+     */
+    public static boolean ifPolyCoverPt2D(WB_Polygon shell, WB_Point pt) {
+        Polygon jtsShell = WB_PolygonToJtsPolygon(shell);
+        Point jtsPoint = gf.createPoint(new Coordinate(pt.xd(), pt.yd(), pt.zd()));
+        return jtsShell.covers(jtsPoint);
+    }
+
 
     /**
      * 将多个polyLine沿着一个方向移动一定的长度

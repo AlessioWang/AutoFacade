@@ -1,8 +1,6 @@
 package unit2Vol;
 
 import Tools.GeoTools;
-import org.apache.logging.log4j.core.appender.rewrite.RewriteAppender;
-import org.junit.Test;
 import unit2Vol.face.Face;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
@@ -117,7 +115,7 @@ public class Building {
      */
     private List<Unit> getNeighborUnits(Unit target, List<Unit> unitList) {
         List<Unit> neighbors = new LinkedList<>();
-        double threshold = calculateDisThreshold(target, 1);
+        double threshold = calculateDisThreshold(target, 1.5);
 
         for (Unit other : unitList) {
             if (other.getId() != target.getId()) {
@@ -158,25 +156,20 @@ public class Building {
      * @return
      */
     private List<Unit> checkNeiUnitByVec(Unit target, WB_Vector vector, List<Unit> neighbors) {
-        System.out.println("nei num : " + neighbors.size());
-
         List<Unit> result = new LinkedList<>();
         Face face = target.getFaceDirMap().get(vector);
 
         for (Unit unit : neighbors) {
             HashMap<WB_Vector, List<Unit>> rndUnitMap = unit.getRndUnitMap();
             HashMap<WB_Vector, Face> dirFaceMap = unit.getFaceDirMap();
-
-            Set<WB_Vector> vectors =  rndUnitMap.keySet();
+            Set<WB_Vector> vectors = rndUnitMap.keySet();
             for (WB_Vector v : vectors) {
                 //找到与目标dir相反的unit face
-                if (v == vector.mul(-1)) {
-                    System.out.println("&&&&");
+                if (v.equals(vector.mul(-1))) {
                     Face f = dirFaceMap.get(v);
                     //判断面是否相互包含
-                    if (checkFaceNeighbor(face, f)) {
+                    if (checkFaceNeiTest(face, f)) {
                         result.add(unit);
-                        System.out.println("***");
                         break;
                     }
                 }
@@ -184,6 +177,42 @@ public class Building {
         }
 
         return result;
+    }
+
+
+    /**
+     * 无法使用
+     * Jts的covers方法只能判断二维图形
+     *
+     * @param f1
+     * @param f2
+     * @return
+     */
+    private boolean checkFaceNeiTest02(Face f1, Face f2) {
+        WB_Polygon polygon1 = f1.getShape();
+        WB_Polygon polygon2 = f2.getShape();
+
+        WB_Point midPosP1 = f1.getMidPos();
+        System.out.println("pts1" + midPosP1);
+        WB_Point midPosP2 = f2.getMidPos();
+        System.out.println("pts2" + midPosP2);
+
+        return (GeoTools.ifPolyCoverPoly2D(polygon1, polygon2) || GeoTools.ifPolyCoverPoly2D(polygon2, polygon1))
+                && (GeoTools.ifPolyCoverPt2D(polygon1, midPosP2) || GeoTools.ifPolyCoverPt2D(polygon2, midPosP1));
+
+    }
+
+    // TODO: 2022/11/30 寻找更合适的判断方法
+
+    /**
+     * 通过两个面的中心点是否在一个距离内来判断
+     *
+     * @param f1
+     * @param f2
+     * @return
+     */
+    private boolean checkFaceNeiTest(Face f1, Face f2) {
+        return GeoTools.getDistance3D(f1.getMidPos(), f2.getMidPos()) < 1;
     }
 
     /**
@@ -203,13 +232,18 @@ public class Building {
         List<WB_Segment> segmentList1 = face1.getShape().toSegments();
         List<WB_Segment> segmentList2 = face2.getShape().toSegments();
 
+        //向量单位化
         WB_Vector vHor = (WB_Vector) segmentList1.get(0).getDirection();
-        vHor.normalizeSelf();
         WB_Vector vVer = (WB_Vector) segmentList1.get(1).getDirection();
-        vVer.normalizeSelf();
 
         double horDistance = (segmentList1.get(0).getLength() + segmentList2.get(0).getLength()) * 0.5;
         double verDistance = (segmentList1.get(1).getLength() + segmentList2.get(1).getLength()) * 0.5;
+
+        System.out.println("hor dis " + horDistance + "---> " + vp.dot(vHor));
+        System.out.println("ver dis " + verDistance + "---> " + vp.dot(vVer));
+
+        System.out.println(Math.abs(vp.dot(vHor)) < horDistance && Math.abs(vp.dot(vVer)) < verDistance);
+
 
         return vp.dot(vHor) < horDistance && vp.dot(vVer) < verDistance;
     }

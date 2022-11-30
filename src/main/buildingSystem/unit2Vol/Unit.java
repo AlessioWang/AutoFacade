@@ -257,4 +257,8 @@ public class Unit {
     public HashMap<WB_Vector, Face> getFaceDirMap() {
         return faceDirMap;
     }
+
+    public WB_Vector getDir() {
+        return dir;
+    }
 }

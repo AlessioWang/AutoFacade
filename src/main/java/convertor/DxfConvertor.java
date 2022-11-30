@@ -84,13 +84,13 @@ public class DxfConvertor {
 
             InputGeoGroup inputGeoGroup;
             for (WB_Polygon winBound : oriWindowsBounds) {
-                if (GeoTools.ifCoverWB(oriPanelBound, winBound)) {
+                if (GeoTools.ifPolyCoverPoly2D(oriPanelBound, winBound)) {
                     winsInPanel.add(winBound);
 
                     //处理每一个win内部的beams
                     List<WB_PolyLine> beamList = new LinkedList<>();
                     for (WB_PolyLine beam : oriBeamsBounds) {
-                        if (GeoTools.ifCoverWB(winBound, beam)) {
+                        if (GeoTools.ifPolyCoverPoly2D(winBound, beam)) {
                             beam = GeoTools.movePolyline(beam, v.mul(-1));
                             beamList.add(beam);
                         }

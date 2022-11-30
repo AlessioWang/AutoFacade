@@ -87,7 +87,7 @@ public class DxfInput {
             //包含在panel内部的win边界线
             List<WB_Polygon> windowInPanel = new LinkedList<>();
             for (WB_Polygon win : windowsBounds) {
-                if (GeoTools.ifCoverWB(panel, win)) {
+                if (GeoTools.ifPolyCoverPoly2D(panel, win)) {
                     windowInPanel.add(win);
                 }
             }
