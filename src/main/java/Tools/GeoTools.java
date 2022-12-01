@@ -783,6 +783,7 @@ public class GeoTools {
 
     /**
      * 检测点在不在polygon内
+     * 只适用于二维
      *
      * @param shell
      * @param pt

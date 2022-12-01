@@ -45,9 +45,11 @@ public class Unit {
     private Unit left;
     private Unit right;
 
+    //this unit周边的unit信息
     private HashMap<WB_Vector, List<Unit>> rndUnitMap;
-    private HashMap<WB_Vector, Face> faceDirMap;
 
+    //this unit的方向与face的·映射关系
+    private HashMap<WB_Vector, Face> faceDirMap;
 
     //Unit周围的面,不包括上下两个底面
     private List<Face> rndFaces;
@@ -96,37 +98,26 @@ public class Unit {
     }
 
     /**
-     * 初始化每个面的ifPanel字段的值
-     * 需要Building实例在初始化unit周边信息，外部调用
+     * 初始化每个面的ifPanel字段的值，检测unit的每个face周边是否有相邻的单元
+     * 需要Building实例在初始化unit周边信息，building外部调用
      * 调用时需要初始化this unit周边unit的信息
      */
     public void initFacePanelStatus() {
-        initTopBotIfPanel();
-        initRndIfPanel();
-    }
+        //top face
+        if (upper == null) topFace.setIfPanel(true);
 
-    /**
-     * 初始化rndFaces的ifPanel字段的值
-     */
-    private void initRndIfPanel() {
+        //bottom face
+        if (lower == null) bottomFace.setIfPanel(true);
+
+        //round face
         for (Face face : rndFaces) {
-
+            WB_Vector dir = face.getDir();
+            //对应的list长度为0，证明无相邻的unit
+            if (rndUnitMap.get(dir).size() == 0) {
+                face.setIfPanel(true);
+            }
         }
     }
-
-    /**
-     * 初始化top和bottom face的ifPanel字段的值
-     * 根据每个unit周边的unit信息
-     */
-    private void initTopBotIfPanel() {
-        Face top = this.getTopFace();
-        Face bottom = this.getBottomFace();
-
-        if (this.getUpper() == null) top.setIfPanel(true);
-
-        if (this.getLower() == null) bottom.setIfPanel(true);
-    }
-
 
     /**
      * 初始化形体中心
@@ -149,7 +140,9 @@ public class Unit {
         realBase = GeoTools.movePolygon3D(p, pos);
     }
 
-
+    /**
+     * 初始化face信息
+     */
     private void initFaces() {
         //初始化四边的面
         List<WB_Segment> segments = realBase.toSegments();
@@ -167,16 +160,8 @@ public class Unit {
         //初始化顶面
         WB_Polygon topShape = GeoTools.movePolygon3D(realBase, new WB_Point(0, 0, 1).mul(height));
         topFace = new TopFace(this, topShape);
-
     }
 
-    /**
-     * 检测unit的每个face的类型
-     * 给ifPanel属性进行赋值
-     */
-    private void checkIfPanel() {
-
-    }
 
     public WB_Point getMidPt() {
         return midPt;

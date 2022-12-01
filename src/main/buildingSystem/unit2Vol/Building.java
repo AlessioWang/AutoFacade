@@ -52,6 +52,18 @@ public class Building {
 
         //给Unit的rndUnitMap赋值
         setNeiUnitMap();
+
+        //初始化unit中每个face的ifPanel信息
+        initIfPanelStatus();
+    }
+
+    /**
+     * 初始化unit中每个face的ifPanel信息
+     */
+    private void initIfPanelStatus() {
+        for (Unit unit : unitList) {
+            unit.initFacePanelStatus();
+        }
     }
 
     /**
@@ -197,8 +209,7 @@ public class Building {
         WB_Point midPosP2 = f2.getMidPos();
         System.out.println("pts2" + midPosP2);
 
-        return (GeoTools.ifPolyCoverPoly2D(polygon1, polygon2) || GeoTools.ifPolyCoverPoly2D(polygon2, polygon1))
-                && (GeoTools.ifPolyCoverPt2D(polygon1, midPosP2) || GeoTools.ifPolyCoverPt2D(polygon2, midPosP1));
+        return (GeoTools.ifPolyCoverPoly2D(polygon1, polygon2) || GeoTools.ifPolyCoverPoly2D(polygon2, polygon1)) && (GeoTools.ifPolyCoverPt2D(polygon1, midPosP2) || GeoTools.ifPolyCoverPt2D(polygon2, midPosP1));
 
     }
 
@@ -317,7 +328,6 @@ public class Building {
             }
         }
     }
-
 
     /**
      * 调用设置的方法

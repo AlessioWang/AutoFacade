@@ -33,7 +33,7 @@ public class BuildingUnitTest extends PApplet {
 
     private double height = 3500;
 
-    private double gap = 12000;
+    private double gap = 8000;
 
     private List<Unit> units;
 
@@ -60,7 +60,7 @@ public class BuildingUnitTest extends PApplet {
     private void checkInfo() {
         System.out.println("unit num : " + build.getUnitList().size());
 
-        Unit unit = build.getUnitList().get(4);
+        Unit unit = build.getUnitList().get(0);
 
         HashMap<WB_Vector, List<Unit>> map = unit.getRndUnitMap();
 
@@ -73,7 +73,7 @@ public class BuildingUnitTest extends PApplet {
     private void initUnits() {
         WB_Point pos = new WB_Point(1000, 0, 2000);
         WB_Polygon base = GeoTools.createRecPolygon(12000, 8000);
-        WB_Vector dir = new WB_Vector(1, 0, 0);
+        WB_Vector dir = new WB_Vector(1, 1, 0);
 
         units = new LinkedList<>();
 

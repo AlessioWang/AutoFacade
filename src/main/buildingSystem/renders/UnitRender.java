@@ -7,6 +7,7 @@ import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
 import wblut.processing.WB_Render;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -34,6 +35,8 @@ public class UnitRender {
 
     private WB_Point topPt;
 
+    private List<WB_Polygon> panelFaceShapes;
+
     public UnitRender(PApplet applet, Unit unit) {
         this.applet = applet;
         this.unit = unit;
@@ -43,11 +46,10 @@ public class UnitRender {
         initGeos();
     }
 
-    private void initFaceInfo() {
-
-    }
-
-    public void initGeos() {
+    /**
+     * 初始化需要渲染的物件
+     */
+    private void initGeos() {
         midPts = new LinkedList<>();
         rndShapes = new LinkedList<>();
 
@@ -61,6 +63,35 @@ public class UnitRender {
         bottomShape = unit.getBottomFace().getShape();
         posPt = unit.getMidPt();
         topPt = unit.getTopFace().getMidPos();
+
+        initPanelFaceGeos();
+    }
+
+    /**
+     * 初始化ifPanel为true的geos
+     */
+    private void initPanelFaceGeos() {
+        panelFaceShapes = new LinkedList<>();
+
+        if (unit.getTopFace().isIfPanel()) {
+            panelFaceShapes.add(unit.getTopFace().getShape());
+        }
+
+        if (unit.getBottomFace().isIfPanel()) {
+            panelFaceShapes.add(unit.getBottomFace().getShape());
+        }
+
+        unit.getRndFaces().stream().filter(Face::isIfPanel).forEach(e -> panelFaceShapes.add(e.getShape()));
+    }
+
+    public void rendPanelShape() {
+        applet.pushStyle();
+        applet.noFill();
+        applet.fill(100, 100, 0, 50);
+        for (WB_Polygon p : panelFaceShapes) {
+            render.drawPolygonEdges(p);
+        }
+        applet.popStyle();
     }
 
     public void rendRndShape() {
@@ -118,13 +149,14 @@ public class UnitRender {
      * 渲染图元
      */
     public void renderAll() {
-        rendRndShape();
-        rendRndShape();
-        rendTopShape();
-        rendBottomShape();
-        rendFaceMidPt();
-        rendPosPt();
-        rendId();
+//        rendRndShape();
+//        rendRndShape();
+//        rendTopShape();
+//        rendBottomShape();
+//        rendFaceMidPt();
+//        rendPosPt();
+//        rendId();
+        rendPanelShape();
     }
 
 }

@@ -24,7 +24,7 @@ public abstract class Face {
     //几何中点
     private WB_Point midPos;
 
-    //是否可以放置面板
+    //是否可以放置面板,默认为false
     private boolean ifPanel = false;
 
     public Face(Unit unit, WB_Polygon shape) {
