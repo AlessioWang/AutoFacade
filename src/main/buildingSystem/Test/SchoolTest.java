@@ -77,18 +77,7 @@ public class SchoolTest extends PApplet {
      * test building information
      */
     private void checkInfo() {
-        Unit unit = building01.getUnitList().get(4);
-
-        System.out.println("upper id : " + unit.getUpper().getId());
-        System.out.println("Lower id : " + unit.getLower().getId());
-
-        if (unit.getLeft() != null) {
-            System.out.println("Left id : " + unit.getLeft().getId());
-        }
-
-        if (unit.getRight() != null) {
-            System.out.println("Right id : " + unit.getRight().getId());
-        }
+        Unit unit = building01.getUnitList().get(2);
 
         System.out.println("building01 h : " + building01.getHeight());
         System.out.println("building02 h : " + building02.getHeight());
@@ -121,7 +110,7 @@ public class SchoolTest extends PApplet {
         WB_Point pos = new WB_Point(0, 0, 0);
         WB_Polygon base = GeoTools.createRecPolygon(8000, 6000);
         WB_Vector dir = new WB_Vector(1, 0, 0);
-        initBuildingLayer(units01, unitRenders, pos, base, dir, 8000, 3, 3);
+        initBuildingLayer(units01, unitRenders, pos, base, dir, 8000, 4, 3);
 
         WB_Point cPos = new WB_Point(0, 6000);
         WB_Polygon cBase = GeoTools.createRecPolygon(32000, 2000);
@@ -148,9 +137,9 @@ public class SchoolTest extends PApplet {
 //            ur.rendId();
 //        }
 
-        buildingRender.renderAll();
+//        buildingRender.renderAll();
 
-//        buildingRender.renderPanelGeo();
+        buildingRender.renderPanelGeo();
     }
 
 }

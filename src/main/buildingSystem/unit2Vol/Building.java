@@ -180,7 +180,7 @@ public class Building {
                 if (v.equals(vector.mul(-1))) {
                     Face f = dirFaceMap.get(v);
                     //判断面是否相互包含
-                    if (checkFaceNeiCover(face, f)) {
+                    if (checkFaceNei(face, f)) {
                         result.add(unit);
                         break;
                     }
@@ -213,7 +213,13 @@ public class Building {
 
     }
 
-    private boolean checkFaceNeiCover(Face f1, Face f2) {
+    /**
+     * 调用判断遍历point在polygon内部来判断
+     * @param f1
+     * @param f2
+     * @return
+     */
+    private boolean checkFaceNei(Face f1, Face f2) {
         WB_Polygon p1 = f1.getShape();
         WB_Polygon p2 = f2.getShape();
 
