@@ -180,7 +180,7 @@ public class Building {
                 if (v.equals(vector.mul(-1))) {
                     Face f = dirFaceMap.get(v);
                     //判断面是否相互包含
-                    if (checkFaceNeiTest(face, f)) {
+                    if (checkFaceNeiCover(face, f)) {
                         result.add(unit);
                         break;
                     }
@@ -211,6 +211,13 @@ public class Building {
 
         return (GeoTools.ifPolyCoverPoly2D(polygon1, polygon2) || GeoTools.ifPolyCoverPoly2D(polygon2, polygon1)) && (GeoTools.ifPolyCoverPt2D(polygon1, midPosP2) || GeoTools.ifPolyCoverPt2D(polygon2, midPosP1));
 
+    }
+
+    private boolean checkFaceNeiCover(Face f1, Face f2) {
+        WB_Polygon p1 = f1.getShape();
+        WB_Polygon p2 = f2.getShape();
+
+        return GeoTools.ifPolyCoverPoly3D(p1, p2) || GeoTools.ifPolyCoverPoly3D(p2, p1);
     }
 
     // TODO: 2022/11/30 寻找更合适的判断方法

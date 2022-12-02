@@ -797,6 +797,103 @@ public class GeoTools {
 
 
     /**
+     * 判断一个多边形是否包含另一个多边形
+     * 通过遍历判断一个多边形的点，是否都在另一个多边形内
+     *
+     * @param shell
+     * @param target
+     * @return
+     */
+    public static boolean ifPolyCoverPoly3D(WB_Polygon shell, WB_Polygon target) {
+        WB_Coord[] pts = target.getPoints().toArray();
+
+        for (WB_Coord pt : pts) {
+            if (!ifPolyCoverPt3D(shell, pt)) return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * 判断点在不在多边形内,二维三维均可用
+     * pt在polygon上，会返回true
+     * 使用面积法判断
+     * 原理：目标点与多边形的每条边组成的三角形的面积和是否与多边形面积相等
+     *
+     * @param polygon
+     * @param pt
+     * @return
+     */
+    public static boolean ifPolyCoverPt3D(WB_Polygon polygon, WB_Coord pt) {
+        double polyArea = Math.abs(polygon.getSignedArea());
+
+        WB_Coord[] ptList = polygon.getPoints().toArray();
+        double area = 0;
+        for (int i = 0; i < ptList.length; i++) {
+            WB_Coord p0 = ptList[i];
+            WB_Coord p1 = ptList[(i + 1) % ptList.length];
+            WB_Polygon p = new WB_Polygon(p0, p1, pt);
+            area += Math.abs(p.getSignedArea());
+        }
+
+        //避免浮点误差
+        return Math.abs(area - polyArea) <= 0.01;
+    }
+
+    /**
+     * 2D,计算三个点组成的三角形的面积
+     *
+     * @param p0
+     * @param p1
+     * @param p2
+     * @return
+     */
+    public static double getRecArea2D(WB_Coord p0, WB_Coord p1, WB_Coord p2) {
+        List<WB_Coord> pointList = new LinkedList<>();
+        pointList.add(p0);
+        pointList.add(p1);
+        pointList.add(p2);
+
+        double area = 0;
+        for (int i = 1; i <= pointList.size(); i++) {
+            double X = pointList.get(i - 1).xd();
+            double Y = pointList.get(i - 1).yd();
+            double nextX = pointList.get(i % pointList.size()).xd();
+            double nextY = pointList.get(i % pointList.size()).yd();
+            double temp = X * nextY - nextX * Y;
+            area += temp;
+        }
+        area = Math.abs(area / 2);
+        return area;
+    }
+
+    /**
+     * 鞋带法求多边形面积
+     *
+     * @param polygon
+     * @return
+     */
+    public static double getPolygonArea2D(WB_Polygon polygon) {
+        List<WB_Coord> pointList = polygon.getPoints().toList();
+
+        if (pointList.size() <= 2) {
+            return 0;
+        }
+
+        double area = 0;
+        for (int i = 1; i <= pointList.size(); i++) {
+            double X = pointList.get(i - 1).xd();
+            double Y = pointList.get(i - 1).yd();
+            double nextX = pointList.get(i % pointList.size()).xd();
+            double nextY = pointList.get(i % pointList.size()).yd();
+            double temp = X * nextY - nextX * Y;
+            area += temp;
+        }
+        area = Math.abs(area / 2);
+        return area;
+    }
+
+    /**
      * 将多个polyLine沿着一个方向移动一定的长度
      *
      * @param polygons

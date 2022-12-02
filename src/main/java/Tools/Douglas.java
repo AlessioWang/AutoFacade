@@ -7,15 +7,15 @@ import java.util.List;
 
 public class Douglas {
     /**
-     * �򻯼����Ķ��㼯��
+     * ????????????
      */
     private final List<WB_Coord> out;
 
     /**
-     * �������λ����ԣ����м򻯼���
+     * ??????????????????????
      *
-     * @param line    ����λ�����
-     * @param epsilon ���
+     * @param line    ??????????
+     * @param epsilon ???
      */
     public Douglas(WB_PolyLine line, double epsilon) {
         List<WB_Coord> pointList = line.getPoints().toList();
@@ -28,9 +28,9 @@ public class Douglas {
     }
 
     /**
-     * �Զ���ζ������½������򣬱������ε�������߶���ĳ�������޷�����
+     * ????????????????????????????????????????????????????
      *
-     * @param list �������εĶ���
+     * @param list ????????????
      */
     private void sort(List<WB_Coord> list) {
         int index = -1;
@@ -55,18 +55,18 @@ public class Douglas {
     }
 
     /**
-     * ��ȡ�����Ķ����
+     * ?????????????
      *
-     * @return ��������
+     * @return ????????
      */
     public WB_PolyLine getAsPolyLine() {
         return new WB_PolyLine(out);
     }
 
     /**
-     * ��ȡ�򻯼����Ķ����
+     * ??????????????
      *
-     * @return ��������
+     * @return ????????
      */
     public WB_Polygon getAsPolygon() {
         out.remove(out.size() - 1);
@@ -74,12 +74,12 @@ public class Douglas {
     }
 
     /**
-     * ���㴹ֱ����
+     * ?????????
      *
-     * @param pt        �����
-     * @param lineStart ��ʼ��
-     * @param lineEnd   ������
-     * @return ����
+     * @param pt        ?????
+     * @param lineStart ?????
+     * @param lineEnd   ??????
+     * @return ????
      */
     private double perpendicularDistance(WB_Coord pt, WB_Coord lineStart, WB_Coord lineEnd) {
         double dx = lineEnd.xd() - lineStart.xd();
@@ -109,11 +109,11 @@ public class Douglas {
     }
 
     /**
-     * �������㣬���ж���λ����Եļ�
+     * ???????????????????????
      *
-     * @param pointList ����㼯
-     * @param epsilon   �����
-     * @param out       ������
+     * @param pointList ?????
+     * @param epsilon   ?????
+     * @param out       ??????
      */
     private void douglasCal(List<WB_Coord> pointList, double epsilon, List<WB_Coord> out) {
         if (pointList.size() < 2)

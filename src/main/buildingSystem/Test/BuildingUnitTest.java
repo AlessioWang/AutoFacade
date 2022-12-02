@@ -98,8 +98,9 @@ public class BuildingUnitTest extends PApplet {
         cameraController.drawSystem(1000);
 
         for (UnitRender ur : unitRenders) {
-            ur.renderAll();
-            ur.rendId();
+//            ur.renderAll();
+//            ur.renderId();
+            ur.renderPanelShape();
         }
     }
 

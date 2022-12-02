@@ -1,13 +1,10 @@
 package renders;
 
-import org.junit.Test;
 import processing.core.PApplet;
 import unit2Vol.Building;
 import unit2Vol.Unit;
 
-import java.io.Console;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -67,9 +64,15 @@ public class BuildingRender {
     /**
      * 渲染building所有的unit图元
      */
-    public void rendAll() {
+    public void renderAll() {
         for (UnitRender ur : unitRenders) {
             ur.renderAll();
+        }
+    }
+
+    public void renderPanelGeo() {
+        for (UnitRender ur :unitRenders ) {
+            ur.renderPanelShape();
         }
     }
 }

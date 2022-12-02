@@ -7,7 +7,6 @@ import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
 import wblut.processing.WB_Render;
 
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -73,28 +72,27 @@ public class UnitRender {
     private void initPanelFaceGeos() {
         panelFaceShapes = new LinkedList<>();
 
-        if (unit.getTopFace().isIfPanel()) {
-            panelFaceShapes.add(unit.getTopFace().getShape());
-        }
-
-        if (unit.getBottomFace().isIfPanel()) {
-            panelFaceShapes.add(unit.getBottomFace().getShape());
-        }
+//        if (unit.getTopFace().isIfPanel()) {
+//            panelFaceShapes.add(unit.getTopFace().getShape());
+//        }
+//
+//        if (unit.getBottomFace().isIfPanel()) {
+//            panelFaceShapes.add(unit.getBottomFace().getShape());
+//        }
 
         unit.getRndFaces().stream().filter(Face::isIfPanel).forEach(e -> panelFaceShapes.add(e.getShape()));
     }
 
-    public void rendPanelShape() {
+    public void renderPanelShape() {
         applet.pushStyle();
-        applet.noFill();
-        applet.fill(100, 100, 0, 50);
+        applet.fill(100, 100, 0, 90);
         for (WB_Polygon p : panelFaceShapes) {
             render.drawPolygonEdges(p);
         }
         applet.popStyle();
     }
 
-    public void rendRndShape() {
+    public void renderRndShape() {
         applet.pushStyle();
         applet.fill(0, 100, 0, 30);
         for (WB_Polygon p : rndShapes) {
@@ -103,21 +101,21 @@ public class UnitRender {
         applet.popStyle();
     }
 
-    public void rendTopShape() {
+    public void renderTopShape() {
         applet.pushStyle();
         applet.fill(100, 0, 0, 50);
         render.drawPolygonEdges(topShape);
         applet.popStyle();
     }
 
-    public void rendBottomShape() {
+    public void renderBottomShape() {
         applet.pushStyle();
         applet.fill(0, 0, 100, 50);
         render.drawPolygonEdges(bottomShape);
         applet.popStyle();
     }
 
-    public void rendFaceMidPt() {
+    public void renderFaceMidPt() {
         applet.pushStyle();
         applet.fill(255, 0, 100, 80);
         for (WB_Point p : midPts) {
@@ -126,14 +124,14 @@ public class UnitRender {
         applet.popStyle();
     }
 
-    public void rendPosPt() {
+    public void renderPosPt() {
         applet.pushStyle();
         applet.fill(0, 0, 200, 50);
         render.drawPoint(posPt, 100);
         applet.popStyle();
     }
 
-    public void rendId() {
+    public void renderId() {
         applet.pushStyle();
         String context = String.valueOf(unit.getId());
         applet.fill(0, 0, 0);
@@ -146,17 +144,18 @@ public class UnitRender {
 
 
     /**
-     * 渲染图元
+     * 渲染所有图元
+     * 除了panel geo信息
      */
     public void renderAll() {
-//        rendRndShape();
-//        rendRndShape();
-//        rendTopShape();
-//        rendBottomShape();
-//        rendFaceMidPt();
-//        rendPosPt();
-//        rendId();
-        rendPanelShape();
+        renderRndShape();
+        renderRndShape();
+        renderTopShape();
+        renderBottomShape();
+        renderFaceMidPt();
+        renderPosPt();
+        renderId();
+//        rendPanelShape();
     }
 
 }

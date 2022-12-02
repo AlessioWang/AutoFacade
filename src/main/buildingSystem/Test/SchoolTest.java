@@ -121,7 +121,7 @@ public class SchoolTest extends PApplet {
         WB_Point pos = new WB_Point(0, 0, 0);
         WB_Polygon base = GeoTools.createRecPolygon(8000, 6000);
         WB_Vector dir = new WB_Vector(1, 0, 0);
-        initBuildingLayer(units01, unitRenders, pos, base, dir, 8000, 4, 3);
+        initBuildingLayer(units01, unitRenders, pos, base, dir, 8000, 3, 3);
 
         WB_Point cPos = new WB_Point(0, 6000);
         WB_Polygon cBase = GeoTools.createRecPolygon(32000, 2000);
@@ -148,7 +148,9 @@ public class SchoolTest extends PApplet {
 //            ur.rendId();
 //        }
 
-        buildingRender.rendAll();
+        buildingRender.renderAll();
+
+//        buildingRender.renderPanelGeo();
     }
 
 }
