@@ -5,14 +5,14 @@ import facadeGen.Panel.Panel;
 import facadeGen.Panel.PanelBase.BasicBase;
 import facadeGen.Panel.PanelGeos;
 import facadeGen.Panel.PanelRender;
-import facadeGen.Panel.PanelStyle.Style01Panel;
 import facadeGen.Panel.PanelStyle.StyleA;
+import facadeGen.Panel.PanelStyle.StyleC;
 import guo_cam.CameraController;
 import processing.core.PApplet;
 import renders.BuildingRender;
+import renders.UnitRender;
 import unit2Vol.Building;
 import unit2Vol.Unit;
-import renders.UnitRender;
 import unit2Vol.face.Face;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
@@ -26,12 +26,12 @@ import java.util.Map;
 
 /**
  * @auther Alessio
- * @date 2022/11/14
+ * @date 2022/12/6
  **/
-public class SchoolTest extends PApplet {
+public class UnitWithPanelTest extends PApplet {
 
     public static void main(String[] args) {
-        PApplet.main(SchoolTest.class.getName());
+        PApplet.main(UnitWithPanelTest.class.getName());
     }
 
     private CameraController cameraController;
@@ -40,13 +40,10 @@ public class SchoolTest extends PApplet {
 
     private Building building01;
 
-    private Building building02;
-
     private double height = 3500;
 
     private List<Unit> units01;
 
-    private List<Unit> units02;
 
     private BuildingRender buildingRender;
 
@@ -60,25 +57,22 @@ public class SchoolTest extends PApplet {
         unitRenders = new LinkedList<>();
 
         units01 = new LinkedList<>();
-        units02 = new LinkedList<>();
 
         initUnits();
         initBuilding();
 
-        //测试信息方法
-        checkInfo();
+        initPanel();
+
+//        //测试信息方法
+//        checkInfo();
     }
 
     private void initBuilding() {
         building01 = new Building(units01);
-        building02 = new Building(units02);
 
         System.out.println("building 01 unit num : " + building01.getUnitList().size());
-        System.out.println("building 02 unit num : " + building02.getUnitList().size());
 
-
-//        buildingRender = new BuildingRender(this, units01, units02);
-        buildingRender = new BuildingRender(this, building01, building02);
+        buildingRender = new BuildingRender(this, building01);
     }
 
     /**
@@ -86,9 +80,6 @@ public class SchoolTest extends PApplet {
      */
     private void checkInfo() {
         Unit unit = building01.getUnitList().get(4);
-
-        System.out.println("building01 h : " + building01.getHeight());
-        System.out.println("building02 h : " + building02.getHeight());
 
         HashMap<WB_Vector, List<Unit>> map = unit.getUnitMap();
 
@@ -119,21 +110,31 @@ public class SchoolTest extends PApplet {
         WB_Point pos = new WB_Point(0, 0, 0);
         WB_Polygon base = GeoTools.createRecPolygon(8000, 6000);
         WB_Vector dir = new WB_Vector(1, 0, 0);
-        initBuildingLayer(units01, unitRenders, pos, base, dir, 8000, 4, 3);
+        initBuildingLayer(units01, unitRenders, pos, base, dir, 8000, 1, 1);
 
-        WB_Point cPos = new WB_Point(0, 6000);
-        WB_Polygon cBase = GeoTools.createRecPolygon(32000, 2000);
-        initBuildingLayer(units01, unitRenders, cPos, cBase, dir, 0, 1, 3);
+    }
 
-        WB_Point pos02 = new WB_Point(24000, 14000);
-        WB_Polygon base02 = GeoTools.createRecPolygon(6000, 8000);
-        WB_Vector dir02 = new WB_Vector(0, 1, 0);
-        initBuildingLayer(units02, unitRenders, pos02, base02, dir02, 6000, 3, 5);
+    private List<PanelGeos> geos = new LinkedList<>();
+    private Panel panel01;
+    private PanelRender panelRender;
 
-        WB_Point cPos02 = new WB_Point(24000, 8000);
-        WB_Polygon cBase02 = GeoTools.createRecPolygon(18000, 2000);
-        WB_Vector cDir02 = new WB_Vector(0, -1, 0);
-        initBuildingLayer(units02, unitRenders, cPos02, cBase02, cDir02, 0, 1, 5);
+
+    private void initPanel() {
+        panelRender = new PanelRender(this, new WB_Render(this), geos);
+
+        WB_Polygon basePolygon = GeoTools.createRecPolygon(8000, 3500);
+        panel01 = new StyleC(new BasicBase(basePolygon));
+
+        for (Unit unit : units01) {
+            List<Face> faces = new LinkedList<>();
+            unit.getAllFaces().stream().filter(Face::isIfPanel).forEach(faces::add);
+
+            for (Face p : faces) {
+                WB_Point pt = p.getShape().getPoint(0);
+                System.out.println(pt);
+                geos.add(new PanelGeos(panel01, pt, p.getDir()));
+            }
+        }
     }
 
 
@@ -141,9 +142,10 @@ public class SchoolTest extends PApplet {
         background(255);
         cameraController.drawSystem(1000);
 
-//        buildingRender.renderAll();
-
         buildingRender.renderPanelGeo();
+
+        panelRender.renderAll();
     }
+
 
 }

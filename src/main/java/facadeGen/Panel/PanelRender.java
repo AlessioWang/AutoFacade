@@ -20,7 +20,7 @@ public class PanelRender {
     private WB_Render render;
 
     private List<PanelGeos> panelGeoList;
-    
+
     /**
      * 渲染多个图元的构造方法
      *
@@ -68,6 +68,7 @@ public class PanelRender {
     private void panelRender(PanelGeos panelGeos) {
         applet.pushStyle();
         applet.fill(255, 130, 93);
+        applet.noStroke();
         render.drawPolygon(panelGeos.wallGeo);
         applet.popStyle();
     }
