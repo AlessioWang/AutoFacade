@@ -2,7 +2,6 @@ package Test;
 
 import Tools.GeoTools;
 import guo_cam.CameraController;
-import org.junit.Test;
 import processing.core.PApplet;
 import unit2Vol.Unit;
 import unit2Vol.face.Face;
@@ -55,7 +54,7 @@ public class UnitTest extends PApplet {
 
         unit = new Unit(pos, base, dir, 3500);
 
-        List<Face> rndFaces = unit.getRndFaces();
+        List<Face> rndFaces = unit.getAllFaces();
         for (Face face : rndFaces) {
             rndShapes.add(face.getShape());
             midPts.add(face.getMidPos());

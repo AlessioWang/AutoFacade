@@ -46,13 +46,13 @@ public class Unit {
     private Unit right;
 
     //this unit周边的unit信息
-    private HashMap<WB_Vector, List<Unit>> rndUnitMap;
+    private HashMap<WB_Vector, List<Unit>> unitMap;
 
     //this unit的方向与face的·映射关系
     private HashMap<WB_Vector, Face> faceDirMap;
 
-    //Unit周围的面,不包括上下两个底面
-    private List<Face> rndFaces;
+    //Unit周围上下左右的face
+    private List<Face> allFaces;
 
     private Face topFace;
 
@@ -67,7 +67,7 @@ public class Unit {
         this.dir = dir;
         this.height = height;
 
-        rndFaces = new LinkedList<>();
+        allFaces = new LinkedList<>();
 
         init();
     }
@@ -87,12 +87,19 @@ public class Unit {
      * 将周边的每个面的vector作为key，value为一个空List
      */
     private void initRndUnitMap() {
-        rndUnitMap = new HashMap<>();
+        unitMap = new HashMap<>();
         faceDirMap = new HashMap<>();
 
-        for (Face face : rndFaces) {
+        unitMap.put(new WB_Vector(0, 0, 1), new LinkedList<>());
+        faceDirMap.put(new WB_Vector(0, 0, 1), topFace);
+
+        unitMap.put(new WB_Vector(0, 0, -1), new LinkedList<>());
+        faceDirMap.put(new WB_Vector(0, 0, -1), bottomFace);
+
+
+        for (Face face : allFaces) {
             WB_Vector dir = face.getDir();
-            rndUnitMap.put(dir, new LinkedList<>());
+            unitMap.put(dir, new LinkedList<>());
             faceDirMap.put(dir, face);
         }
     }
@@ -103,17 +110,17 @@ public class Unit {
      * 调用时需要初始化this unit周边unit的信息
      */
     public void initFacePanelStatus() {
-        //top face
-        if (upper == null) topFace.setIfPanel(true);
-
-        //bottom face
-        if (lower == null) bottomFace.setIfPanel(true);
+//        //top face
+//        if (upper == null) topFace.setIfPanel(true);
+//
+//        //bottom face
+//        if (lower == null) bottomFace.setIfPanel(true);
 
         //round face
-        for (Face face : rndFaces) {
+        for (Face face : allFaces) {
             WB_Vector dir = face.getDir();
             //对应的list长度为0，证明无相邻的unit
-            if (rndUnitMap.get(dir).size() == 0) {
+            if (unitMap.get(dir).size() == 0) {
                 face.setIfPanel(true);
             }
         }
@@ -125,11 +132,11 @@ public class Unit {
     private void initMidPt() {
         WB_Point temp = new WB_Point(0, 0, 0);
 
-        for (Face face : rndFaces) {
+        for (Face face : allFaces) {
             temp = temp.add(face.getMidPos());
         }
 
-        midPt = temp.div(rndFaces.size());
+        midPt = temp.div(allFaces.size());
     }
 
     /**
@@ -150,16 +157,18 @@ public class Unit {
 
         for (WB_Segment seg : segments) {
             WB_Polygon shape = GeoTools.getRecBySegAndWidth(seg, height, new WB_Vector(0, 0, 1));
-            rndFaces.add(new RndFace(this, shape));
+            allFaces.add(new RndFace(this, shape));
         }
 
         //初始化底面
         WB_Polygon reversePolygon = GeoTools.reversePolygon(realBase);
         bottomFace = new BottomFace(this, reversePolygon);
+        allFaces.add(bottomFace);
 
         //初始化顶面
         WB_Polygon topShape = GeoTools.movePolygon3D(realBase, new WB_Point(0, 0, 1).mul(height));
         topFace = new TopFace(this, topShape);
+        allFaces.add(topFace);
     }
 
 
@@ -167,8 +176,8 @@ public class Unit {
         return midPt;
     }
 
-    public List<Face> getRndFaces() {
-        return rndFaces;
+    public List<Face> getAllFaces() {
+        return allFaces;
     }
 
     public Face getTopFace() {
@@ -235,8 +244,8 @@ public class Unit {
         this.building = building;
     }
 
-    public HashMap<WB_Vector, List<Unit>> getRndUnitMap() {
-        return rndUnitMap;
+    public HashMap<WB_Vector, List<Unit>> getUnitMap() {
+        return unitMap;
     }
 
     public HashMap<WB_Vector, Face> getFaceDirMap() {

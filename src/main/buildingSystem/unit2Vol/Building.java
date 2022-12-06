@@ -134,6 +134,14 @@ public class Building {
                 double dis = GeoTools.getDistance3D(target.getMidPt(), other.getMidPt());
                 if (dis < threshold) {
                     neighbors.add(other);
+                } else {
+                    List<Face> faces = new LinkedList<>(other.getAllFaces());
+                    for (Face face : faces) {
+                        double d = GeoTools.getDistance3D(target.getMidPt(), face.getMidPos());
+                        if (d < threshold) {
+                            neighbors.add(other);
+                        }
+                    }
                 }
             }
         }
@@ -146,11 +154,11 @@ public class Building {
      */
     private void setNeiUnitMap() {
         for (Unit target : unitList) {
-            HashMap map = target.getRndUnitMap();
+            HashMap map = target.getUnitMap();
             List<Unit> neighbors = getNeighborUnits(target, unitList);
 
             List<WB_Vector> vectors = new LinkedList<>();
-            target.getRndFaces().forEach(face -> vectors.add(face.getDir()));
+            target.getAllFaces().forEach(face -> vectors.add(face.getDir()));
 
             for (WB_Vector vector : vectors) {
                 List<Unit> neiList = (List<Unit>) map.get(vector);
@@ -172,7 +180,7 @@ public class Building {
         Face face = target.getFaceDirMap().get(vector);
 
         for (Unit unit : neighbors) {
-            HashMap<WB_Vector, List<Unit>> rndUnitMap = unit.getRndUnitMap();
+            HashMap<WB_Vector, List<Unit>> rndUnitMap = unit.getUnitMap();
             HashMap<WB_Vector, Face> dirFaceMap = unit.getFaceDirMap();
             Set<WB_Vector> vectors = rndUnitMap.keySet();
             for (WB_Vector v : vectors) {
@@ -191,30 +199,9 @@ public class Building {
         return result;
     }
 
-
-    /**
-     * 无法使用
-     * Jts的covers方法只能判断二维图形
-     *
-     * @param f1
-     * @param f2
-     * @return
-     */
-    private boolean checkFaceNeiTest02(Face f1, Face f2) {
-        WB_Polygon polygon1 = f1.getShape();
-        WB_Polygon polygon2 = f2.getShape();
-
-        WB_Point midPosP1 = f1.getMidPos();
-        System.out.println("pts1" + midPosP1);
-        WB_Point midPosP2 = f2.getMidPos();
-        System.out.println("pts2" + midPosP2);
-
-        return (GeoTools.ifPolyCoverPoly2D(polygon1, polygon2) || GeoTools.ifPolyCoverPoly2D(polygon2, polygon1)) && (GeoTools.ifPolyCoverPt2D(polygon1, midPosP2) || GeoTools.ifPolyCoverPt2D(polygon2, midPosP1));
-
-    }
-
     /**
      * 调用判断遍历point在polygon内部来判断
+     *
      * @param f1
      * @param f2
      * @return
@@ -226,6 +213,29 @@ public class Building {
         return GeoTools.ifPolyCoverPoly3D(p1, p2) || GeoTools.ifPolyCoverPoly3D(p2, p1);
     }
 
+    /**
+     * 无法使用
+     * Jts的covers方法只能判断二维图形
+     *
+     * @param f1
+     * @param f2
+     * @return
+     */
+    @Deprecated
+    private boolean checkFaceNeiTest02(Face f1, Face f2) {
+        WB_Polygon polygon1 = f1.getShape();
+        WB_Polygon polygon2 = f2.getShape();
+
+        WB_Point midPosP1 = f1.getMidPos();
+        System.out.println("pts1" + midPosP1);
+        WB_Point midPosP2 = f2.getMidPos();
+        System.out.println("pts2" + midPosP2);
+
+        return (GeoTools.ifPolyCoverPoly2D(polygon1, polygon2) || GeoTools.ifPolyCoverPoly2D(polygon2, polygon1))
+                && (GeoTools.ifPolyCoverPt2D(polygon1, midPosP2) || GeoTools.ifPolyCoverPt2D(polygon2, midPosP1));
+
+    }
+
     // TODO: 2022/11/30 寻找更合适的判断方法
 
     /**
@@ -235,6 +245,7 @@ public class Building {
      * @param f2
      * @return
      */
+    @Deprecated
     private boolean checkFaceNeiTest(Face f1, Face f2) {
         return GeoTools.getDistance3D(f1.getMidPos(), f2.getMidPos()) < 1;
     }
@@ -247,6 +258,7 @@ public class Building {
      * @param face2
      * @return
      */
+    @Deprecated
     private boolean checkFaceNeighbor(Face face1, Face face2) {
         WB_Point p1 = face1.getMidPos();
         WB_Point p2 = face2.getMidPos();
@@ -315,9 +327,9 @@ public class Building {
      * @param neighbors
      */
     private void setUnitRight(Unit target, List<Unit> neighbors) {
-        WB_Point oriPt = target.getRndFaces().get(0).getMidPos();
+        WB_Point oriPt = target.getAllFaces().get(0).getMidPos();
         for (Unit unit : neighbors) {
-            WB_Point otherPt = unit.getRndFaces().get(2).getMidPos();
+            WB_Point otherPt = unit.getAllFaces().get(2).getMidPos();
             if (GeoTools.getDistance3D(oriPt, otherPt) <= threshold) {
                 target.setRight(unit);
                 break;
@@ -332,9 +344,9 @@ public class Building {
      * @param neighbors
      */
     private void setUnitLeft(Unit target, List<Unit> neighbors) {
-        WB_Point oriPt = target.getRndFaces().get(2).getMidPos();
+        WB_Point oriPt = target.getAllFaces().get(2).getMidPos();
         for (Unit unit : neighbors) {
-            WB_Point otherPt = unit.getRndFaces().get(0).getMidPos();
+            WB_Point otherPt = unit.getAllFaces().get(0).getMidPos();
             if (GeoTools.getDistance3D(oriPt, otherPt) <= threshold) {
                 target.setLeft(unit);
                 break;

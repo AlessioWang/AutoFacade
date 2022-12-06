@@ -40,7 +40,6 @@ public class SchoolTest extends PApplet {
 
     private List<Unit> units02;
 
-
     private BuildingRender buildingRender;
 
     public void settings() {
@@ -77,13 +76,14 @@ public class SchoolTest extends PApplet {
      * test building information
      */
     private void checkInfo() {
-        Unit unit = building01.getUnitList().get(2);
+        Unit unit = building01.getUnitList().get(4);
 
         System.out.println("building01 h : " + building01.getHeight());
         System.out.println("building02 h : " + building02.getHeight());
 
-        HashMap<WB_Vector, List<Unit>> map = unit.getRndUnitMap();
-        for (Map.Entry<WB_Vector, List<Unit>> entry: map.entrySet()){
+        HashMap<WB_Vector, List<Unit>> map = unit.getUnitMap();
+
+        for (Map.Entry<WB_Vector, List<Unit>> entry : map.entrySet()) {
             System.out.println(entry.getKey());
 
             entry.getValue().forEach(e -> System.out.println(e.getId()));
@@ -131,11 +131,6 @@ public class SchoolTest extends PApplet {
     public void draw() {
         background(255);
         cameraController.drawSystem(1000);
-
-//        for (UnitRender ur : unitRenders) {
-//            ur.renderAll();
-//            ur.rendId();
-//        }
 
 //        buildingRender.renderAll();
 

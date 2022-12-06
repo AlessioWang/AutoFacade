@@ -799,6 +799,7 @@ public class GeoTools {
     /**
      * 判断一个多边形是否包含另一个多边形
      * 通过遍历判断一个多边形的点，是否都在另一个多边形内
+     * 支持三维判断
      *
      * @param shell
      * @param target
@@ -837,7 +838,7 @@ public class GeoTools {
         }
 
         //避免浮点误差
-        return Math.abs(area - polyArea) <= 0.01;
+        return Math.abs(area - polyArea) <= 100;
     }
 
     /**

@@ -52,7 +52,7 @@ public class UnitRender {
         midPts = new LinkedList<>();
         rndShapes = new LinkedList<>();
 
-        List<Face> rndFaces = unit.getRndFaces();
+        List<Face> rndFaces = unit.getAllFaces();
         for (Face face : rndFaces) {
             rndShapes.add(face.getShape());
             midPts.add(face.getMidPos());
@@ -72,15 +72,7 @@ public class UnitRender {
     private void initPanelFaceGeos() {
         panelFaceShapes = new LinkedList<>();
 
-//        if (unit.getTopFace().isIfPanel()) {
-//            panelFaceShapes.add(unit.getTopFace().getShape());
-//        }
-//
-//        if (unit.getBottomFace().isIfPanel()) {
-//            panelFaceShapes.add(unit.getBottomFace().getShape());
-//        }
-
-        unit.getRndFaces().stream().filter(Face::isIfPanel).forEach(e -> panelFaceShapes.add(e.getShape()));
+        unit.getAllFaces().stream().filter(Face::isIfPanel).forEach(e -> panelFaceShapes.add(e.getShape()));
     }
 
     public void renderPanelShape() {
