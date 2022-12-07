@@ -51,15 +51,30 @@ public class PanelGeos {
         iniGeo();
     }
 
+    /**
+     * 初始化panel
+     */
     public void iniPanel() {
         //获取窗户的位置信息
         windowComps = panel.getWindowsComps();
+
         //初始化各种图元信息
         iniGeo();
     }
 
-    //初始化窗户的几何图元信息
+
+    /**
+     * 初始化panel与window的几何图元信息
+     */
     private void iniGeo() {
+        initWindowGeo();
+        initPanelGeo();
+    }
+
+    /**
+     * window的几何信息
+     */
+    private void initWindowGeo() {
         for (Map.Entry<Window, WB_Point> entry : windowComps.entrySet()) {
             Window win = entry.getKey();
             WindowGeos windowGeos = win.getWindowGeos();
@@ -69,9 +84,9 @@ public class PanelGeos {
             WB_Polygon rawBoundary = GeoTools.movePolygon(windowGeos.getFrameBoundary(), entry.getValue());
             WB_Polygon rawGlass = GeoTools.movePolygon(windowGeos.getGlassShape(), entry.getValue());
 
-            frames.add(GeoTools.transferPolygon3DByZ(rawFrame, pos, direction));
+            frames.add(GeoTools.transferPolygon3DByZNew(rawFrame, pos, direction));
             winBoundaries.add(rawBoundary);
-            glasses.add(GeoTools.transferPolygon3DByZ(rawGlass, pos, direction));
+            glasses.add(GeoTools.transferPolygon3DByZNew(rawGlass, pos, direction));
 
             List<WB_PolyLine> rawBeams = windowGeos.getAll2DBeams();
             for (WB_PolyLine l : rawBeams) {
@@ -79,9 +94,19 @@ public class PanelGeos {
                 beams.add(GeoTools.transferPolyline3DByZ(rawL, pos, direction));
             }
         }
+    }
 
+    /**
+     * panel的几何信息
+     */
+    private void initPanelGeo() {
         WB_Polygon baseShape = panel.getBase().getBasicShape();
-        wallGeo = GeoTools.transferPolygon3DByZ(GeoTools.getPolygonWithHoles(baseShape, winBoundaries), pos, direction);
+        WB_Polygon polygonWithHoles = GeoTools.getPolygonWithHoles(baseShape, winBoundaries);
+//        wallGeo = GeoTools.transferPolygon3DByZ(polygonWithHoles, pos, direction);
+//        wallGeo = GeoTools.transferPolygon3DByZNew(polygonWithHoles, pos, direction);
+
+        wallGeo = GeoTools.transferPolygon3DByZNew(polygonWithHoles, pos, direction);
+//        wallGeo = GeoTools.movePolygon(GeoTools.movePolygon3D());
     }
 
     public void setPanel(Panel panel) {

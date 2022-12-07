@@ -12,6 +12,7 @@ import Tools.GeoTools;
 import guo_cam.CameraController;
 import processing.core.PApplet;
 import wblut.geom.WB_Point;
+import wblut.geom.WB_PolyLine;
 import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Vector;
 import wblut.processing.WB_Render;
@@ -39,6 +40,10 @@ public class GeoRenderTest extends PApplet {
 
     PanelRender panelRender;
 
+    WB_Polygon basePolygon;
+
+    WB_Polygon testPolygon;
+
     public void settings() {
         size(800, 800, P3D);
     }
@@ -50,10 +55,23 @@ public class GeoRenderTest extends PApplet {
         iniPanel();
 
         panelRender = new PanelRender(this, render, geos);
+
+        initPoly();
+    }
+
+    private void initPoly() {
+        WB_Point p0 = new WB_Point(4500, 1000, 5000);
+        WB_Point p1 = new WB_Point(9000, 1000, 5000);
+        WB_Point p2 = new WB_Point(9000, 1000, 8900);
+        WB_Point p3 = new WB_Point(4500, 1000, 8900);
+
+        testPolygon = new WB_Polygon(p0, p1, p2, p3);
+
+
     }
 
     private void iniPanel() {
-        WB_Polygon basePolygon = GeoTools.createRecPolygon(6000, 3900);
+        basePolygon = GeoTools.createRecPolygon(6000, 3900);
         panel01 = new Style01Panel(new BasicBase(basePolygon));
 
         WB_Polygon schoolBase = GeoTools.createRecPolygon(4500, 3900);
@@ -61,16 +79,18 @@ public class GeoRenderTest extends PApplet {
         panel03 = new StyleB(new BasicBase(schoolBase));
         panel04 = new StyleC(new BasicBase(schoolBase));
 
-        geos.add(new PanelGeos(panel01, new WB_Point(0, 0, 0), new WB_Vector(0, 1, 0)));
-        geos.add(new PanelGeos(panel02, new WB_Point(4500, 0, 0), new WB_Vector(0, 1, 0)));
-        geos.add(new PanelGeos(panel03, new WB_Point(9000, 0, 0), new WB_Vector(0, 1, 0)));
-        geos.add(new PanelGeos(panel04, new WB_Point(13500, 0, 0), new WB_Vector(0, 1, 0)));
+//        geos.add(new PanelGeos(panel01, new WB_Point(0, 0, 0), new WB_Vector(0, 1, 0)));
+        geos.add(new PanelGeos(panel02, new WB_Point(4500,1000, 5000), new WB_Vector(0, 1, 0)));
+//        geos.add(new PanelGeos(panel03, new WB_Point(9000, 0, 0), new WB_Vector(0, 1, 0)));
+//        geos.add(new PanelGeos(panel04, new WB_Point(13500, 0, 0), new WB_Vector(0, 1, 0)));
     }
 
     public void draw() {
         background(255);
         cameraController.drawSystem(1000);
         panelRender.renderAll();
+
+        render.drawPolygonEdges(testPolygon);
     }
 
 

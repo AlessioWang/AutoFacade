@@ -727,6 +727,7 @@ public class GeoTools {
     public static WB_Polygon transferPolygon3DByZ(WB_Polygon origin, WB_Point pos, WB_Vector dir) {
         WB_Transform3D transform3D = new WB_Transform3D();
         WB_CoordinateSystem system = new WB_CoordinateSystem();
+
         system.setOrigin(pos);
         system.setZ(dir);
 
@@ -745,16 +746,16 @@ public class GeoTools {
     public static WB_Polygon transferPolygon3DByZNew(WB_Polygon origin, WB_Point pos, WB_Vector dir) {
         WB_Transform3D transform3D = new WB_Transform3D();
         WB_CoordinateSystem system = new WB_CoordinateSystem();
-        system.setOrigin(pos);
+
+//        WB_Point p = new WB_Point(pos.xd()*(-1), pos.zd()*(-1), pos.yd());
+
+//        system.setOrigin(pos);
         system.setZ(dir);
-        List<WB_Segment> segments = origin.toSegments();
-        WB_Coord sx = segments.get(1).getDirection();
-        System.out.println(sx);
-        WB_Coord sy = segments.get(2).getDirection();
-        System.out.println(sy);
-        system.setXY(sx,sy);
+//        transform3D.addRotateZ(90);
         transform3D.addFromWorldToCS(system);
-        return origin.apply(transform3D);
+        origin.apply(transform3D);
+
+        return GeoTools.movePolygon3D(origin, pos);
     }
 
     /**

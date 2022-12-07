@@ -25,12 +25,12 @@ import java.util.Map;
 
 /**
  * @auther Alessio
- * @date 2022/12/6
+ * @date 2022/12/7
  **/
-public class UnitWithPanelTest extends PApplet {
+public class SimpleTestPanel extends PApplet {
 
     public static void main(String[] args) {
-        PApplet.main(UnitWithPanelTest.class.getName());
+        PApplet.main(SimpleTestPanel.class.getName());
     }
 
     private CameraController cameraController;
@@ -42,7 +42,6 @@ public class UnitWithPanelTest extends PApplet {
     private double height = 3500;
 
     private List<Unit> units01;
-
 
     private BuildingRender buildingRender;
 
@@ -62,8 +61,6 @@ public class UnitWithPanelTest extends PApplet {
 
         initPanel();
 
-//        //测试信息方法
-//        checkInfo();
     }
 
     private void initBuilding() {
@@ -74,20 +71,7 @@ public class UnitWithPanelTest extends PApplet {
         buildingRender = new BuildingRender(this, building01);
     }
 
-    /**
-     * test building information
-     */
-    private void checkInfo() {
-        Unit unit = building01.getUnitList().get(4);
 
-        HashMap<WB_Vector, List<Unit>> map = unit.getUnitMap();
-
-        for (Map.Entry<WB_Vector, List<Unit>> entry : map.entrySet()) {
-            System.out.println(entry.getKey());
-
-            entry.getValue().forEach(e -> System.out.println(e.getId()));
-        }
-    }
 
     private void initBuildingLayer(List<Unit> target, List<UnitRender> renders, WB_Point pos, WB_Polygon base, WB_Vector dir, double gap, int horNum, int layerNum) {
         for (int i = 0; i < horNum; i++) {
@@ -145,6 +129,5 @@ public class UnitWithPanelTest extends PApplet {
 
         panelRender.renderAll();
     }
-
 
 }
