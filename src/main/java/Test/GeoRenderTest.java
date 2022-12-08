@@ -99,9 +99,9 @@ public class GeoRenderTest extends PApplet {
 //        panel03 = new StyleB(new BasicBase(schoolBase));
 //        panel04 = new StyleC(new BasicBase(schoolBase));
 
-        geos.add(new PanelGeos(panel02, new WB_Point(4500, 1000, 5000), new WB_Vector(0, 1, 0)));
+        geos.add(new PanelGeos(panel02, new WB_Point(4500, 1000, 5000), new WB_Vector(0, 1, 1)));
         geos.add(new PanelGeos(panel02, new WB_Point(9500, 1000, 5000), new WB_Vector(0, 1, 0)));
-        geos.add(new PanelGeos(panel02, new WB_Point(0, 0, 0), new WB_Vector(-1, 0, 0)));
+        geos.add(new PanelGeos(panel02, new WB_Point(0, 0, 0), new WB_Vector(1, 0, 0)));
         geos.add(new PanelGeos(panel02, new WB_Point(0, 0, 1000), new WB_Vector(0, 0, 1)));
     }
 

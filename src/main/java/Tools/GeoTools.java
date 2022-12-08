@@ -765,6 +765,7 @@ public class GeoTools {
 
 //        transform3D.addTranslate(pos);
         return origin.apply(transform3D);
+//        return GeoTools.movePolygon3D(origin, pos);
     }
 
     /**
