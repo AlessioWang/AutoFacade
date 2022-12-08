@@ -84,9 +84,9 @@ public class PanelGeos {
             WB_Polygon rawBoundary = GeoTools.movePolygon(windowGeos.getFrameBoundary(), entry.getValue());
             WB_Polygon rawGlass = GeoTools.movePolygon(windowGeos.getGlassShape(), entry.getValue());
 
-            frames.add(GeoTools.transferPolygon3DByZNew(rawFrame, pos, direction));
+            frames.add(GeoTools.transferPolygon3DByZ(rawFrame, pos, direction));
             winBoundaries.add(rawBoundary);
-            glasses.add(GeoTools.transferPolygon3DByZNew(rawGlass, pos, direction));
+            glasses.add(GeoTools.transferPolygon3DByZ(rawGlass, pos, direction));
 
             List<WB_PolyLine> rawBeams = windowGeos.getAll2DBeams();
             for (WB_PolyLine l : rawBeams) {
@@ -103,10 +103,10 @@ public class PanelGeos {
         WB_Polygon baseShape = panel.getBase().getBasicShape();
         WB_Polygon polygonWithHoles = GeoTools.getPolygonWithHoles(baseShape, winBoundaries);
 //        wallGeo = GeoTools.transferPolygon3DByZ(polygonWithHoles, pos, direction);
-//        wallGeo = GeoTools.transferPolygon3DByZNew(polygonWithHoles, pos, direction);
+        wallGeo = GeoTools.transferPolygon3DByZTest(polygonWithHoles, pos, direction);
 
-        wallGeo = GeoTools.transferPolygon3DByZNew(polygonWithHoles, pos, direction);
-//        wallGeo = GeoTools.movePolygon(GeoTools.movePolygon3D());
+//        wallGeo = GeoTools.transferPolygon3DByZNew(polygonWithHoles, pos, direction);
+        wallGeo = GeoTools.movePolygon3D(wallGeo, pos);
     }
 
     public void setPanel(Panel panel) {

@@ -692,12 +692,6 @@ public class GeoTools {
         return result;
     }
 
-    public static WB_Polygon movePolygonNew(WB_Polygon origin, WB_Point pos) {
-        WB_Transform2D transform2D = new WB_Transform2D();
-        transform2D.addTranslate2D(pos);
-        return (WB_Polygon) origin.apply2D(transform2D);
-    }
-
     public static WB_Polygon movePolygon(WB_Polygon origin, WB_Point pos) {
         WB_Transform2D transform2D = new WB_Transform2D();
         transform2D.addTranslate2D(pos);
@@ -743,19 +737,34 @@ public class GeoTools {
      * @param dir
      * @return
      */
-    public static WB_Polygon transferPolygon3DByZNew(WB_Polygon origin, WB_Point pos, WB_Vector dir) {
+    public static WB_Polygon transferPolygon3DByZTest(WB_Polygon origin, WB_Point pos, WB_Vector dir) {
         WB_Transform3D transform3D = new WB_Transform3D();
         WB_CoordinateSystem system = new WB_CoordinateSystem();
-
-//        WB_Point p = new WB_Point(pos.xd()*(-1), pos.zd()*(-1), pos.yd());
-
-//        system.setOrigin(pos);
-        system.setZ(dir);
-//        transform3D.addRotateZ(90);
         transform3D.addFromWorldToCS(system);
-        origin.apply(transform3D);
 
-        return GeoTools.movePolygon3D(origin, pos);
+        system.setOrigin(new WB_Point(0, 0, 0));
+
+        WB_Vector v0 = new WB_Vector(1, 0, 0);
+
+        WB_Vector v1 = new WB_Vector(0, 1, 0);
+
+        system.setXY(v0, v1);
+        system.setZ(dir);
+        transform3D.addFromWorldToCS(system);
+
+
+//        transform3D.addRotateZ(dir.getAngle(new WB_Point(0, 0, 1)));
+//        System.out.println("Z " + dir.getAngle(new WB_Point(0, 0, 1)));
+//
+//        transform3D.addRotateY(dir.getAngle(new WB_Point(0, 0, 1)));
+//        System.out.println("Y " + dir.getAngle(new WB_Point(0, 1, 0)));
+//
+//        transform3D.addRotateX(dir.getAngle(new WB_Point(0, 0, 1)));
+//        System.out.println("X " + dir.getAngle(new WB_Point(1, 0, 0)));
+//        transform3D.addRotateX(dir.getAngle(origin.getNormal()));
+
+//        transform3D.addTranslate(pos);
+        return origin.apply(transform3D);
     }
 
     /**

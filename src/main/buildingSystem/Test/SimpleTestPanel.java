@@ -113,7 +113,7 @@ public class SimpleTestPanel extends PApplet {
             unit.getAllFaces().stream().filter(Face::isIfPanel).forEach(faces::add);
 
             for (Face p : faces) {
-                WB_Point pt = p.getShape().getPoint(0);
+                WB_Point pt = p.getShape().getPoint(3);
                 System.out.println(pt);
                 geos.add(new PanelGeos(panel01, pt, p.getDir()));
             }
