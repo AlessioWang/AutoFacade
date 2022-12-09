@@ -94,7 +94,6 @@ public class SimpleTestPanel extends PApplet {
         WB_Polygon base = GeoTools.createRecPolygon(8000, 6000);
         WB_Vector dir = new WB_Vector(1, 0, 0);
         initBuildingLayer(units01, unitRenders, pos, base, dir, 8000, 1, 1);
-
     }
 
     private List<PanelGeos> geos = new LinkedList<>();

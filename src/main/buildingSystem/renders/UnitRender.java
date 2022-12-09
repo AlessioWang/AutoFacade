@@ -147,7 +147,6 @@ public class UnitRender {
         renderFaceMidPt();
         renderPosPt();
         renderId();
-//        rendPanelShape();
     }
 
 }

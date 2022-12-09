@@ -143,8 +143,6 @@ public class PanelGeos {
 //        wallGeo = GeoTools.movePolygon3D(wallGeo, pos);
 
         wallGeo = GeoTools.transfer3DByTargetPolygon(polygonWithHoles, target, pos, direction);
-        wallGeo = GeoTools.movePolygon3D(wallGeo, pos);
-
     }
 
     public void setPanel(Panel panel) {

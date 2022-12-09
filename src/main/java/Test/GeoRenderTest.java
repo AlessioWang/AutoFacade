@@ -6,14 +6,12 @@ import facadeGen.Panel.PanelGeos;
 import facadeGen.Panel.PanelRender;
 import facadeGen.Panel.PanelStyle.Style01Panel;
 import facadeGen.Panel.PanelStyle.StyleA;
-import facadeGen.Panel.PanelStyle.StyleB;
-import facadeGen.Panel.PanelStyle.StyleC;
 import Tools.GeoTools;
 import guo_cam.CameraController;
 import processing.core.PApplet;
 import wblut.geom.WB_Point;
-import wblut.geom.WB_PolyLine;
 import wblut.geom.WB_Polygon;
+import wblut.geom.WB_Transform3D;
 import wblut.geom.WB_Vector;
 import wblut.processing.WB_Render;
 
@@ -44,11 +42,13 @@ public class GeoRenderTest extends PApplet {
 
     WB_Polygon testPolygon;
 
-    WB_Polygon rotatePolygon;
+    WB_Polygon movePolygon;
 
     WB_Polygon yPolygon;
 
     WB_Polygon zPolygon;
+
+    WB_Polygon rotatePolygon;
 
     public void settings() {
         size(800, 800, P3D);
@@ -74,7 +74,7 @@ public class GeoRenderTest extends PApplet {
 
         testPolygon = new WB_Polygon(p0, p1, p2, p3);
 
-        rotatePolygon = GeoTools.movePolygon3D(testPolygon, new WB_Point(5000, 0, 0));
+        movePolygon = GeoTools.movePolygon3D(testPolygon, new WB_Point(5000, 0, 0));
 
         WB_Point pp0 = new WB_Point(0, 0, 0);
         WB_Point pp1 = new WB_Point(0, 4500, 0);
@@ -89,6 +89,12 @@ public class GeoRenderTest extends PApplet {
         WB_Point ppp3 = new WB_Point(0, 3900, 1000);
 
         zPolygon = new WB_Polygon(ppp0, ppp1, ppp2, ppp3);
+
+
+        WB_Transform3D transform3D = new WB_Transform3D();
+        transform3D.addRotateZ(Math.PI*0.25);
+        rotatePolygon = yPolygon.apply(transform3D);
+
     }
 
     private void iniPanel() {
@@ -101,11 +107,11 @@ public class GeoRenderTest extends PApplet {
 //        panel04 = new StyleC(new BasicBase(schoolBase));
 
         geos.add(new PanelGeos(panel02, new WB_Point(4500, 1000, 5000), testPolygon, new WB_Vector(0, 1, 0)));
-        geos.add(new PanelGeos(panel02, new WB_Point(9500, 1000, 5000), rotatePolygon, new WB_Vector(0, 1, 0)));
+        geos.add(new PanelGeos(panel02, new WB_Point(9500, 1000, 5000), movePolygon, new WB_Vector(0, 1, 0)));
         geos.add(new PanelGeos(panel02, new WB_Point(0, 0, 0), yPolygon, new WB_Vector(1, 0, 0)));
         geos.add(new PanelGeos(panel02, new WB_Point(0, 0, 1000), zPolygon, new WB_Vector(0, 0, 1)));
 
-
+        geos.add(new PanelGeos(panel02, new WB_Point(0,0,0), rotatePolygon, new WB_Vector(-1, 1, 0)));
     }
 
     public void draw() {
@@ -114,10 +120,11 @@ public class GeoRenderTest extends PApplet {
         panelRender.renderAll();
 
         noFill();
-        render.drawPolygonEdges(testPolygon);
+//        render.drawPolygonEdges(testPolygon);
+//        render.drawPolygonEdges(movePolygon);
+//        render.drawPolygonEdges(yPolygon);
+//        render.drawPolygonEdges(zPolygon);
         render.drawPolygonEdges(rotatePolygon);
-        render.drawPolygonEdges(yPolygon);
-        render.drawPolygonEdges(zPolygon);
     }
 
 

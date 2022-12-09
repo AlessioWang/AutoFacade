@@ -745,6 +745,7 @@ public class GeoTools {
         system.setZ(dir);
 
         transform3D.addFromWorldToCS(system);
+        transform3D.addTranslate(pos);
 
         return origin.apply(transform3D);
     }
