@@ -23,6 +23,14 @@ public class PanelGeos {
     //基点位置
     public WB_Point pos;
 
+    //panel 第一条边的方向
+    public WB_Vector v1;
+
+    //panel 第二条边的方向
+    public WB_Vector v2;
+
+    public WB_Polygon target;
+
     //朝向
     public WB_Vector direction;
 
@@ -37,6 +45,34 @@ public class PanelGeos {
     public List<WB_Polygon> glasses = new LinkedList<>();
 
     public PanelGeos() {
+    }
+
+    public PanelGeos(Panel panel, WB_Point pos, WB_Polygon target, WB_Vector direction) {
+        this.panel = panel;
+        this.pos = pos;
+        this.direction = direction;
+        this.target = target;
+
+        //获取窗户的位置信息
+        windowComps = panel.getWindowsComps();
+
+        //初始化各种图元信息
+        iniGeo();
+    }
+
+
+    public PanelGeos(Panel panel, WB_Point pos, WB_Vector v1, WB_Vector v2, WB_Vector direction) {
+        this.panel = panel;
+        this.pos = pos;
+        this.direction = direction;
+        this.v1 = v1;
+        this.v2 = v2;
+
+        //获取窗户的位置信息
+        windowComps = panel.getWindowsComps();
+
+        //初始化各种图元信息
+        iniGeo();
     }
 
     public PanelGeos(Panel panel, WB_Point pos, WB_Vector direction) {
@@ -102,11 +138,13 @@ public class PanelGeos {
     private void initPanelGeo() {
         WB_Polygon baseShape = panel.getBase().getBasicShape();
         WB_Polygon polygonWithHoles = GeoTools.getPolygonWithHoles(baseShape, winBoundaries);
-//        wallGeo = GeoTools.transferPolygon3DByZ(polygonWithHoles, pos, direction);
-        wallGeo = GeoTools.transferPolygon3DByZTest(polygonWithHoles, pos, direction);
 
-//        wallGeo = GeoTools.transferPolygon3DByZNew(polygonWithHoles, pos, direction);
+//        wallGeo = GeoTools.transferPolygon3DByZTest(polygonWithHoles, pos, direction);
+//        wallGeo = GeoTools.movePolygon3D(wallGeo, pos);
+
+        wallGeo = GeoTools.transfer3DByTargetPolygon(polygonWithHoles, target, pos, direction);
         wallGeo = GeoTools.movePolygon3D(wallGeo, pos);
+
     }
 
     public void setPanel(Panel panel) {

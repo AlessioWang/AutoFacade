@@ -619,8 +619,7 @@ public class GeoTools {
         WB_Point p1 = new WB_Point(width, 0);
         WB_Point p2 = new WB_Point(width, height);
         WB_Point p3 = new WB_Point(0, height);
-        WB_Point p4 = new WB_Point(0, 0);
-        return new WB_Polygon(p0, p1, p2, p3, p4);
+        return new WB_Polygon(p0, p1, p2, p3);
     }
 
 
@@ -729,6 +728,40 @@ public class GeoTools {
         return origin.apply(transform3D);
     }
 
+    public static WB_Polygon transfer3DByTargetPolygon(WB_Polygon origin, WB_Polygon target, WB_Point pos, WB_Vector dir) {
+        WB_Transform3D transform3D = new WB_Transform3D();
+        WB_CoordinateSystem system = new WB_CoordinateSystem();
+
+        List<WB_Segment> segments = target.toSegments();
+        WB_Vector v1 = (WB_Vector) segments.get(1).getDirection();
+        WB_Vector v2 = (WB_Vector) segments.get(2).getDirection();
+
+        System.out.println(segments.size());
+        System.out.println("x " + v1);
+        System.out.println("y " + v2);
+        System.out.println("z " + dir);
+
+        system.setXY(v1, v2);
+        system.setZ(dir);
+
+        transform3D.addFromWorldToCS(system);
+
+        return origin.apply(transform3D);
+    }
+
+    public static WB_Polygon transfer3DByVectors(WB_Polygon origin, WB_Vector v1, WB_Vector v2, WB_Point pos, WB_Vector dir) {
+        WB_Transform3D transform3D = new WB_Transform3D();
+        WB_CoordinateSystem system = new WB_CoordinateSystem();
+
+        system.setXY(v1, v2);
+        system.setZ(dir);
+        system.setOrigin(pos);
+
+        transform3D.addFromWorldToCS(system);
+
+        return origin.apply(transform3D);
+    }
+
     /**
      * 将基准图元三维变换,矢量方向以Z轴位基准
      *
@@ -740,28 +773,15 @@ public class GeoTools {
     public static WB_Polygon transferPolygon3DByZTest(WB_Polygon origin, WB_Point pos, WB_Vector dir) {
         WB_Transform3D transform3D = new WB_Transform3D();
         WB_CoordinateSystem system = new WB_CoordinateSystem();
-        transform3D.addFromWorldToCS(system);
 
         system.setOrigin(new WB_Point(0, 0, 0));
 
         WB_Vector v0 = new WB_Vector(1, 0, 0);
-
         WB_Vector v1 = new WB_Vector(0, 1, 0);
 
         system.setXY(v0, v1);
         system.setZ(dir);
         transform3D.addFromWorldToCS(system);
-
-
-//        transform3D.addRotateZ(dir.getAngle(new WB_Point(0, 0, 1)));
-//        System.out.println("Z " + dir.getAngle(new WB_Point(0, 0, 1)));
-//
-//        transform3D.addRotateY(dir.getAngle(new WB_Point(0, 0, 1)));
-//        System.out.println("Y " + dir.getAngle(new WB_Point(0, 1, 0)));
-//
-//        transform3D.addRotateX(dir.getAngle(new WB_Point(0, 0, 1)));
-//        System.out.println("X " + dir.getAngle(new WB_Point(1, 0, 0)));
-//        transform3D.addRotateX(dir.getAngle(origin.getNormal()));
 
 //        transform3D.addTranslate(pos);
         return origin.apply(transform3D);
@@ -829,7 +849,6 @@ public class GeoTools {
         Point jtsPoint = gf.createPoint(new Coordinate(pt.xd(), pt.yd(), pt.zd()));
         return jtsShell.covers(jtsPoint);
     }
-
 
     /**
      * 判断一个多边形是否包含另一个多边形
