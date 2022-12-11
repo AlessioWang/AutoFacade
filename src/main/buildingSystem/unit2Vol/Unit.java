@@ -153,7 +153,6 @@ public class Unit {
     private void initFaces() {
         //初始化四边的面
         List<WB_Segment> segments = realBase.toSegments();
-        segments.remove(0);
 
         for (WB_Segment seg : segments) {
             WB_Polygon shape = GeoTools.getRecBySegAndWidth(seg, height, new WB_Vector(0, 0, 1));

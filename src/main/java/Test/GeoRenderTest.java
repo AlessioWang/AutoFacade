@@ -67,10 +67,10 @@ public class GeoRenderTest extends PApplet {
     }
 
     private void initPoly() {
-        WB_Point p0 = new WB_Point(4500, 1000, 5000);
-        WB_Point p1 = new WB_Point(9000, 1000, 5000);
-        WB_Point p2 = new WB_Point(9000, 1000, 8900);
-        WB_Point p3 = new WB_Point(4500, 1000, 8900);
+        WB_Point p0 = new WB_Point(4500, 3000, 5000);
+        WB_Point p1 = new WB_Point(9000, 3000, 5000);
+        WB_Point p2 = new WB_Point(9000, 3000, 8900);
+        WB_Point p3 = new WB_Point(4500, 3000, 8900);
 
         testPolygon = new WB_Polygon(p0, p1, p2, p3);
 
@@ -92,7 +92,7 @@ public class GeoRenderTest extends PApplet {
 
 
         WB_Transform3D transform3D = new WB_Transform3D();
-        transform3D.addRotateZ(Math.PI*0.25);
+        transform3D.addRotateZ(Math.PI * 0.25);
         rotatePolygon = yPolygon.apply(transform3D);
 
     }
@@ -106,12 +106,13 @@ public class GeoRenderTest extends PApplet {
 //        panel03 = new StyleB(new BasicBase(schoolBase));
 //        panel04 = new StyleC(new BasicBase(schoolBase));
 
-        geos.add(new PanelGeos(panel02, new WB_Point(4500, 1000, 5000), testPolygon, new WB_Vector(0, 1, 0)));
-        geos.add(new PanelGeos(panel02, new WB_Point(9500, 1000, 5000), movePolygon, new WB_Vector(0, 1, 0)));
+        geos.add(new PanelGeos(panel02, new WB_Point(4500, 3000, 5000), testPolygon, new WB_Vector(0, 1, 0)));
+        geos.add(new PanelGeos(panel02, new WB_Point(9500, 3000, 5000), movePolygon, new WB_Vector(0, 1, 0)));
         geos.add(new PanelGeos(panel02, new WB_Point(0, 0, 0), yPolygon, new WB_Vector(1, 0, 0)));
-        geos.add(new PanelGeos(panel02, new WB_Point(0, 0, 1000), zPolygon, new WB_Vector(0, 0, 1)));
+//        geos.add(new PanelGeos(panel02, new WB_Point(0, 0, 1000), zPolygon, new WB_Vector(0, 0, 1)));
 
-        geos.add(new PanelGeos(panel02, new WB_Point(0,0,0), rotatePolygon, new WB_Vector(-1, 1, 0)));
+//        geos.add(new PanelGeos(panel02, new WB_Point(0,0,0), rotatePolygon, new WB_Vector(-1, 1, 0)));
+        System.out.println("sss " + geos.size());
     }
 
     public void draw() {
@@ -120,11 +121,11 @@ public class GeoRenderTest extends PApplet {
         panelRender.renderAll();
 
         noFill();
-//        render.drawPolygonEdges(testPolygon);
-//        render.drawPolygonEdges(movePolygon);
-//        render.drawPolygonEdges(yPolygon);
-//        render.drawPolygonEdges(zPolygon);
-        render.drawPolygonEdges(rotatePolygon);
+        render.drawPolygonEdges(testPolygon);
+        render.drawPolygonEdges(movePolygon);
+        render.drawPolygonEdges(yPolygon);
+        render.drawPolygonEdges(zPolygon);
+//        render.drawPolygonEdges(rotatePolygon);
     }
 
 

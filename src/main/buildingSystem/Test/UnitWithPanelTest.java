@@ -109,7 +109,7 @@ public class UnitWithPanelTest extends PApplet {
         WB_Point pos = new WB_Point(0, 0, 0);
         WB_Polygon base = GeoTools.createRecPolygon(8000, 6000);
         WB_Vector dir = new WB_Vector(1, 0, 0);
-        initBuildingLayer(units01, unitRenders, pos, base, dir, 8000, 2, 2);
+        initBuildingLayer(units01, unitRenders, pos, base, dir, 8000, 1, 1);
 
     }
 
@@ -128,8 +128,18 @@ public class UnitWithPanelTest extends PApplet {
             List<Face> faces = new LinkedList<>();
             unit.getAllFaces().stream().filter(Face::isIfPanel).forEach(faces::add);
 
+//            faces.add(unit.getAllFaces().get(1));
+//            faces.add(unit.getAllFaces().get(3));
+
             for (Face p : faces) {
-                WB_Point pt = p.getShape().getPoint(0);
+                WB_Point pt0 = p.getShape().getPoint(0);
+                WB_Point pt1 = p.getShape().getPoint(3);
+
+                System.out.println("pt0 " + pt0.zd());
+                System.out.println("pt1 " + pt1.zd());
+
+                WB_Point pt = pt0.zd() >= pt1.zd() ? pt0 : pt1;
+
                 geos.add(new PanelGeos(panel01, pt, p.getShape(), p.getDir()));
             }
         }

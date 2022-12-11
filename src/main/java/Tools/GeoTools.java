@@ -436,7 +436,14 @@ public class GeoTools {
         return selPolygons;
     }
 
-    //选择polygons在多边形外
+
+    /**
+     * 选择polygons在多边形外
+     *
+     * @param ring
+     * @param polygons
+     * @return
+     */
     public static List<WB_Polygon> selPolygonsInRingByPoint0(WB_Polygon ring, List<WB_Polygon> polygons) {
         List<WB_Polygon> selPolygons = new ArrayList<>();
         for (WB_Polygon polygon : polygons) {
@@ -728,6 +735,33 @@ public class GeoTools {
         return origin.apply(transform3D);
     }
 
+    // TODO: 2022/12/11 新的尝试
+    public static WB_Polygon transfer(WB_Polygon origin, WB_Polygon target, WB_Point pos, WB_Vector dir) {
+        WB_Transform3D transform3D = new WB_Transform3D();
+
+//        List<WB_Segment> segments = target.toSegments();
+//        WB_Vector v1 = (WB_Vector) segments.get(1).getDirection();
+//        WB_Vector v2 = (WB_Vector) segments.get(2).getDirection();
+//        WB_Vector vt = v1.cross(v2);
+//        System.out.println("vt " + vt);
+
+        List<WB_Segment> segmentsOri = origin.toSegments();
+        WB_Vector vOri1 = (WB_Vector) segmentsOri.get(1).getDirection();
+        WB_Vector vOri2 = (WB_Vector) segmentsOri.get(2).getDirection();
+        WB_Vector vOri = vOri1.cross(vOri2);
+        System.out.println("vOri- " + vOri);
+
+        WB_Vector ax = dir.cross(vOri);
+        System.out.println("ax- " + ax);
+
+        double angle = vOri.getAngle(dir);
+
+        System.out.println("angle- " + angle);
+        transform3D.addRotateAboutAxis(angle, new WB_Point(0, 0, 0), ax);
+
+        return origin.apply(transform3D);
+    }
+
     public static WB_Polygon transfer3DByTargetPolygon(WB_Polygon origin, WB_Polygon target, WB_Point pos, WB_Vector dir) {
         WB_Transform3D transform3D = new WB_Transform3D();
         WB_CoordinateSystem system = new WB_CoordinateSystem();
@@ -736,10 +770,27 @@ public class GeoTools {
         WB_Vector v1 = (WB_Vector) segments.get(1).getDirection();
         WB_Vector v2 = (WB_Vector) segments.get(2).getDirection();
 
-        System.out.println(segments.size());
         System.out.println("x " + v1);
         System.out.println("y " + v2);
         System.out.println("z " + dir);
+        System.out.println("-----");
+
+        system.setXY(v1, v2);
+        system.setZ(dir);
+
+        transform3D.addFromWorldToCS(system);
+        transform3D.addTranslate(pos);
+
+        return origin.apply(transform3D);
+    }
+
+    public static WB_PolyLine transfer3DByTargetPolyline(WB_PolyLine origin, WB_Polygon target, WB_Point pos, WB_Vector dir) {
+        WB_Transform3D transform3D = new WB_Transform3D();
+        WB_CoordinateSystem system = new WB_CoordinateSystem();
+
+        List<WB_Segment> segments = target.toSegments();
+        WB_Vector v1 = (WB_Vector) segments.get(1).getDirection();
+        WB_Vector v2 = (WB_Vector) segments.get(2).getDirection();
 
         system.setXY(v1, v2);
         system.setZ(dir);
@@ -761,32 +812,6 @@ public class GeoTools {
         transform3D.addFromWorldToCS(system);
 
         return origin.apply(transform3D);
-    }
-
-    /**
-     * 将基准图元三维变换,矢量方向以Z轴位基准
-     *
-     * @param origin
-     * @param pos
-     * @param dir
-     * @return
-     */
-    public static WB_Polygon transferPolygon3DByZTest(WB_Polygon origin, WB_Point pos, WB_Vector dir) {
-        WB_Transform3D transform3D = new WB_Transform3D();
-        WB_CoordinateSystem system = new WB_CoordinateSystem();
-
-        system.setOrigin(new WB_Point(0, 0, 0));
-
-        WB_Vector v0 = new WB_Vector(1, 0, 0);
-        WB_Vector v1 = new WB_Vector(0, 1, 0);
-
-        system.setXY(v0, v1);
-        system.setZ(dir);
-        transform3D.addFromWorldToCS(system);
-
-//        transform3D.addTranslate(pos);
-        return origin.apply(transform3D);
-//        return GeoTools.movePolygon3D(origin, pos);
     }
 
     /**
