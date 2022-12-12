@@ -735,29 +735,55 @@ public class GeoTools {
         return origin.apply(transform3D);
     }
 
-    // TODO: 2022/12/11 新的尝试
-    public static WB_Polygon transfer(WB_Polygon origin, WB_Polygon target, WB_Point pos, WB_Vector dir) {
+    /**
+     * 由轴做三维变换
+     *
+     * @param origin
+     * @param pos
+     * @param dir
+     * @return
+     */
+    public static WB_Polygon transferPolygon3dByAxis(WB_Polygon origin, WB_Point pos, WB_Vector dir) {
         WB_Transform3D transform3D = new WB_Transform3D();
-
-//        List<WB_Segment> segments = target.toSegments();
-//        WB_Vector v1 = (WB_Vector) segments.get(1).getDirection();
-//        WB_Vector v2 = (WB_Vector) segments.get(2).getDirection();
-//        WB_Vector vt = v1.cross(v2);
-//        System.out.println("vt " + vt);
 
         List<WB_Segment> segmentsOri = origin.toSegments();
         WB_Vector vOri1 = (WB_Vector) segmentsOri.get(1).getDirection();
         WB_Vector vOri2 = (WB_Vector) segmentsOri.get(2).getDirection();
-        WB_Vector vOri = vOri1.cross(vOri2);
+        WB_Vector vOri = vOri2.cross(vOri1);
         System.out.println("vOri- " + vOri);
 
-        WB_Vector ax = dir.cross(vOri);
+
+        WB_Vector ax = vOri.cross(dir);
         System.out.println("ax- " + ax);
 
         double angle = vOri.getAngle(dir);
 
         System.out.println("angle- " + angle);
         transform3D.addRotateAboutAxis(angle, new WB_Point(0, 0, 0), ax);
+        transform3D.addTranslate(pos);
+
+        return origin.apply(transform3D);
+    }
+
+    /**
+     * 由轴做三维变换
+     *
+     * @param origin
+     * @param pos
+     * @param dir
+     * @return
+     */
+    public static WB_PolyLine transferPolyline3dByAxis(WB_PolyLine origin, WB_Point pos, WB_Vector dir) {
+        WB_Transform3D transform3D = new WB_Transform3D();
+
+        WB_Vector vOri = new WB_Vector(0, 0, 1);
+
+        WB_Vector ax = vOri.cross(dir);
+
+        double angle = vOri.getAngle(dir);
+
+        transform3D.addRotateAboutAxis(angle, new WB_Point(0, 0, 0), ax);
+        transform3D.addTranslate(pos);
 
         return origin.apply(transform3D);
     }

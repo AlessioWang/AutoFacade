@@ -141,7 +141,7 @@ public class SchoolTest extends PApplet {
         background(255);
         cameraController.drawSystem(1000);
 
-//        buildingRender.renderAll();
+        buildingRender.renderAll();
 
         buildingRender.renderPanelGeo();
     }

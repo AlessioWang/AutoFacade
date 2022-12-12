@@ -5,6 +5,8 @@ import facadeGen.Panel.Panel;
 import facadeGen.Panel.PanelBase.BasicBase;
 import facadeGen.Panel.PanelGeos;
 import facadeGen.Panel.PanelRender;
+import facadeGen.Panel.PanelStyle.StyleA;
+import facadeGen.Panel.PanelStyle.StyleB;
 import facadeGen.Panel.PanelStyle.StyleC;
 import guo_cam.CameraController;
 import processing.core.PApplet;
@@ -18,10 +20,7 @@ import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Vector;
 import wblut.processing.WB_Render;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @auther Alessio
@@ -109,7 +108,7 @@ public class UnitWithPanelTest extends PApplet {
         WB_Point pos = new WB_Point(0, 0, 0);
         WB_Polygon base = GeoTools.createRecPolygon(8000, 6000);
         WB_Vector dir = new WB_Vector(1, 0, 0);
-        initBuildingLayer(units01, unitRenders, pos, base, dir, 8000, 1, 1);
+        initBuildingLayer(units01, unitRenders, pos, base, dir, 8000, 5, 5);
 
     }
 
@@ -117,28 +116,40 @@ public class UnitWithPanelTest extends PApplet {
     private Panel panel01;
     private PanelRender panelRender;
 
-
     private void initPanel() {
         panelRender = new PanelRender(this, new WB_Render(this), geos);
 
         WB_Polygon basePolygon = GeoTools.createRecPolygon(8000, 3500);
-        panel01 = new StyleC(new BasicBase(basePolygon));
+//        panel01 = new StyleC(new BasicBase(basePolygon));
+        panel01 = new StyleA(new BasicBase(basePolygon));
 
         for (Unit unit : units01) {
             List<Face> faces = new LinkedList<>();
-            unit.getAllFaces().stream().filter(Face::isIfPanel).forEach(faces::add);
+//            unit.getAllFaces().stream().filter(Face::isIfPanel).forEach(faces::add);
 
-//            faces.add(unit.getAllFaces().get(1));
-//            faces.add(unit.getAllFaces().get(3));
+            faces.add(unit.getAllFaces().get(1));
+            faces.add(unit.getAllFaces().get(3));
 
             for (Face p : faces) {
                 WB_Point pt0 = p.getShape().getPoint(0);
-                WB_Point pt1 = p.getShape().getPoint(3);
+                WB_Point pt1 = p.getShape().getPoint(1);
+                WB_Point pt2 = p.getShape().getPoint(2);
+                WB_Point pt3 = p.getShape().getPoint(3);
 
-                System.out.println("pt0 " + pt0.zd());
-                System.out.println("pt1 " + pt1.zd());
+                System.out.println("pt0 " + pt0);
+                System.out.println("pt1 " + pt1);
+                System.out.println("pt2 " + pt2);
+                System.out.println("pt3 " + pt3);
 
-                WB_Point pt = pt0.zd() >= pt1.zd() ? pt0 : pt1;
+                WB_Point pt = pt0;
+
+                System.out.println(p.getDir());
+
+                if (p.getDir().yd() == -1) {
+                    pt = pt0;
+                } else if (p.getDir().yd() == 1) {
+                    pt = pt2;
+                }
 
                 geos.add(new PanelGeos(panel01, pt, p.getShape(), p.getDir()));
             }

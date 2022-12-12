@@ -103,7 +103,7 @@ public class PanelGeos {
      * 初始化panel与window的几何图元信息
      */
     private void iniGeo() {
-//        initWindowGeo();
+        initWindowGeo();
         initPanelGeo();
     }
 
@@ -120,14 +120,14 @@ public class PanelGeos {
             WB_Polygon rawBoundary = GeoTools.movePolygon(windowGeos.getFrameBoundary(), entry.getValue());
             WB_Polygon rawGlass = GeoTools.movePolygon(windowGeos.getGlassShape(), entry.getValue());
 
-            frames.add(GeoTools.transfer3DByTargetPolygon(rawFrame, target, pos, direction));
+            frames.add(GeoTools.transferPolygon3dByAxis(rawFrame, pos, direction));
             winBoundaries.add(rawBoundary);
-            glasses.add(GeoTools.transfer3DByTargetPolygon(rawGlass, target, pos, direction));
+            glasses.add(GeoTools.transferPolygon3dByAxis(rawGlass, pos, direction));
 
             List<WB_PolyLine> rawBeams = windowGeos.getAll2DBeams();
             for (WB_PolyLine l : rawBeams) {
                 WB_PolyLine rawL = GeoTools.movePolyline(l, entry.getValue());
-                beams.add(GeoTools.transfer3DByTargetPolyline(rawL, target, pos, direction));
+                beams.add(GeoTools.transferPolyline3dByAxis(rawL, pos, direction));
             }
         }
     }
@@ -139,12 +139,10 @@ public class PanelGeos {
         WB_Polygon baseShape = panel.getBase().getBasicShape();
         WB_Polygon polygonWithHoles = GeoTools.getPolygonWithHoles(baseShape, winBoundaries);
 
-//        wallGeo = GeoTools.transfer3DByTargetPolygon(polygonWithHoles, target, pos, direction);
-        wallGeo = GeoTools.transfer(polygonWithHoles, target, pos, direction);
-        wallGeo = GeoTools.movePolygon3D(wallGeo,pos);
+        wallGeo = GeoTools.transferPolygon3dByAxis(polygonWithHoles, pos, direction);
 
         System.out.println("pos " + pos);
-        System.out.println("-------------------");
+        System.out.println("------------------------------");
     }
 
     public void setPanel(Panel panel) {
