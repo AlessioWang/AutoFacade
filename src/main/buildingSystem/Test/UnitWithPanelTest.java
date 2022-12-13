@@ -6,8 +6,6 @@ import facadeGen.Panel.PanelBase.BasicBase;
 import facadeGen.Panel.PanelGeos;
 import facadeGen.Panel.PanelRender;
 import facadeGen.Panel.PanelStyle.StyleA;
-import facadeGen.Panel.PanelStyle.StyleB;
-import facadeGen.Panel.PanelStyle.StyleC;
 import guo_cam.CameraController;
 import processing.core.PApplet;
 import renders.BuildingRender;
@@ -42,9 +40,7 @@ public class UnitWithPanelTest extends PApplet {
 
     private List<Unit> units01;
 
-
     private BuildingRender buildingRender;
-
 
     public void settings() {
         size(800, 800, P3D);
@@ -109,7 +105,6 @@ public class UnitWithPanelTest extends PApplet {
         WB_Polygon base = GeoTools.createRecPolygon(8000, 6000);
         WB_Vector dir = new WB_Vector(1, 0, 0);
         initBuildingLayer(units01, unitRenders, pos, base, dir, 8000, 5, 5);
-
     }
 
     private List<PanelGeos> geos = new LinkedList<>();
@@ -155,7 +150,6 @@ public class UnitWithPanelTest extends PApplet {
             }
         }
     }
-
 
     public void draw() {
         background(255);

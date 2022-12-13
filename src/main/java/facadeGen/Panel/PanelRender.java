@@ -73,7 +73,6 @@ public class PanelRender {
         applet.popStyle();
     }
 
-
     /**
      * 绘制窗户的分隔
      *

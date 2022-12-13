@@ -83,12 +83,25 @@ public class GeoTools {
         return aabb.getWidth() / aabb.getHeight();
     }
 
-    //p2指向p1的单位向量
+    /**
+     * p2指向p1的单位向量
+     *
+     * @param p1
+     * @param p2
+     * @return
+     */
     static public WB_Vector getUnitVector(WB_Point p1, WB_Point p2) {
         return p1.sub(p2).div(p1.getDistance(p2));
     }
 
-    //polygon判断是否相交（相交是false，相交是true）
+
+    /**
+     * polygon判断是否相交（相交是false，相交是true）
+     *
+     * @param a
+     * @param b
+     * @return
+     */
     public static boolean checkIntersection(WB_Polygon a, WB_Polygon b) {
         List<WB_Segment> as = a.toSegments();
         List<WB_Segment> bs = b.toSegments();
@@ -309,7 +322,13 @@ public class GeoTools {
     }
 
 
-    //线切割polygon，得到切割后的List<polygon>
+    /**
+     * 线切割polygon，得到切割后的List<polygon>
+     *
+     * @param back
+     * @param cutters
+     * @return
+     */
     public static List<WB_Polygon> splitPolygonWithPolylineList(List<WB_Polygon> back, List<WB_PolyLine> cutters) {
         List<LineString> lines = new ArrayList<>();
         List<WB_Segment> allSegs = new ArrayList<>();
@@ -499,6 +518,7 @@ public class GeoTools {
 
     /**
      * 比较两个点是否是在同一个位置
+     * 默认阈值：0.01
      *
      * @param p1
      * @param p2
@@ -602,12 +622,10 @@ public class GeoTools {
             if (nextLines.size() > 0) {
                 WB_Coord[] nextSelLine = GeoTools.selNextLineCoords(originLine, nextLines);
                 target.get(target.size() - 1).add(nextSelLine[1]);
-                System.out.println("add point");
             } else {
                 target.add(new ArrayList<>());
                 target.get(target.size() - 1).add(coordsList.get(i + 1)[0]);
                 target.get(target.size() - 1).add(coordsList.get(i + 1)[1]);
-                System.out.println("new polyline");
             }
         }
         return target;
@@ -659,7 +677,6 @@ public class GeoTools {
     /**
      * 检测两个二维的wb_polygon是否相连
      * 涉及较为复杂几何运算，有时会出现浮点误差与计算时间过长等问题
-     * 若输入的list中仅含有一个元素，输出为true，但会生成提示
      *
      * @return
      */
@@ -668,7 +685,14 @@ public class GeoTools {
         return result.size() == 1;
     }
 
-    public static WB_Polygon unionPolygons(WB_Polygon p1, WB_Polygon p2) {
+    /**
+     * 合并两个wb_polygon
+     *
+     * @param p1
+     * @param p2
+     * @return
+     */
+    public static WB_Polygon unionPolygons2D(WB_Polygon p1, WB_Polygon p2) {
         if (checkIfNeighbor2D(p1, p2)) {
             System.out.println("多边形不相邻，无法合并");
             return null;
@@ -683,7 +707,7 @@ public class GeoTools {
      * @param ps
      * @return
      */
-    public static List<WB_Polygon> unionPolygons(WB_Polygon... ps) {
+    public static List<WB_Polygon> unionPolygons2D(WB_Polygon... ps) {
         if (ps.length == 1) {
             return Collections.singletonList(ps[0]);
         }
@@ -750,15 +774,11 @@ public class GeoTools {
         WB_Vector vOri1 = (WB_Vector) segmentsOri.get(1).getDirection();
         WB_Vector vOri2 = (WB_Vector) segmentsOri.get(2).getDirection();
         WB_Vector vOri = vOri2.cross(vOri1);
-        System.out.println("vOri- " + vOri);
-
 
         WB_Vector ax = vOri.cross(dir);
-        System.out.println("ax- " + ax);
 
         double angle = vOri.getAngle(dir);
 
-        System.out.println("angle- " + angle);
         transform3D.addRotateAboutAxis(angle, new WB_Point(0, 0, 0), ax);
         transform3D.addTranslate(pos);
 
@@ -796,10 +816,6 @@ public class GeoTools {
         WB_Vector v1 = (WB_Vector) segments.get(1).getDirection();
         WB_Vector v2 = (WB_Vector) segments.get(2).getDirection();
 
-        System.out.println("x " + v1);
-        System.out.println("y " + v2);
-        System.out.println("z " + dir);
-        System.out.println("-----");
 
         system.setXY(v1, v2);
         system.setZ(dir);
