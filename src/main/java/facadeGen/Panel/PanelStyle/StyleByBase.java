@@ -27,7 +27,7 @@ public class StyleByBase extends Panel {
 
     public void styleSetting() {
         WB_Polygon basePoly = base.getBasicShape();
-        WB_Polygon winPoly = GeoTools.getBuffer(basePoly, -900);
+        WB_Polygon winPoly = GeoTools.getBuffer(basePoly, -600);
         winPoly = GeoTools.reversePolygon(winPoly);
         System.out.println("base window" + Arrays.toString(winPoly.getPoints().toArray()));
 

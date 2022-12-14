@@ -4,6 +4,7 @@ import facadeGen.Panel.Component.Window;
 import facadeGen.Panel.Component.WindowGeos;
 import Tools.GeoTools;
 import facadeGen.Panel.PanelStyle.Panel;
+import unit2Vol.panelBase.PanelBase;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_PolyLine;
 import wblut.geom.WB_Polygon;
@@ -53,6 +54,20 @@ public class PanelGeos {
         this.pos = pos;
         this.direction = direction;
         this.target = target;
+
+        //获取窗户的位置信息
+        windowComps = panel.getWindowsComps();
+
+        //初始化各种图元信息
+        iniGeo();
+    }
+
+    // TODO: 2022/12/14 可能存在基点问题
+    public PanelGeos(Panel panel, PanelBase panelBase) {
+        this.panel = panel;
+        this.pos = panelBase.getShape().getPoint(0);
+        this.direction = panelBase.getDir();
+        this.target = panelBase.getShape();
 
         //获取窗户的位置信息
         windowComps = panel.getWindowsComps();

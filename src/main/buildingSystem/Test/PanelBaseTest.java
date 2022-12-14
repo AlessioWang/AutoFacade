@@ -6,6 +6,7 @@ import facadeGen.Panel.PanelBase.BasicBase;
 import facadeGen.Panel.PanelGeos;
 import facadeGen.Panel.PanelRender;
 import facadeGen.Panel.PanelStyle.StyleA;
+import facadeGen.Panel.PanelStyle.StyleB;
 import facadeGen.Panel.PanelStyle.StyleByBase;
 import guo_cam.CameraController;
 import processing.core.PApplet;
@@ -21,6 +22,7 @@ import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Vector;
 import wblut.processing.WB_Render;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -41,7 +43,7 @@ public class PanelBaseTest extends PApplet {
 
     private double height = 3500;
 
-    private List<Unit> units01;
+    private List<Unit> units;
 
     private BuildingRender buildingRender;
 
@@ -53,7 +55,7 @@ public class PanelBaseTest extends PApplet {
         cameraController = new CameraController(this, 50000);
         unitRenders = new LinkedList<>();
 
-        units01 = new LinkedList<>();
+        units = new LinkedList<>();
 
         initUnits();
         initBuilding();
@@ -63,7 +65,7 @@ public class PanelBaseTest extends PApplet {
     }
 
     private void initBuilding() {
-        building01 = new Building(units01);
+        building01 = new Building(units);
 
         buildingRender = new BuildingRender(this, building01);
     }
@@ -88,39 +90,45 @@ public class PanelBaseTest extends PApplet {
         WB_Point pos = new WB_Point(0, 0, 0);
         WB_Polygon base = GeoTools.createRecPolygon(8000, 6000);
         WB_Vector dir = new WB_Vector(1, 0, 0);
-        initBuildingLayer(units01, unitRenders, pos, base, dir, 8000, 5, 5);
+        initBuildingLayer(units, unitRenders, pos, base, dir, 8000, 8, 5);
     }
 
     private List<PanelGeos> geos;
     private Panel panel01;
     private Panel panel02;
     private PanelRender panelRender;
-    PanelBase panelBase;
 
     private void initPanel() {
         geos = new LinkedList<>();
 
         panelRender = new PanelRender(this, new WB_Render(this), geos);
 
-        WB_Polygon basePolygon = GeoTools.createRecPolygon(8000 * 5, 3500 * 5);
-//        panel01 = new StyleA(new BasicBase(basePolygon));
-        panel01 = new StyleByBase(new BasicBase(basePolygon));
-        panel02 = new StyleA(new BasicBase(basePolygon));
+        WB_Polygon basePolygon01 = GeoTools.createRecPolygon(8000, 3500 * 5);
+        panel01 = new StyleByBase(new BasicBase(basePolygon01));
 
-        List<Face> faceList = new LinkedList<>();
-        for (Unit unit : units01) {
-            List<Face> faces = new LinkedList<>();
+        WB_Polygon basePolygon02 = GeoTools.createRecPolygon(8000, 3500);
+        panel02 = new StyleB(new BasicBase(basePolygon02));
 
-            faces.add(unit.getAllFaces().get(1));
+        List<Face> facesMulti = new LinkedList<>();
+        List<Face> facesSingle = new LinkedList<>();
 
-            faceList.addAll(faces);
+        for (int i = 0; i < units.size(); i++) {
+            Unit unit = units.get(i);
+
+            if (i <= 4) {
+                facesMulti.add(unit.getAllFaces().get(1));
+            } else {
+                facesSingle.add(unit.getAllFaces().get(1));
+            }
         }
 
-        panelBase = new MergedPanelBase(faceList);
-        WB_Polygon shape = panelBase.getShape();
-        WB_Point pt = shape.getPoint(0);
-        geos.add(new PanelGeos(panel01, pt, shape, panelBase.getDir()));
-        geos.add(new PanelGeos(panel02, pt, shape, panelBase.getDir()));
+
+        for (Face face : facesSingle) {
+            geos.add(new PanelGeos(panel02, new MergedPanelBase(Collections.singletonList(face))));
+        }
+
+        PanelBase panelBaseLarge = new MergedPanelBase(facesMulti);
+        geos.add(new PanelGeos(panel01, panelBaseLarge));
     }
 
     public void draw() {

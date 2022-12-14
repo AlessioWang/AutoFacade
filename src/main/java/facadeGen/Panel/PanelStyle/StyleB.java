@@ -20,13 +20,13 @@ public class StyleB extends Panel {
     }
 
     public void styleSetting() {
-        WB_Polygon p1 = GeoTools.createRecPolygon(1800, 2700);
+        WB_Polygon p1 = GeoTools.createRecPolygon(2000, 2700);
         Window w1 = new VerDuoWindow(p1, base);
         WB_Point pos1 = new WB_Point(600, 500);
 
-        WB_Polygon p2 = GeoTools.createRecPolygon(700, 2700);
+        WB_Polygon p2 = GeoTools.createRecPolygon(2000, 2700);
         Window w2 = new VerDuoWindow(p2, base);
-        WB_Point pos2 = new WB_Point(3400, 500);
+        WB_Point pos2 = new WB_Point(3800, 500);
 
         addComponents(w1, pos1);
         addComponents(w2, pos2);

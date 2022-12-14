@@ -67,7 +67,7 @@ public class PanelRender {
      */
     private void panelRender(PanelGeos panelGeos) {
         applet.pushStyle();
-        applet.fill(255, 130, 93);
+        applet.fill(219,223,232);
         applet.noStroke();
         render.drawPolygon(panelGeos.wallGeo);
         applet.popStyle();
@@ -97,7 +97,7 @@ public class PanelRender {
     private void frameRender(PanelGeos panelGeos) {
         applet.pushStyle();
         applet.noFill();
-        applet.stroke(10, 50, 130);
+        applet.stroke(78,101,122);
         applet.strokeWeight(3);
         for (WB_Polygon p : panelGeos.frames) {
             render.drawPolygonEdges(p);
@@ -112,7 +112,7 @@ public class PanelRender {
      */
     private void glassRender(PanelGeos panelGeos) {
         applet.pushStyle();
-        applet.fill(84, 192, 235);
+        applet.fill(170,196,222);
         for (WB_Polygon p : panelGeos.glasses) {
             render.drawPolygonEdges(p);
         }
