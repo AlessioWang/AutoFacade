@@ -3,7 +3,6 @@ package facadeGen.Panel.PanelStyle;
 import convertor.DxfConvertor;
 import facadeGen.Panel.Component.Window;
 import facadeGen.Panel.Component.WindowStyle.CustomWindow;
-import facadeGen.Panel.Panel;
 import facadeGen.Panel.PanelBase.Base;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
@@ -17,18 +16,18 @@ import java.util.List;
 public class StyleCustom extends Panel {
     public Base base;
 
-//    private final DxfInput dxfInput;
+    //    private final DxfInput dxfInput;
     private final DxfConvertor dxfConvertor;
 
     public StyleCustom(Base base, DxfConvertor dxfConvertor) {
         this.base = base;
         this.dxfConvertor = dxfConvertor;
-        styleFromDxf();
+        styleSetting();
     }
 
-    public StyleCustom( DxfConvertor dxfConvertor) {
+    public StyleCustom(DxfConvertor dxfConvertor) {
         this.dxfConvertor = dxfConvertor;
-        styleFromDxf();
+        styleSetting();
     }
 
     private void styleFromDxf() {
@@ -41,6 +40,11 @@ public class StyleCustom extends Panel {
             WB_Point pt = new WB_Point(0, 0, 0);
             addComponents(w, pt);
         }
+    }
+
+    @Override
+    public void styleSetting() {
+        styleFromDxf();
     }
 
     @Override

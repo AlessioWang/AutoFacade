@@ -2,7 +2,7 @@ package Test;
 
 import facadeGen.Panel.Component.Window;
 import facadeGen.Panel.Component.WindowGeos;
-import facadeGen.Panel.Panel;
+import facadeGen.Panel.PanelStyle.Panel;
 import facadeGen.Panel.PanelBase.BasicBase;
 import facadeGen.Panel.PanelStyle.Style01Panel;
 import Tools.GeoTools;

@@ -1,6 +1,6 @@
 package facadeGen;
 
-import facadeGen.Panel.Panel;
+import facadeGen.Panel.PanelStyle.Panel;
 import facadeGen.Panel.PanelBase.BasicBase;
 import facadeGen.Panel.PanelStyle.StyleA;
 import facadeGen.Panel.PanelStyle.StyleB;

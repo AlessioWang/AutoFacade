@@ -1,9 +1,6 @@
 package unit2Vol.panelBase;
 
-import facadeGen.Panel.PanelBaseAble;
-import org.eclipse.collections.impl.bimap.mutable.HashBiMap;
 import unit2Vol.Building;
-import unit2Vol.face.Face;
 import wblut.geom.*;
 
 import java.util.*;
@@ -24,10 +21,11 @@ public abstract class PanelBase {
 
     protected WB_Vector dir;
 
-    public PanelBase() {
-    }
+    public PanelBase() {}
 
-
+    /**
+     * 初始化总方法
+     */
     public abstract void init();
 
     /**
@@ -40,6 +38,9 @@ public abstract class PanelBase {
      */
     public abstract void initShape();
 
+    /**
+     * 初始化信息
+     */
     public abstract void initInfo();
 
     public WB_Polygon getShape() {

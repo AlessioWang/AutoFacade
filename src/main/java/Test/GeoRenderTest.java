@@ -1,6 +1,6 @@
 package Test;
 
-import facadeGen.Panel.Panel;
+import facadeGen.Panel.PanelStyle.Panel;
 import facadeGen.Panel.PanelBase.BasicBase;
 import facadeGen.Panel.PanelGeos;
 import facadeGen.Panel.PanelRender;

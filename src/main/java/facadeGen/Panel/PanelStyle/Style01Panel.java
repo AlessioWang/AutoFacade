@@ -4,7 +4,6 @@ import facadeGen.Panel.Component.Window;
 import facadeGen.Panel.Component.WindowStyle.KouWindow;
 import facadeGen.Panel.Component.WindowStyle.SimpleWindow;
 import facadeGen.Panel.Component.WindowStyle.TianWindow;
-import facadeGen.Panel.Panel;
 import facadeGen.Panel.PanelBase.Base;
 import Tools.GeoTools;
 import wblut.geom.WB_Point;
@@ -25,7 +24,7 @@ public class Style01Panel extends Panel {
         styleSetting();
     }
 
-    private void styleSetting() {
+    public void styleSetting() {
         WB_Polygon p1 = GeoTools.createRecPolygon(1800, 1200);
         Window w1 = new TianWindow(p1, base);
         WB_Point pos1 = new WB_Point(500, 800);

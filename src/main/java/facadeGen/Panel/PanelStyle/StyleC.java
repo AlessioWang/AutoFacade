@@ -2,7 +2,6 @@ package facadeGen.Panel.PanelStyle;
 
 import facadeGen.Panel.Component.Window;
 import facadeGen.Panel.Component.WindowStyle.VerDuoWindow;
-import facadeGen.Panel.Panel;
 import facadeGen.Panel.PanelBase.Base;
 import Tools.GeoTools;
 import wblut.geom.WB_Point;
@@ -20,7 +19,7 @@ public class StyleC extends Panel {
         styleSetting();
     }
 
-    private void styleSetting() {
+    public void styleSetting() {
         WB_Polygon p2 = GeoTools.createRecPolygon(700, 2700);
         Window w2 = new VerDuoWindow(p2, base);
         WB_Point pos2 = new WB_Point(3400, 500);

@@ -1,11 +1,12 @@
 package Test;
 
 import Tools.GeoTools;
-import facadeGen.Panel.Panel;
+import facadeGen.Panel.PanelStyle.Panel;
 import facadeGen.Panel.PanelBase.BasicBase;
 import facadeGen.Panel.PanelGeos;
 import facadeGen.Panel.PanelRender;
 import facadeGen.Panel.PanelStyle.StyleA;
+import facadeGen.Panel.PanelStyle.StyleByBase;
 import guo_cam.CameraController;
 import processing.core.PApplet;
 import renders.BuildingRender;

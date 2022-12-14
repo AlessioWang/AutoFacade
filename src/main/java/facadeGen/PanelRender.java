@@ -1,6 +1,6 @@
 package facadeGen;
 
-import facadeGen.Panel.Panel;
+import facadeGen.Panel.PanelStyle.Panel;
 import processing.core.PApplet;
 import wblut.geom.WB_PolyLine;
 import wblut.geom.WB_Polygon;

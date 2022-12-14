@@ -52,6 +52,7 @@ public class WindowGeos {
         if (customBeam != null)
             customBeamLine2D = customBeam.getbLines();
         iniAllBeamLines();
+
         glassShape = window.getGlass().getShape();
     }
 

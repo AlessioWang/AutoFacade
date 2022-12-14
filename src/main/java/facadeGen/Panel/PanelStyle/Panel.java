@@ -1,8 +1,9 @@
-package facadeGen.Panel;
+package facadeGen.Panel.PanelStyle;
 
 import facadeGen.Panel.Component.PanelComponent;
 import facadeGen.Panel.Component.Window;
 import facadeGen.Panel.PanelBase.Base;
+import facadeGen.Panel.PanelGeos;
 import wblut.geom.WB_Point;
 
 import java.util.HashMap;
@@ -37,6 +38,8 @@ public abstract class Panel {
             windowsComps.put((Window) component, p);
         }
     }
+
+    public abstract void styleSetting();
 
     public int getIndex() {
         return index;

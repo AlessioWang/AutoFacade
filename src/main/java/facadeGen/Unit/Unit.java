@@ -1,6 +1,6 @@
 package facadeGen.Unit;
 
-import facadeGen.Panel.Panel;
+import facadeGen.Panel.PanelStyle.Panel;
 import facadeGen.Geo.Cell;
 
 import Tools.Douglas;

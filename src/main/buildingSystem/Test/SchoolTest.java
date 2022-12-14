@@ -1,23 +1,15 @@
 package Test;
 
 import Tools.GeoTools;
-import facadeGen.Panel.Panel;
-import facadeGen.Panel.PanelBase.BasicBase;
-import facadeGen.Panel.PanelGeos;
-import facadeGen.Panel.PanelRender;
-import facadeGen.Panel.PanelStyle.Style01Panel;
-import facadeGen.Panel.PanelStyle.StyleA;
 import guo_cam.CameraController;
 import processing.core.PApplet;
 import renders.BuildingRender;
 import unit2Vol.Building;
 import unit2Vol.Unit;
 import renders.UnitRender;
-import unit2Vol.face.Face;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Vector;
-import wblut.processing.WB_Render;
 
 import java.util.HashMap;
 import java.util.LinkedList;

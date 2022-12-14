@@ -3,6 +3,7 @@ package facadeGen.Panel;
 import facadeGen.Panel.Component.Window;
 import facadeGen.Panel.Component.WindowGeos;
 import Tools.GeoTools;
+import facadeGen.Panel.PanelStyle.Panel;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_PolyLine;
 import wblut.geom.WB_Polygon;

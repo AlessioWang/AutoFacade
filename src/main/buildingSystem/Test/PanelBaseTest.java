@@ -1,11 +1,12 @@
 package Test;
 
 import Tools.GeoTools;
-import facadeGen.Panel.Panel;
+import facadeGen.Panel.PanelStyle.Panel;
 import facadeGen.Panel.PanelBase.BasicBase;
 import facadeGen.Panel.PanelGeos;
 import facadeGen.Panel.PanelRender;
 import facadeGen.Panel.PanelStyle.StyleA;
+import facadeGen.Panel.PanelStyle.StyleByBase;
 import guo_cam.CameraController;
 import processing.core.PApplet;
 import renders.BuildingRender;
@@ -92,6 +93,7 @@ public class PanelBaseTest extends PApplet {
 
     private List<PanelGeos> geos;
     private Panel panel01;
+    private Panel panel02;
     private PanelRender panelRender;
     PanelBase panelBase;
 
@@ -101,7 +103,9 @@ public class PanelBaseTest extends PApplet {
         panelRender = new PanelRender(this, new WB_Render(this), geos);
 
         WB_Polygon basePolygon = GeoTools.createRecPolygon(8000 * 5, 3500 * 5);
-        panel01 = new StyleA(new BasicBase(basePolygon));
+//        panel01 = new StyleA(new BasicBase(basePolygon));
+        panel01 = new StyleByBase(new BasicBase(basePolygon));
+        panel02 = new StyleA(new BasicBase(basePolygon));
 
         List<Face> faceList = new LinkedList<>();
         for (Unit unit : units01) {
@@ -111,17 +115,17 @@ public class PanelBaseTest extends PApplet {
 
             faceList.addAll(faces);
         }
-        System.out.println("face size" + faceList.size());
 
         panelBase = new MergedPanelBase(faceList);
         WB_Polygon shape = panelBase.getShape();
         WB_Point pt = shape.getPoint(0);
         geos.add(new PanelGeos(panel01, pt, shape, panelBase.getDir()));
+        geos.add(new PanelGeos(panel02, pt, shape, panelBase.getDir()));
     }
-
 
     public void draw() {
         background(255);
+
         cameraController.drawSystem(5000);
 
         buildingRender.renderPanelGeo();
