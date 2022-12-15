@@ -10,7 +10,7 @@ import wblut.geom.WB_Vector;
  * @auther Alessio
  * @date 2022/11/9
  **/
-public abstract class Face {
+public abstract class  Face {
 
     //所属的单元
     private final Unit unit;

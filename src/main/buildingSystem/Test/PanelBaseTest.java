@@ -17,6 +17,8 @@ import unit2Vol.panelBase.MergedPanelBase;
 import unit2Vol.panelBase.PanelBase;
 import unit2Vol.Unit;
 import unit2Vol.face.Face;
+import unit2Vol.panelBase.PanelBaseRender;
+import unit2Vol.panelBase.SimplePanelBase;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Vector;
@@ -47,6 +49,7 @@ public class PanelBaseTest extends PApplet {
 
     private BuildingRender buildingRender;
 
+
     public void settings() {
         size(800, 800, P3D);
     }
@@ -59,14 +62,11 @@ public class PanelBaseTest extends PApplet {
 
         initUnits();
         initBuilding();
-
         initPanel();
-
     }
 
     private void initBuilding() {
         building01 = new Building(units);
-
         buildingRender = new BuildingRender(this, building01);
     }
 
@@ -93,13 +93,55 @@ public class PanelBaseTest extends PApplet {
         initBuildingLayer(units, unitRenders, pos, base, dir, 8000, 8, 5);
     }
 
+    public void draw() {
+        background(255);
+
+        cameraController.drawSystem(5000);
+
+        if (ifGeo)
+            buildingRender.renderPanelGeo();
+
+        if (ifBuilding)
+            buildingRender.renderPanelGeo();
+
+        if (ifPanel)
+            panelRender.renderAll();
+
+        if (ifBase)
+            panelBaseRender.renderAll();
+    }
+
+    boolean ifBuilding = true;
+    boolean ifGeo = true;
+    boolean ifPanel = true;
+    boolean ifBase = true;
+
+    @Override
+    public void keyPressed() {
+        if (key == 'Q' || key == 'q')
+            ifBuilding = !ifBuilding;
+
+        if (key == 'W' || key == 'w')
+            ifPanel = !ifPanel;
+
+        if (key == 'E' || key == 'e')
+            ifGeo = !ifGeo;
+
+        if (key == 'R' || key == 'r')
+            ifBase = !ifBase;
+
+    }
+
     private List<PanelGeos> geos;
     private Panel panel01;
     private Panel panel02;
     private PanelRender panelRender;
+    private PanelBaseRender panelBaseRender;
+    private List<PanelBase> panelBaseList;
 
     private void initPanel() {
         geos = new LinkedList<>();
+        panelBaseList = new LinkedList<>();
 
         panelRender = new PanelRender(this, new WB_Render(this), geos);
 
@@ -124,22 +166,16 @@ public class PanelBaseTest extends PApplet {
 
 
         for (Face face : facesSingle) {
-            geos.add(new PanelGeos(panel02, new MergedPanelBase(Collections.singletonList(face))));
+            SimplePanelBase simplePanelBase = new SimplePanelBase(face);
+            geos.add(new PanelGeos(panel02, simplePanelBase));
+            panelBaseList.add(simplePanelBase);
         }
 
         PanelBase panelBaseLarge = new MergedPanelBase(facesMulti);
         geos.add(new PanelGeos(panel01, panelBaseLarge));
+        panelBaseList.add(panelBaseLarge);
+
+        panelBaseRender = new PanelBaseRender(this, panelBaseList);
     }
-
-    public void draw() {
-        background(255);
-
-        cameraController.drawSystem(5000);
-
-        buildingRender.renderPanelGeo();
-
-        panelRender.renderAll();
-    }
-
 
 }

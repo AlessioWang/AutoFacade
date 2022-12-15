@@ -361,7 +361,6 @@ public class GeoTools {
             output.add(wb_polygon);
         }
 
-
         return output;
     }
 
