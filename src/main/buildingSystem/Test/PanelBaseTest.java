@@ -1,13 +1,10 @@
 package Test;
 
 import Tools.GeoTools;
-import facadeGen.Panel.PanelStyle.Panel;
+import facadeGen.Panel.PanelStyle.*;
 import facadeGen.Panel.PanelBase.BasicBase;
 import facadeGen.Panel.PanelGeos;
 import facadeGen.Panel.PanelRender;
-import facadeGen.Panel.PanelStyle.StyleA;
-import facadeGen.Panel.PanelStyle.StyleB;
-import facadeGen.Panel.PanelStyle.StyleByBase;
 import guo_cam.CameraController;
 import processing.core.PApplet;
 import renders.BuildingRender;
@@ -27,6 +24,7 @@ import wblut.processing.WB_Render;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * @auther Alessio
@@ -130,6 +128,8 @@ public class PanelBaseTest extends PApplet {
         if (key == 'R' || key == 'r')
             ifBase = !ifBase;
 
+        if(key == 'Z' || key == 'z')
+            initPanel();
     }
 
     private List<PanelGeos> geos;
@@ -138,8 +138,20 @@ public class PanelBaseTest extends PApplet {
     private PanelRender panelRender;
     private PanelBaseRender panelBaseRender;
     private List<PanelBase> panelBaseList;
+    private List<Panel> allPanels;
+
+    private void initPanelStyles() {
+        allPanels = new LinkedList<>();
+
+        WB_Polygon basePolygon = GeoTools.createRecPolygon(8000, 3500);
+        allPanels.add(new StyleA(new BasicBase(basePolygon)));
+        allPanels.add(new StyleB(new BasicBase(basePolygon)));
+        allPanels.add(new StyleC(new BasicBase(basePolygon)));
+    }
 
     private void initPanel() {
+        initPanelStyles();
+
         geos = new LinkedList<>();
         panelBaseList = new LinkedList<>();
 
@@ -164,11 +176,20 @@ public class PanelBaseTest extends PApplet {
             }
         }
 
+        Random random = new Random();
 
         for (Face face : facesSingle) {
             SimplePanelBase simplePanelBase = new SimplePanelBase(face);
-            geos.add(new PanelGeos(panel02, simplePanelBase));
             panelBaseList.add(simplePanelBase);
+
+            float seed = random.nextFloat();
+            if (seed < 0.3) {
+                geos.add(new PanelGeos(allPanels.get(0), simplePanelBase));
+            } else if (0.3 <= seed && seed <= 0.7) {
+                geos.add(new PanelGeos(allPanels.get(1), simplePanelBase));
+            } else {
+                geos.add(new PanelGeos(allPanels.get(2), simplePanelBase));
+            }
         }
 
         PanelBase panelBaseLarge = new MergedPanelBase(facesMulti);
