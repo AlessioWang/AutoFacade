@@ -10,7 +10,6 @@ import facadeGen.Panel.PanelBase.Base;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
 
-import java.util.Arrays;
 
 /**
  * @auther Alessio

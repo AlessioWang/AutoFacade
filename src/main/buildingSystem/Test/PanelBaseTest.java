@@ -68,7 +68,10 @@ public class PanelBaseTest extends PApplet {
         buildingRender = new BuildingRender(this, building01);
     }
 
+
     private void initBuildingLayer(List<Unit> target, List<UnitRender> renders, WB_Point pos, WB_Polygon base, WB_Vector dir, double gap, int horNum, int layerNum) {
+        Random random = new Random(6);
+
         for (int i = 0; i < horNum; i++) {
             for (int j = 0; j < layerNum; j++) {
                 dir.normalizeSelf();
@@ -78,8 +81,10 @@ public class PanelBaseTest extends PApplet {
                 WB_Point p = pos.add(v.add(new WB_Point(0, 0, 1).mul(height).mul(j)));
 
                 Unit u = new Unit(p, base, dir, height);
-                target.add(u);
-                renders.add(new UnitRender(this, u));
+                if (random.nextFloat() < 0.9) {
+                    target.add(u);
+                    renders.add(new UnitRender(this, u));
+                }
             }
         }
     }
@@ -128,7 +133,7 @@ public class PanelBaseTest extends PApplet {
         if (key == 'R' || key == 'r')
             ifBase = !ifBase;
 
-        if(key == 'Z' || key == 'z')
+        if (key == 'Z' || key == 'z')
             initPanel();
     }
 
@@ -151,6 +156,7 @@ public class PanelBaseTest extends PApplet {
 
     private void initPanel() {
         initPanelStyles();
+        Random random = new Random();
 
         geos = new LinkedList<>();
         panelBaseList = new LinkedList<>();
@@ -176,7 +182,6 @@ public class PanelBaseTest extends PApplet {
             }
         }
 
-        Random random = new Random();
 
         for (Face face : facesSingle) {
             SimplePanelBase simplePanelBase = new SimplePanelBase(face);

@@ -59,31 +59,37 @@ public class SchoolTest extends PApplet {
 
         //测试信息方法
         checkInfo();
+
+
     }
 
     private void initBuilding() {
+
         building01 = new Building(units01);
         building02 = new Building(units02);
 
         System.out.println("building 01 unit num : " + building01.getUnitList().size());
         System.out.println("building 02 unit num : " + building02.getUnitList().size());
 
-
-//        buildingRender = new BuildingRender(this, units01, units02);
         buildingRender = new BuildingRender(this, building01, building02);
     }
+
+
+    int unitNum = 0;
 
     /**
      * test building information
      */
     private void checkInfo() {
-        Unit unit = building01.getUnitList().get(4);
+        Unit unit = building01.getUnitList().get(unitNum);
 
-        System.out.println("building01 h : " + building01.getHeight());
-        System.out.println("building02 h : " + building02.getHeight());
+//        System.out.println("building01 h : " + building01.getHeight());
+//        System.out.println("building02 h : " + building02.getHeight());
 
         HashMap<WB_Vector, List<Unit>> map = unit.getUnitMap();
 
+        System.out.println("-----------------------------");
+        System.out.println("target unit: " + unitNum);
         for (Map.Entry<WB_Vector, List<Unit>> entry : map.entrySet()) {
             System.out.println(entry.getKey());
 
@@ -129,14 +135,54 @@ public class SchoolTest extends PApplet {
         initBuildingLayer(units02, unitRenders, cPos02, cBase02, cDir02, 0, 1, 5);
     }
 
-
     public void draw() {
         background(255);
         cameraController.drawSystem(1000);
 
-        buildingRender.renderAll();
+        if (ifAll)
+            buildingRender.renderAll();
 
-        buildingRender.renderPanelGeo();
+        if (ifPanel)
+            buildingRender.renderPanelGeo();
+
+        if (ifInfo) {
+            checkInfo();
+            ifInfo = false;
+        }
+    }
+
+
+    boolean ifAll = true;
+    boolean ifPanel = true;
+    boolean ifInfo = false;
+
+    @Override
+    public void keyPressed() {
+        if (key == 'Q' || key == 'q')
+            ifAll = !ifAll;
+
+        if (key == 'W' || key == 'w')
+            ifPanel = !ifPanel;
+
+        if (key == 'z' || key == 'Z') {
+            if (unitNum <= units01.size()) {
+                unitNum++;
+                ifInfo = true;
+            } else {
+                System.out.println("Out range");
+            }
+
+        }
+
+        if (key == 'x' || key == 'X') {
+            if (unitNum >= 0) {
+                unitNum--;
+                ifInfo = true;
+            } else {
+                System.out.println("unit num must > 0");
+            }
+        }
+
     }
 
 }
