@@ -1,5 +1,6 @@
 package unit2Vol.panelBase;
 
+import org.junit.Test;
 import unit2Vol.face.Face;
 import unit2Vol.face.RndFace;
 import wblut.geom.*;
@@ -8,6 +9,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * 目前仅考虑竖直分割的情况
+ *
  * @auther Alessio
  * @date 2022/12/15
  **/
@@ -23,19 +26,31 @@ public class SplitPanelBase extends PanelBase {
 
     private List<WB_Polygon> shapes;
 
-    private List<Face> faces;
-
+    //记录一个face分隔出来的SimplePanelBase
     private List<SimplePanelBase> panelBases;
 
     public SplitPanelBase(Face face, double[] verticalSplit, double[] horizonSplit) {
         this.face = face;
         this.verticalSplit = verticalSplit;
         this.horizonSplit = horizonSplit;
+
+        init();
+    }
+
+    public SplitPanelBase(Face face, double[] verticalSplit) {
+        this.face = face;
+        this.verticalSplit = verticalSplit;
+
+        init();
     }
 
     @Override
     public void init() {
+        initDir();
+        initShape();
+        initInfo();
 
+        initPanelBase();
     }
 
     @Override
@@ -55,35 +70,39 @@ public class SplitPanelBase extends PanelBase {
     }
 
     private void initPanelBase() {
-        faces = new LinkedList<>();
         panelBases = new LinkedList<>();
 
         for (WB_Polygon p : shapes) {
+            panelBases.add(new SimplePanelBase(face, p));
         }
     }
 
+    // TODO: 2022/12/21 仅考虑Vertical的划分
     private List<WB_Polygon> getShapes() {
         List<WB_Segment> segments = face.getShape().toSegments();
 
         WB_Segment segment0 = segments.get(0);
         WB_Segment segment1 = segments.get(1);
 
-        WB_Segment vertiSeg = segment0;
-        WB_Segment horiSeg = segment1;
+        WB_Segment vertiSeg = segment1;
+        WB_Segment horiSeg = segment0;
 
+        //筛选水平与竖直的segment
         if (segment0.getDirection().zd() == 0) {
-            vertiSeg = segment1;
-            horiSeg = segment0;
+            vertiSeg = segment0;
+            horiSeg = segment1;
         }
 
         WB_Point origin = face.getShape().getPoint(0);
         WB_Point end = face.getShape().getPoint(3);
         WB_Vector vertiVec = new WB_Vector(vertiSeg.getOrigin(), vertiSeg.getEndpoint());
-        WB_Vector horiVec = new WB_Vector(horiSeg.getOrigin(), horiSeg.getEndpoint());
+//        WB_Vector horiVec = new WB_Vector(horiSeg.getOrigin(), horiSeg.getEndpoint());
+        WB_Vector horiVec = new WB_Vector(horiSeg.getEndpoint(), horiSeg.getOrigin());
 
         WB_Point tempOrigin = origin;
         WB_Point tempEnd = end;
         List<WB_Polygon> result = new LinkedList<>();
+
         for (double pos : verticalSplit) {
             WB_Point p0 = origin.add(vertiVec.mul(pos));
             WB_Point p1 = p0.add(horiVec);
@@ -93,6 +112,15 @@ public class SplitPanelBase extends PanelBase {
             tempEnd = p1;
         }
 
+        //加入最后一个的polygon
+        WB_Point p1 = face.getShape().getPoint(1);
+        WB_Point p2 = face.getShape().getPoint(2);
+        result.add(new WB_Polygon(tempOrigin, p1, p2, tempEnd));
+
         return result;
+    }
+
+    public List<SimplePanelBase> getPanelBases() {
+        return panelBases;
     }
 }

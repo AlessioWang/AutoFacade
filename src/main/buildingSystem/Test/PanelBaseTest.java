@@ -10,12 +10,9 @@ import processing.core.PApplet;
 import renders.BuildingRender;
 import renders.UnitRender;
 import unit2Vol.Building;
-import unit2Vol.panelBase.MergedPanelBase;
-import unit2Vol.panelBase.PanelBase;
+import unit2Vol.panelBase.*;
 import unit2Vol.Unit;
 import unit2Vol.face.Face;
-import unit2Vol.panelBase.PanelBaseRender;
-import unit2Vol.panelBase.SimplePanelBase;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Vector;
@@ -140,6 +137,7 @@ public class PanelBaseTest extends PApplet {
     private List<PanelGeos> geos;
     private Panel panel01;
     private Panel panel02;
+    private Panel panel03;
     private PanelRender panelRender;
     private PanelBaseRender panelBaseRender;
     private List<PanelBase> panelBaseList;
@@ -169,19 +167,35 @@ public class PanelBaseTest extends PApplet {
         WB_Polygon basePolygon02 = GeoTools.createRecPolygon(8000, 3500);
         panel02 = new StyleB(new BasicBase(basePolygon02));
 
+        WB_Polygon basePolygon03 = GeoTools.createRecPolygon(4000, 3500);
+        panel03 = new StyleByBase(new BasicBase(basePolygon03));
+
         List<Face> facesMulti = new LinkedList<>();
         List<Face> facesSingle = new LinkedList<>();
+        List<Face> facesSplit = new LinkedList<>();
 
         for (int i = 0; i < units.size(); i++) {
             Unit unit = units.get(i);
 
             if (i <= 4) {
                 facesMulti.add(unit.getAllFaces().get(1));
+            } else if (i == 5) {
+                facesSplit.add(unit.getAllFaces().get(1));
             } else {
                 facesSingle.add(unit.getAllFaces().get(1));
             }
         }
 
+        for (Face face : facesSplit) {
+            SplitPanelBase splitPanelBase = new SplitPanelBase(face, new double[]{0.5});
+            List<SimplePanelBase> panelBases = splitPanelBase.getPanelBases();
+            panelBaseList.addAll(panelBases);
+
+            for (SimplePanelBase simplePanelBase : panelBases) {
+                geos.add(new PanelGeos(panel03, simplePanelBase));
+            }
+
+        }
 
         for (Face face : facesSingle) {
             SimplePanelBase simplePanelBase = new SimplePanelBase(face);
