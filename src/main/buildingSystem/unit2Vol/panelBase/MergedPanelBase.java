@@ -9,6 +9,7 @@ import wblut.geom.WB_Polygon;
 import java.util.*;
 
 /**
+ * 由若干个基础的Face组成的PanelBase
  * @auther Alessio
  * @date 2022/12/13
  **/

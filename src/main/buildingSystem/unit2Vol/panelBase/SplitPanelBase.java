@@ -10,6 +10,7 @@ import java.util.List;
 
 /**
  * 目前仅考虑竖直分割的情况
+ * 水平分隔的情况根据需求再决定是否要合并实现
  *
  * @auther Alessio
  * @date 2022/12/15
@@ -21,21 +22,10 @@ public class SplitPanelBase extends PanelBase {
     //垂直分割位置
     private double[] verticalSplit;
 
-    //水平分割位置
-    private double[] horizonSplit;
-
     private List<WB_Polygon> shapes;
 
     //记录一个face分隔出来的SimplePanelBase
     private List<SimplePanelBase> panelBases;
-
-    public SplitPanelBase(Face face, double[] verticalSplit, double[] horizonSplit) {
-        this.face = face;
-        this.verticalSplit = verticalSplit;
-        this.horizonSplit = horizonSplit;
-
-        init();
-    }
 
     public SplitPanelBase(Face face, double[] verticalSplit) {
         this.face = face;
@@ -63,7 +53,6 @@ public class SplitPanelBase extends PanelBase {
         shapes = getShapes();
     }
 
-
     @Override
     public void initInfo() {
         building = face.getUnit().getBuilding();
@@ -77,7 +66,6 @@ public class SplitPanelBase extends PanelBase {
         }
     }
 
-    // TODO: 2022/12/21 仅考虑Vertical的划分
     private List<WB_Polygon> getShapes() {
         List<WB_Segment> segments = face.getShape().toSegments();
 
@@ -96,7 +84,6 @@ public class SplitPanelBase extends PanelBase {
         WB_Point origin = face.getShape().getPoint(0);
         WB_Point end = face.getShape().getPoint(3);
         WB_Vector vertiVec = new WB_Vector(vertiSeg.getOrigin(), vertiSeg.getEndpoint());
-//        WB_Vector horiVec = new WB_Vector(horiSeg.getOrigin(), horiSeg.getEndpoint());
         WB_Vector horiVec = new WB_Vector(horiSeg.getEndpoint(), horiSeg.getOrigin());
 
         WB_Point tempOrigin = origin;
