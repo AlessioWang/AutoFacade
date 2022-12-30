@@ -84,6 +84,14 @@ public abstract class Panel {
         this.components = components;
     }
 
+    public List<WB_Polygon> getParapetWalls() {
+        return parapetWalls;
+    }
+
+    public void setParapetWalls(List<WB_Polygon> parapetWalls) {
+        this.parapetWalls = parapetWalls;
+    }
+
     @Override
     public String toString() {
         return "Panel{" +
