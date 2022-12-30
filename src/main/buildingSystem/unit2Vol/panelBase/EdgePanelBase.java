@@ -15,6 +15,8 @@ import java.util.List;
  * @auther Alessio
  * @date 2022/12/28
  **/
+
+// TODO: 2022/12/30 未完全解决转交的问题
 public class EdgePanelBase extends PanelBase {
     //输入的faces
     private final List<Face> faceList;
@@ -45,6 +47,7 @@ public class EdgePanelBase extends PanelBase {
 
     @Override
     public void initShape() {
+
     }
 
     @Override
@@ -75,11 +78,13 @@ public class EdgePanelBase extends PanelBase {
         }
     }
 
-    public List<WB_Vector> getDirs(){
+    /**
+     * 获取若干个朝向的方向
+     *
+     * @return
+     */
+    public List<WB_Vector> getDirs() {
         return dirs;
     }
-
-
-
 
 }

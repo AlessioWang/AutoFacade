@@ -5,8 +5,11 @@ import facadeGen.Panel.Component.Window;
 import facadeGen.Panel.PanelBase.Base;
 import facadeGen.Panel.PanelGeos;
 import wblut.geom.WB_Point;
+import wblut.geom.WB_Polygon;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @auther Alessio
@@ -18,9 +21,21 @@ public abstract class Panel {
 
     private Base base;
 
+    /**
+     * 记录构件的信息
+     */
     private HashMap<PanelComponent, WB_Point> components = new HashMap<>();
 
+    /**
+     * 记录窗户的信息
+     */
     private HashMap<Window, WB_Point> windowsComps = new HashMap<>();
+
+    /**
+     * 记录女儿墙的信息
+     * 只要roof的panel有这个属性
+     */
+    private List<WB_Polygon> parapetWalls = new LinkedList<>();
 
     private PanelGeos panelGeos;
 

@@ -16,13 +16,11 @@ import java.util.Arrays;
 public class StyleA extends Panel {
     public Base base;
 
-    public StyleA() {
-    }
-
     public StyleA(Base base) {
         this.base = base;
         styleSetting();
     }
+
     public void styleSetting() {
         WB_Polygon p1 = GeoTools.createRecPolygon(1800, 2100);
         Window w1 = new HorDuoWindow(p1, base);
