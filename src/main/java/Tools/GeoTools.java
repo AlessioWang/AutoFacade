@@ -633,6 +633,8 @@ public class GeoTools {
     /**
      * 创建四边形的二维wb_polygon
      * 基点在左下角，基点为（0,0）
+     * 逆时针点序
+     * 四个点创建的polygon
      *
      * @param width
      * @param height

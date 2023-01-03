@@ -5,6 +5,7 @@ import facadeGen.Panel.PanelStyle.*;
 import facadeGen.Panel.PanelBase.BasicBase;
 import facadeGen.Panel.PanelGeos;
 import facadeGen.Panel.PanelRender;
+import facadeGen.Panel.RoofStyle.BasicRoof;
 import guo_cam.CameraController;
 import processing.core.PApplet;
 import renders.BuildingRender;
@@ -18,16 +19,20 @@ import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Vector;
 import wblut.processing.WB_Render;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
 /**
+ * 2022-12月组会的测试类
+ * 测试应对不同组合unit组成building的例子
+ * 有随机空缺扣掉的unit
+ *
  * @auther Alessio
  * @date 2022/12/13
  **/
 public class PanelBaseTest extends PApplet {
+
     public static void main(String[] args) {
         PApplet.main(PanelBaseTest.class.getName());
     }
@@ -64,7 +69,6 @@ public class PanelBaseTest extends PApplet {
         building01 = new Building(units);
         buildingRender = new BuildingRender(this, building01);
     }
-
 
     private void initBuildingLayer(List<Unit> target, List<UnitRender> renders, WB_Point pos, WB_Polygon base, WB_Vector dir, double gap, int horNum, int layerNum) {
         Random random = new Random(6);
@@ -136,7 +140,7 @@ public class PanelBaseTest extends PApplet {
 
     private List<PanelGeos> geos;
     private Panel panel01;
-    private Panel panel02;
+    private Panel roofPanel;
     private Panel panel03;
     private PanelRender panelRender;
     private PanelBaseRender panelBaseRender;
@@ -164,15 +168,16 @@ public class PanelBaseTest extends PApplet {
         WB_Polygon basePolygon01 = GeoTools.createRecPolygon(8000, 3500 * 5);
         panel01 = new StyleByBase(new BasicBase(basePolygon01));
 
-        WB_Polygon basePolygon02 = GeoTools.createRecPolygon(8000, 3500);
-        panel02 = new StyleB(new BasicBase(basePolygon02));
-
         WB_Polygon basePolygon03 = GeoTools.createRecPolygon(4000, 3500);
         panel03 = new StyleByBase(new BasicBase(basePolygon03));
+
+        WB_Polygon roofPolygon = GeoTools.createRecPolygon(10000, 20000);
+        roofPanel = new BasicRoof(new BasicBase(roofPolygon));
 
         List<Face> facesMulti = new LinkedList<>();
         List<Face> facesSingle = new LinkedList<>();
         List<Face> facesSplit = new LinkedList<>();
+
 
         for (int i = 0; i < units.size(); i++) {
             Unit unit = units.get(i);

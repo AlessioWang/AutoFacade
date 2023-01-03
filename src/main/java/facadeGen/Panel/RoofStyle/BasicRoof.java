@@ -17,7 +17,7 @@ import java.util.List;
  **/
 public class BasicRoof extends Panel {
 
-    private Base base;
+    public Base base;
 
     // the default height of parapet wall
     private double wallHeight = 900;

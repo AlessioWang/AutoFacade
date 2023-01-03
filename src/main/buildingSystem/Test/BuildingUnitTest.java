@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 测试最基本的由Unit组成building
+ *
  * @auther Alessio
  * @date 2022/11/12
  **/
@@ -98,8 +100,8 @@ public class BuildingUnitTest extends PApplet {
         cameraController.drawSystem(1000);
 
         for (UnitRender ur : unitRenders) {
-//            ur.renderAll();
-//            ur.renderId();
+            ur.renderAll();
+            ur.renderId();
             ur.renderPanelShape();
         }
     }

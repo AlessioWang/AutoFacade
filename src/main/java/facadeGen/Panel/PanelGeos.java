@@ -159,6 +159,7 @@ public class PanelGeos {
         WB_Polygon baseShape = panel.getBase().getBasicShape();
         WB_Polygon polygonWithHoles = GeoTools.getPolygonWithHoles(baseShape, winBoundaries);
 
+//        wallGeo = GeoTools.movePolygon3D(polygonWithHoles, pos);
         wallGeo = GeoTools.transferPolygon3dByAxis(polygonWithHoles, pos, direction);
     }
 
