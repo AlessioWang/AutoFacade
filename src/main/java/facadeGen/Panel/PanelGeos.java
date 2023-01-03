@@ -46,6 +46,9 @@ public class PanelGeos {
     public List<WB_PolyLine> beams = new LinkedList<>();
     public List<WB_Polygon> glasses = new LinkedList<>();
 
+    //女儿墙
+    public List<WB_Polygon> parapets = new LinkedList<>();
+
     public PanelGeos() {
     }
 
@@ -121,6 +124,7 @@ public class PanelGeos {
     private void iniGeo() {
         initWindowGeo();
         initPanelGeo();
+        initParapet();
     }
 
     /**
@@ -156,6 +160,15 @@ public class PanelGeos {
         WB_Polygon polygonWithHoles = GeoTools.getPolygonWithHoles(baseShape, winBoundaries);
 
         wallGeo = GeoTools.transferPolygon3dByAxis(polygonWithHoles, pos, direction);
+    }
+
+    /**
+     * 初始化女儿墙相关信息
+     * 将所有的parapet的polygon的图元都add pos的距离（进行相对坐标系的变换）
+     */
+    private void initParapet() {
+        if (panel.getParapetWalls().size() != 0)
+            panel.getParapetWalls().forEach(e -> parapets.add(GeoTools.movePolygon3D(e, pos)));
     }
 
     public void setPanel(Panel panel) {

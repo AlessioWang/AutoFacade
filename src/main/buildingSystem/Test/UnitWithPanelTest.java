@@ -6,7 +6,6 @@ import facadeGen.Panel.PanelBase.BasicBase;
 import facadeGen.Panel.PanelGeos;
 import facadeGen.Panel.PanelRender;
 import facadeGen.Panel.PanelStyle.StyleA;
-import facadeGen.Panel.PanelStyle.StyleByBase;
 import guo_cam.CameraController;
 import processing.core.PApplet;
 import renders.BuildingRender;
@@ -64,8 +63,6 @@ public class UnitWithPanelTest extends PApplet {
 
     private void initBuilding() {
         building01 = new Building(units01);
-
-        System.out.println("building 01 unit num : " + building01.getUnitList().size());
 
         buildingRender = new BuildingRender(this, building01);
     }
@@ -132,10 +129,6 @@ public class UnitWithPanelTest extends PApplet {
                 WB_Point pt2 = p.getShape().getPoint(2);
                 WB_Point pt3 = p.getShape().getPoint(3);
 
-                System.out.println("pt0 " + pt0);
-                System.out.println("pt1 " + pt1);
-                System.out.println("pt2 " + pt2);
-                System.out.println("pt3 " + pt3);
 
                 WB_Point pt = pt0;
 

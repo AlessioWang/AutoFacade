@@ -54,6 +54,9 @@ public abstract class Panel {
         }
     }
 
+    /**
+     * 初始化面板的样式
+     */
     public abstract void styleSetting();
 
     public int getIndex() {

@@ -14,7 +14,6 @@ import java.util.List;
  **/
 public class PanelRender {
 
-
     private PApplet applet;
 
     private WB_Render render;
@@ -57,6 +56,7 @@ public class PanelRender {
             frameRender(geos);
             beamRender(geos);
             glassRender(geos);
+            parapetRender(geos);
         }
     }
 
@@ -65,9 +65,9 @@ public class PanelRender {
      *
      * @param panelGeos
      */
-    private void panelRender(PanelGeos panelGeos) {
+    public void panelRender(PanelGeos panelGeos) {
         applet.pushStyle();
-        applet.fill(219,223,232);
+        applet.fill(219, 223, 232);
         applet.noStroke();
         render.drawPolygon(panelGeos.wallGeo);
         applet.popStyle();
@@ -78,7 +78,7 @@ public class PanelRender {
      *
      * @param panelGeos
      */
-    private void beamRender(PanelGeos panelGeos) {
+    public void beamRender(PanelGeos panelGeos) {
         applet.pushStyle();
         applet.noFill();
         applet.stroke(80, 50, 20);
@@ -94,10 +94,10 @@ public class PanelRender {
      *
      * @param panelGeos
      */
-    private void frameRender(PanelGeos panelGeos) {
+    public void frameRender(PanelGeos panelGeos) {
         applet.pushStyle();
         applet.noFill();
-        applet.stroke(78,101,122);
+        applet.stroke(78, 101, 122);
         applet.strokeWeight(3);
         for (WB_Polygon p : panelGeos.frames) {
             render.drawPolygonEdges(p);
@@ -110,10 +110,24 @@ public class PanelRender {
      *
      * @param panelGeos
      */
-    private void glassRender(PanelGeos panelGeos) {
+    public void glassRender(PanelGeos panelGeos) {
         applet.pushStyle();
-        applet.fill(170,196,222);
+        applet.fill(170, 196, 222);
         for (WB_Polygon p : panelGeos.glasses) {
+            render.drawPolygonEdges(p);
+        }
+        applet.popStyle();
+    }
+
+    /**
+     * 绘制女儿墙
+     *
+     * @param panelGeos
+     */
+    public void parapetRender(PanelGeos panelGeos) {
+        applet.pushStyle();
+        applet.fill(219, 223, 232);
+        for (WB_Polygon p : panelGeos.parapets) {
             render.drawPolygonEdges(p);
         }
         applet.popStyle();

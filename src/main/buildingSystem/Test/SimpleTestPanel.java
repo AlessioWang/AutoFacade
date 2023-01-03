@@ -22,6 +22,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * 测试panel往一个unit贴面的测试类
+ *
  * @auther Alessio
  * @date 2022/12/7
  **/
@@ -68,7 +70,6 @@ public class SimpleTestPanel extends PApplet {
 
         buildingRender = new BuildingRender(this, building01);
     }
-
 
 
     private void initBuildingLayer(List<Unit> target, List<UnitRender> renders, WB_Point pos, WB_Polygon base, WB_Vector dir, double gap, int horNum, int layerNum) {

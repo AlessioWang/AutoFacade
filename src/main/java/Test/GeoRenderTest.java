@@ -7,6 +7,7 @@ import facadeGen.Panel.PanelRender;
 import facadeGen.Panel.PanelStyle.Style01Panel;
 import facadeGen.Panel.PanelStyle.StyleA;
 import Tools.GeoTools;
+import facadeGen.Panel.RoofStyle.BasicRoof;
 import guo_cam.CameraController;
 import processing.core.PApplet;
 import wblut.geom.WB_Point;
@@ -19,6 +20,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * 测试transfer方法的测试类
+ *
  * @auther Alessio
  * @date 2022/4/21
  **/
@@ -103,16 +106,17 @@ public class GeoRenderTest extends PApplet {
 
         WB_Polygon schoolBase = GeoTools.createRecPolygon(4500, 3900);
         panel02 = new StyleA(new BasicBase(schoolBase));
-//        panel03 = new StyleB(new BasicBase(schoolBase));
+        panel03 = new BasicRoof(new BasicBase(schoolBase));
 //        panel04 = new StyleC(new BasicBase(schoolBase));
 
         geos.add(new PanelGeos(panel02, new WB_Point(4500, 3000, 5000), testPolygon, new WB_Vector(0, 1, 0)));
         geos.add(new PanelGeos(panel02, new WB_Point(9500, 3000, 5000), movePolygon, new WB_Vector(0, 1, 0)));
         geos.add(new PanelGeos(panel02, new WB_Point(0, 0, 0), yPolygon, new WB_Vector(1, 0, 0)));
+
+        geos.add(new PanelGeos(panel03, new WB_Point(0, 0, 1000), zPolygon, new WB_Vector(0, 0, 1)));
 //        geos.add(new PanelGeos(panel02, new WB_Point(0, 0, 1000), zPolygon, new WB_Vector(0, 0, 1)));
 
 //        geos.add(new PanelGeos(panel02, new WB_Point(0,0,0), rotatePolygon, new WB_Vector(-1, 1, 0)));
-        System.out.println("sss " + geos.size());
     }
 
     public void draw() {
@@ -121,9 +125,9 @@ public class GeoRenderTest extends PApplet {
         panelRender.renderAll();
 
         noFill();
-        render.drawPolygonEdges(testPolygon);
-        render.drawPolygonEdges(movePolygon);
-        render.drawPolygonEdges(yPolygon);
+//        render.drawPolygonEdges(testPolygon);
+//        render.drawPolygonEdges(movePolygon);
+//        render.drawPolygonEdges(yPolygon);
         render.drawPolygonEdges(zPolygon);
 //        render.drawPolygonEdges(rotatePolygon);
     }

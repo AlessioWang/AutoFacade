@@ -7,6 +7,7 @@ import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Segment;
 import wblut.geom.WB_Vector;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class BasicRoof extends Panel {
 
     private Base base;
 
-    // the height of parapet wall
+    // the default height of parapet wall
     private double wallHeight = 900;
 
     public BasicRoof(Base base) {
@@ -52,5 +53,10 @@ public class BasicRoof extends Panel {
 
     public void setWallHeight(double wallHeight) {
         this.wallHeight = wallHeight;
+    }
+
+    @Override
+    public Base getBase() {
+        return base;
     }
 }
