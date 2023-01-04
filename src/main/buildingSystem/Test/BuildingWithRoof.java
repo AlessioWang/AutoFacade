@@ -103,8 +103,7 @@ public class BuildingWithRoof extends PApplet {
     private void initPanel() {
         WB_Polygon roofPolygon = GeoTools.createRecPolygon(8000 * 2, 6000);
 
-        // TODO: 2023/1/3 确定点序问题
-        roofPolygon = GeoTools.reversePolygon(roofPolygon);
+        // TODO: 2023/1/3 polygon的点序需要与face的方向相同
         roofPanel = new BasicRoof(new BasicBase(roofPolygon));
 
         PanelBase roofBase = getRoofBase();

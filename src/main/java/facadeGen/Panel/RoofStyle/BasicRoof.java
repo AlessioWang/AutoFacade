@@ -7,7 +7,6 @@ import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Segment;
 import wblut.geom.WB_Vector;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,7 +28,24 @@ public class BasicRoof extends Panel {
 
     @Override
     public void styleSetting() {
+        checkBaseDir();
         initParapetWall();
+    }
+
+    /**
+     * 保证base的polygon的点序方向
+     */
+    private void checkBaseDir() {
+        WB_Polygon basicShape = base.basicShape;
+
+        List<WB_Segment> segments = basicShape.toSegments();
+        WB_Vector v0 = segments.get(0).getNormal();
+        WB_Vector v1 = segments.get(1).getNormal();
+
+        WB_Vector dir = v0.cross(v1);
+        if (dir.zd() > 0) {
+            base.setBasicShape(GeoTools.reversePolygon(basicShape));
+        }
     }
 
     /**

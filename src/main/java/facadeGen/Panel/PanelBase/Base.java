@@ -53,6 +53,10 @@ public abstract class Base {
         return basicShape;
     }
 
+    public void setBasicShape(WB_Polygon basicShape) {
+        this.basicShape = basicShape;
+    }
+
     public int getMaterial() {
         return material;
     }
