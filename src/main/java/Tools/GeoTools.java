@@ -774,10 +774,8 @@ public class GeoTools {
         List<WB_Segment> segmentsOri = origin.toSegments();
         WB_Vector vOri1 = (WB_Vector) segmentsOri.get(1).getDirection();
         WB_Vector vOri2 = (WB_Vector) segmentsOri.get(2).getDirection();
-        WB_Vector vOri = vOri2.cross(vOri1);
-
-        System.out.println("ori1 : " + vOri1);
-        System.out.println("ori2 : " + vOri2);
+//        WB_Vector vOri = vOri2.cross(vOri1);
+        WB_Vector vOri = vOri1.cross(vOri2);
 
         WB_Vector ax = vOri.cross(dir);
 
@@ -802,7 +800,7 @@ public class GeoTools {
 
         WB_Vector vOri = new WB_Vector(0, 0, 1);
 
-        WB_Vector ax = vOri.cross(dir);
+        WB_Vector ax = dir.cross(vOri);
 
         double angle = vOri.getAngle(dir);
 

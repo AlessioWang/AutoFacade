@@ -43,7 +43,7 @@ public class BasicRoof extends Panel {
         WB_Vector v1 = segments.get(1).getNormal();
 
         WB_Vector dir = v0.cross(v1);
-        if (dir.zd() > 0) {
+        if (dir.zd() < 0) {
             base.setBasicShape(GeoTools.reversePolygon(basicShape));
         }
     }

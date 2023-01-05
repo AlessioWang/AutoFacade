@@ -108,7 +108,8 @@ public class BuildingWithRoof extends PApplet {
 
         PanelBase roofBase = getRoofBase();
 
-        geos.add(new PanelGeos(roofPanel, roofBase));
+        // 指定基点来放置屋顶
+        geos.add(new PanelGeos(roofPanel, roofBase, roofBase.getShape().getPoint(0)));
 
         panelRender = new PanelRender(this, new WB_Render(this), geos);
     }

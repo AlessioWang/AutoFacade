@@ -183,11 +183,11 @@ public class PanelBaseTest extends PApplet {
             Unit unit = units.get(i);
 
             if (i <= 4) {
-                facesMulti.add(unit.getAllFaces().get(1));
+                facesMulti.add(unit.getAllFaces().get(3));
             } else if (i == 5) {
-                facesSplit.add(unit.getAllFaces().get(1));
+                facesSplit.add(unit.getAllFaces().get(3));
             } else {
-                facesSingle.add(unit.getAllFaces().get(1));
+                facesSingle.add(unit.getAllFaces().get(3));
             }
         }
 
@@ -208,6 +208,7 @@ public class PanelBaseTest extends PApplet {
 
             float seed = random.nextFloat();
             if (seed < 0.3) {
+//                geos.add(new PanelGeos(allPanels.get(0), simplePanelBase));
                 geos.add(new PanelGeos(allPanels.get(0), simplePanelBase));
             } else if (0.3 <= seed && seed <= 0.7) {
                 geos.add(new PanelGeos(allPanels.get(1), simplePanelBase));

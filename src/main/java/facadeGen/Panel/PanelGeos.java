@@ -65,7 +65,26 @@ public class PanelGeos {
         iniGeo();
     }
 
-    // TODO: 2022/12/14 可能存在基点问题
+    public PanelGeos(Panel panel, PanelBase panelBase, WB_Point pos) {
+        this.panel = panel;
+        this.pos = pos;
+        this.direction = panelBase.getDir();
+        this.target = panelBase.getShape();
+
+        //获取窗户的位置信息
+        windowComps = panel.getWindowsComps();
+
+        //初始化各种图元信息
+        iniGeo();
+    }
+
+    /**
+     * 存在基点问题，仅适用于一个方向的panel的快速创建
+     *
+     * @param panel
+     * @param panelBase
+     */
+    @Deprecated
     public PanelGeos(Panel panel, PanelBase panelBase) {
         this.panel = panel;
         this.pos = panelBase.getShape().getPoint(0);
