@@ -11,6 +11,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * 基础的带有一圈女儿墙的屋顶类
+ *
  * @auther Alessio
  * @date 2022/12/30
  **/
