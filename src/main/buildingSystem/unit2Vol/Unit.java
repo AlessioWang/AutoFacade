@@ -48,7 +48,7 @@ public class Unit {
     //this unit周边的unit信息
     private HashMap<WB_Vector, List<Unit>> unitMap;
 
-    //this unit的方向与face的·映射关系
+    //this unit的方向与face的映射关系
     private HashMap<WB_Vector, Face> faceDirMap;
 
     //Unit周围上下左右的face

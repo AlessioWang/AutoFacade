@@ -11,7 +11,6 @@
     <properties>
         <maven.compiler.source>13</maven.compiler.source>
         <maven.compiler.target>13</maven.compiler.target>
-
     </properties>
 
     <dependencies>
@@ -43,11 +42,13 @@
             <artifactId>core</artifactId>
             <version>3.3.7</version>
         </dependency>
+
         <dependency>
             <groupId>org.jogamp.gluegen</groupId>
             <artifactId>gluegen-rt-main</artifactId>
             <version>2.3.2</version>
         </dependency>
+
         <dependency>
             <groupId>org.jogamp.jogl</groupId>
             <artifactId>jogl-all-main</artifactId>
@@ -73,7 +74,7 @@
         </dependency>
 
         <dependency>
-            <groupId>junit</groupId>
+            <groupId>junit</groupId>1
             <artifactId>junit</artifactId>
             <version>RELEASE</version>
             <scope>compile</scope>
