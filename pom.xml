@@ -73,12 +73,7 @@
             <version>5.3.19</version>
         </dependency>
 
-        <dependency>
-            <groupId>junit</groupId>1
-            <artifactId>junit</artifactId>
-            <version>RELEASE</version>
-            <scope>compile</scope>
-        </dependency>
+
 
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -186,6 +181,12 @@
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-launcher</artifactId>
             <version>1.3.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
         </dependency>
     </dependencies>
 

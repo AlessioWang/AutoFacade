@@ -59,8 +59,6 @@ public class SchoolTest extends PApplet {
 
         //测试信息方法
         checkInfo();
-
-
     }
 
     private void initBuilding() {
