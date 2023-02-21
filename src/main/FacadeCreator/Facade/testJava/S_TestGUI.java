@@ -19,9 +19,7 @@ public class S_TestGUI extends PApplet {
     ControlPanel panel;
     S_ExtrudeIn example;
 
-    public void settings() {
-        size(1280, 660, P3D);
-    }
+
 
     public static void main(String[] args) {
         PApplet.main(S_TestGUI.class.getName());

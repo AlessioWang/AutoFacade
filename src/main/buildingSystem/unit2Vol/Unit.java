@@ -51,6 +51,8 @@ public class Unit {
     //this unit的方向与face的映射关系
     private HashMap<WB_Vector, Face> faceDirMap;
 
+    private List<Face> rndFaces;
+
     //Unit周围上下左右的face
     private List<Face> allFaces;
 
@@ -67,6 +69,7 @@ public class Unit {
         this.dir = dir;
         this.height = height;
 
+        rndFaces = new LinkedList<>();
         allFaces = new LinkedList<>();
 
         init();
@@ -157,6 +160,7 @@ public class Unit {
         for (WB_Segment seg : segments) {
             WB_Polygon shape = GeoTools.getRecBySegAndWidth(seg, height, new WB_Vector(0, 0, 1));
             allFaces.add(new RndFace(this, shape));
+            rndFaces.add(new RndFace(this, shape));
         }
 
         //初始化底面
@@ -253,5 +257,9 @@ public class Unit {
 
     public WB_Vector getDir() {
         return dir;
+    }
+
+    public List<Face> getRndFaces() {
+        return rndFaces;
     }
 }

@@ -6,6 +6,7 @@ package Facade.facade.unit.styles;
  */
 
 import Facade.facade.basic.BasicObject;
+import Tools.GeoTools;
 import wblut.geom.*;
 import wblut.hemesh.HEC_Box;
 import wblut.hemesh.HEC_FromQuads;
@@ -14,6 +15,7 @@ import wblut.hemesh.HE_Mesh;
 
 import Facade.facade.basic.Material;
 import Facade.facade.basic.StyledMesh;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -23,8 +25,33 @@ public class S_ExtrudeIn extends BasicObject {
     WB_Point[] rectPts;
     Random rand = new Random();
 
+    /**
+     * create by pt array
+     *
+     * @param rectPts
+     */
     public S_ExtrudeIn(WB_Point[] rectPts) {
         this.rectPts = rectPts;
+        initPara();
+        initData();
+        calculate();
+    }
+
+    /**
+     * create by polygon
+     *
+     * @param polygon
+     */
+    public S_ExtrudeIn(WB_Polygon polygon) {
+        WB_Coord[] wb_coords = polygon.getPoints().toArray();
+        WB_Point[] pts = new WB_Point[wb_coords.length];
+
+        for (int i = 0; i < wb_coords.length; i++) {
+            WB_Coord coord = wb_coords[i];
+            pts[i] = new WB_Point(coord.xd(), coord.yd(), coord.zd());
+        }
+
+        this.rectPts = pts;
         initPara();
         initData();
         calculate();
@@ -67,6 +94,7 @@ public class S_ExtrudeIn extends BasicObject {
 
 
     ArrayList<WB_Segment> divideLines;
+
     @Override
     protected void initData() {
         putData("height", "");
@@ -89,9 +117,9 @@ public class S_ExtrudeIn extends BasicObject {
         WB_Vector n = v1.cross(v2);
         n.normalizeSelf();
 
-        HE_Mesh topMesh =  new HEC_Box().setFromCorners(rectPts[3],rectPts[2].add(n.mul(this.top_depth).add(0,0,-this.top_height))).create();
-        HE_Mesh bottomMesh =  new HEC_Box().setFromCorners(rectPts[0],rectPts[1].add(n.mul(this.top_depth).add(0,0,this.bottom_height))).create();
-        HE_Mesh glassHemesh =  new HEC_FromQuads(new WB_Quad[]{new WB_Quad(
+        HE_Mesh topMesh = new HEC_Box().setFromCorners(rectPts[3], rectPts[2].add(n.mul(this.top_depth).add(0, 0, -this.top_height))).create();
+        HE_Mesh bottomMesh = new HEC_Box().setFromCorners(rectPts[0], rectPts[1].add(n.mul(this.top_depth).add(0, 0, this.bottom_height))).create();
+        HE_Mesh glassHemesh = new HEC_FromQuads(new WB_Quad[]{new WB_Quad(
                 rectPts[0].add(v2.mul(bottom_height)).add(n.mul(glass_offset)),
                 rectPts[1].add(v2.mul(bottom_height)).add(n.mul(glass_offset)),
                 rectPts[2].sub(v2.mul(top_height)).add(n.mul(glass_offset)),
@@ -108,10 +136,10 @@ public class S_ExtrudeIn extends BasicObject {
 
         paintArea = 0;
         for (HE_Face face : topMesh.getFaces()) {
-            paintArea+= face.getFaceArea();
+            paintArea += face.getFaceArea();
         }
         for (HE_Face face : bottomMesh.getFaces()) {
-            paintArea+= face.getFaceArea();
+            paintArea += face.getFaceArea();
         }
 
 
@@ -119,7 +147,6 @@ public class S_ExtrudeIn extends BasicObject {
         //StyledMesh glassMesh = new StyledMesh(Material.Glass).add(glassHemesh);
         StyledMesh glassMesh = new StyledMesh(Material.Glass);
 //        StyledPolyLine styledPolyLine = new StyledPolyLine(0x00000000,4).add(frame);
-
 
 
         //*******************************************just for test
@@ -142,50 +169,49 @@ public class S_ExtrudeIn extends BasicObject {
         //*******************************************test end
 
 
-
-        paintArea = (int)(paintArea/1e6);
+        paintArea = (int) (paintArea / 1e6);
         addGeometry(whiteMesh);
         addGeometry(glassMesh);
 //        addGeometry(styledPolyLine);
     }
 
 
-/*------------- private detail generation methods ------------*/
+    /*------------- private detail generation methods ------------*/
 //    private int shaderNum(){
 //        return (int)(this.width/shaderUnitWidth);
 //    }
 
 
-    private ArrayList<HE_Mesh> applyExtrudeIn( ArrayList<WB_PolyLine>dividedFrames ){
+    private ArrayList<HE_Mesh> applyExtrudeIn(ArrayList<WB_PolyLine> dividedFrames) {
         ArrayList<HE_Mesh> mesh_extrudeIn = new ArrayList<>();
-        for (WB_PolyLine df: dividedFrames){
-           // ArrayList<WB_Segment>  pl_forExtrudeIn = new ArrayList<>();
+        for (WB_PolyLine df : dividedFrames) {
+            // ArrayList<WB_Segment>  pl_forExtrudeIn = new ArrayList<>();
             WB_Polygon polygon = new WB_Polygon(df.getPoints());
 
             WB_Vector borderOffset = new WB_Vector(df.getSegment(0).getDirection()).mul(borderWidth);
             WB_Segment s0 = new WB_Segment(df.getPoint(0).add(borderOffset), df.getPoint(3).add(borderOffset));
             //pl_forExtrudeIn.add(s0);
 
-            double rate_s1 = (1+ rand.nextInt(3))*0.1;
-            double rate_s2 = 1- (1+ rand.nextInt(3))*0.1;
+            double rate_s1 = (1 + rand.nextInt(3)) * 0.1;
+            double rate_s2 = 1 - (1 + rand.nextInt(3)) * 0.1;
             System.out.println("rate_s1 = " + rate_s1);
             System.out.println("rate_s2 = " + rate_s2);
 
             WB_Segment s3 = new WB_Segment(df.getPoint(1).add((borderOffset).mul(-1)), df.getPoint(2).add((borderOffset).mul(-1)));
 //            System.out.println("S3 = " + s3.getPoint(0) + " - " +s3.getEndpoint());
-           // pl_forExtrudeIn.add(s3);
-            
-            WB_Segment middleLine = new WB_Segment(s0.getPoint(0),s3.getPoint(0));
-            
-            WB_Segment s1 = new WB_Segment(middleLine.getParametricPoint(rate_s1),middleLine.getParametricPoint(rate_s1).add(new WB_Point(0,0,df.getSegment(1).getLength()-extrudeIn_up_height)));
-            WB_Segment s2 = new WB_Segment(middleLine.getParametricPoint(rate_s2), middleLine.getParametricPoint(rate_s2).add(new WB_Point(0,0,df.getSegment(1).getLength()-extrudeIn_up_height)));
+            // pl_forExtrudeIn.add(s3);
 
-            WB_Point move_fore = new WB_Point(top_depth-glass_offset,0, 0);
+            WB_Segment middleLine = new WB_Segment(s0.getPoint(0), s3.getPoint(0));
+
+            WB_Segment s1 = new WB_Segment(middleLine.getParametricPoint(rate_s1), middleLine.getParametricPoint(rate_s1).add(new WB_Point(0, 0, df.getSegment(1).getLength() - extrudeIn_up_height)));
+            WB_Segment s2 = new WB_Segment(middleLine.getParametricPoint(rate_s2), middleLine.getParametricPoint(rate_s2).add(new WB_Point(0, 0, df.getSegment(1).getLength() - extrudeIn_up_height)));
+
+            WB_Point move_fore = new WB_Point(top_depth - glass_offset, 0, 0);
             WB_Point[] f1 = new WB_Point[4];
             f1[0] = (s0.getPoint(0)).add(move_fore);
             f1[1] = (s1.getPoint(0));
             f1[2] = (WB_Point) (s1.getEndpoint());
-            f1[3] =( (WB_Point) (s0.getEndpoint())).add(move_fore);
+            f1[3] = ((WB_Point) (s0.getEndpoint())).add(move_fore);
 
             WB_Point[] f3 = new WB_Point[4];
             f3[0] = (s2.getPoint(0));
@@ -200,20 +226,19 @@ public class S_ExtrudeIn extends BasicObject {
             f2[3] = f1[3];
 
             WB_Quad[] quads = new WB_Quad[3];
-            quads[0] = new WB_Quad(f1[0], f1[1],f1[2],f1[3]);
-            quads[1] = new WB_Quad(f2[0], f2[1],f2[2],f2[3]);
-            quads[2] = new WB_Quad(f3[0], f3[1],f3[2],f3[3]);
-            HEC_FromQuads creator=new HEC_FromQuads();
+            quads[0] = new WB_Quad(f1[0], f1[1], f1[2], f1[3]);
+            quads[1] = new WB_Quad(f2[0], f2[1], f2[2], f2[3]);
+            quads[2] = new WB_Quad(f3[0], f3[1], f3[2], f3[3]);
+            HEC_FromQuads creator = new HEC_FromQuads();
             creator.setQuads(quads);
 
-            HE_Mesh mesh= new HE_Mesh(creator);
+            HE_Mesh mesh = new HE_Mesh(creator);
             mesh_extrudeIn.add(mesh);
-
 
 
             //updates glasses
             HE_Mesh glass_every = new HEC_FromQuads(new WB_Quad[]{new WB_Quad(
-                   f1[1],
+                    f1[1],
                     f3[0],
                     f3[3],
                     f1[2]
@@ -226,68 +251,67 @@ public class S_ExtrudeIn extends BasicObject {
     }
 
 
-    private ArrayList<HE_Mesh> addLREdges(ArrayList<WB_PolyLine>dividedFrames){
+    private ArrayList<HE_Mesh> addLREdges(ArrayList<WB_PolyLine> dividedFrames) {
         System.out.println("dividedFrames.size = " + dividedFrames.size());
 
         ArrayList<HE_Mesh> LREdges = new ArrayList<>();
         int i = 0;
-       for (WB_PolyLine df: dividedFrames){
-           WB_Polygon polygon = new WB_Polygon(df.getPoints());
+        for (WB_PolyLine df : dividedFrames) {
+            WB_Polygon polygon = new WB_Polygon(df.getPoints());
 
-           WB_Point toRight = new WB_Point(df.getSegment(0).getDirection()).mul(borderWidth);
-           HE_Mesh mesh_l =  new HEC_Box().setFromCorners(
-                   df.getPoint(0),
-                   df.getPoint(3).add(toRight).add(polygon.getNormal().mul(top_depth-glass_offset))
-           ).create();
-           LREdges.add(mesh_l);
+            WB_Point toRight = new WB_Point(df.getSegment(0).getDirection()).mul(borderWidth);
+            HE_Mesh mesh_l = new HEC_Box().setFromCorners(
+                    df.getPoint(0),
+                    df.getPoint(3).add(toRight).add(polygon.getNormal().mul(top_depth - glass_offset))
+            ).create();
+            LREdges.add(mesh_l);
 
-           WB_Point toLeft = new WB_Point(df.getSegment(0).getDirection()).mul(borderWidth);
-           HE_Mesh mesh_r =  new HEC_Box().setFromCorners(
-                   df.getPoint(1),
-                   df.getPoint(2).sub(toLeft).add(polygon.getNormal().mul(top_depth-glass_offset))
-           ).create();
+            WB_Point toLeft = new WB_Point(df.getSegment(0).getDirection()).mul(borderWidth);
+            HE_Mesh mesh_r = new HEC_Box().setFromCorners(
+                    df.getPoint(1),
+                    df.getPoint(2).sub(toLeft).add(polygon.getNormal().mul(top_depth - glass_offset))
+            ).create();
 
 //           System.out.println("df[" + i + "]" + "SP" +  df.getPoint(1));
 //           System.out.println("df[" + i + "]" + "EP" +  df.getPoint(2).sub(new WB_Point(df.getSegment(0).getDirection()).mul(borderWidth)).add(polygon.getNormal().mul(-glass_offset)));
 
-           LREdges.add(mesh_r);
-           i++;
+            LREdges.add(mesh_r);
+            i++;
         }
-        System.out.println("LREdges.size = " +  LREdges.size());
-        return  LREdges;
+        System.out.println("LREdges.size = " + LREdges.size());
+        return LREdges;
     }
 
-    private ArrayList<WB_PolyLine> randomDivide(WB_PolyLine frame){
+    private ArrayList<WB_PolyLine> randomDivide(WB_PolyLine frame) {
         ArrayList<WB_PolyLine> dividedFrames = new ArrayList<>();
-        ArrayList<WB_Segment> divideLines= new ArrayList<WB_Segment>();
+        ArrayList<WB_Segment> divideLines = new ArrayList<WB_Segment>();
         WB_Segment segment_start = frame.getSegment(3);
         segment_start.reverse();
         divideLines.add(segment_start);
         //divide the units in 1-2 times for 2-3 parts randomly
-        rand.setSeed((long)seed);
+        rand.setSeed((long) seed);
 
-        ArrayList<Double> allDividePos = this.generateRandomInt(0,1,0.2,(int)divideNum);//get two random positions with appropriate intervals
+        ArrayList<Double> allDividePos = this.generateRandomInt(0, 1, 0.2, (int) divideNum);//get two random positions with appropriate intervals
 //        System.out.println("allDividePos.size = " + allDividePos.size());
-        for (double i : allDividePos)
-        {
+        for (double i : allDividePos) {
             WB_Point start = frame.getSegment(0).getParametricPoint(i);
 
-            WB_Point end = WB_GeometryOp.getClosestPoint3D(start,frame.getSegment(2));
+            WB_Point end = WB_GeometryOp.getClosestPoint3D(start, frame.getSegment(2));
 //            System.out.println(" allDividePosPoint " + i + " = " + "start " + start);
 //            System.out.println(" allDividePosPoint " + i + " = " + " end  " + end);
-            WB_Segment  p = new  WB_Segment(start,end);
+            WB_Segment p = new WB_Segment(start, end);
 
             divideLines.add(p);
         }
         divideLines.add(frame.getSegment(1));
 
 
-        for(int  i = 0 ; i < divideLines.size()-1; i++){
+        for (int i = 0; i < divideLines.size() - 1; i++) {
 
             WB_PolyLine f = new WB_PolyLine(
                     divideLines.get(i).getPoint(0),
-                    divideLines.get(i+1).getPoint(0),
-                    divideLines.get(i+1).getEndpoint(),
+                    divideLines.get(i + 1).getPoint(0),
+                    divideLines.get(i + 1).getEndpoint(),
                     divideLines.get(i).getEndpoint()
             );
 //
@@ -301,24 +325,24 @@ public class S_ExtrudeIn extends BasicObject {
     }
 
 
-    private ArrayList<Double> generateRandomInt(int startNum, int endNum , double interval, int divideNum){
+    private ArrayList<Double> generateRandomInt(int startNum, int endNum, double interval, int divideNum) {
         ArrayList<Double> mylist = new ArrayList(); //生成数据集，用来保存随即生成数，并用于判断
 
-        int  range = endNum - startNum;
-        while(mylist.size() < divideNum) {
+        int range = endNum - startNum;
+        while (mylist.size() < divideNum) {
 
-            int modulusNum = (int)(range/interval);
-            double num = ((int)(1+rand.nextInt(modulusNum-1)))* interval +startNum;
+            int modulusNum = (int) (range / interval);
+            double num = ((int) (1 + rand.nextInt(modulusNum - 1))) * interval + startNum;
 
-            String str = String.format("%.2f",num);
+            String str = String.format("%.2f", num);
             double two = Double.parseDouble(str);
 
             if (!mylist.contains(two)) {
                 mylist.add(two); //往集合里面添加数据。
             }
         }
-        for (double  d : mylist
-             ) {
+        for (double d : mylist
+        ) {
 //                System.out.println("myRandomList"  + d);
         }
 
@@ -326,9 +350,9 @@ public class S_ExtrudeIn extends BasicObject {
         return mylist;
     }
 
-    
-    private WB_Vector getUnitVector(WB_Vector p){
+
+    private WB_Vector getUnitVector(WB_Vector p) {
         return p.div(p.getLength());
     }
-    
+
 }

@@ -39,7 +39,6 @@ public class BuildingUnitTest extends PApplet {
 
     private List<Unit> units;
 
-
     public void settings() {
         size(800, 800, P3D);
     }
