@@ -47,10 +47,10 @@ public class HongjianStyleTest extends PApplet {
 
     private void initUnit() {
         WB_Point pos = new WB_Point(1000, 0, 2000);
-        WB_Polygon base = GeoTools.createRecPolygon(12000, 8000);
-        WB_Vector dir = new WB_Vector(2, 1, 0);
+        WB_Polygon base = GeoTools.createRecPolygon(8000, 6000);
+        WB_Vector dir = new WB_Vector(0, 1, 0);
 
-        unit = new Unit(pos, base, dir, 3500);
+        unit = new Unit(pos, base, dir, 3000);
     }
 
     private void initPanel() {
