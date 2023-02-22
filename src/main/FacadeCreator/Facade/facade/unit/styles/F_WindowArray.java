@@ -1,7 +1,9 @@
 package Facade.facade.unit.styles;
 
 import Facade.facade.basic.BasicObject;
+import Tools.GeoTools;
 import wblut.geom.WB_Point;
+import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Quad;
 import wblut.geom.WB_Vector;
 import wblut.hemesh.HEC_Box;
@@ -23,11 +25,19 @@ public class F_WindowArray extends BasicObject {
         calculate();
     }
 
+    public F_WindowArray(WB_Polygon polygon) {
+        WB_Point[] pts = GeoTools.polygon2Pts(polygon);
+
+        this.rectPts = pts;
+        initPara();
+        calculate();
+    }
+
     /**
      * ------------- parameters ------------
      */
     double collum_width, win_width, win_height, bottom_height, col_thickness, mid_thickness;
-    double minTopHeight = 200, frameWidth = 50,glassThickness = 20;
+    double minTopHeight = 200, frameWidth = 50, glassThickness = 20;
 
     @Override
     protected void initPara() {
@@ -78,8 +88,8 @@ public class F_WindowArray extends BasicObject {
         HE_Mesh mesh = new HEC_Box().setFromCorners(p1, p2).create();
         collumMesh.add(mesh);
         for (int i = 0; i < winNum; i++) {
-            p1 = rectPts[0].add(v1.mul(i * (win_width + collum_width)+endWidth));
-            p2 = rectPts[0].add(v1.mul(i * (win_width + collum_width)+endWidth+win_width)).add(v2.mul(bottom_height)).add(n.mul(mid_thickness));
+            p1 = rectPts[0].add(v1.mul(i * (win_width + collum_width) + endWidth));
+            p2 = rectPts[0].add(v1.mul(i * (win_width + collum_width) + endWidth + win_width)).add(v2.mul(bottom_height)).add(n.mul(mid_thickness));
             mesh = new HEC_Box().setFromCorners(p1, p2).create();
             midMesh.add(mesh);
 
@@ -90,32 +100,32 @@ public class F_WindowArray extends BasicObject {
                 getPara("win_height").setValueString("" + win_height);
             }
 
-            p1 = rectPts[3].add(v1.mul(i * (win_width + collum_width)+endWidth).sub(v2.mul(topHeight)));
-            p2 = rectPts[3].add(v1.mul(i * (win_width + collum_width)+endWidth+win_width)).add(n.mul(mid_thickness));
+            p1 = rectPts[3].add(v1.mul(i * (win_width + collum_width) + endWidth).sub(v2.mul(topHeight)));
+            p2 = rectPts[3].add(v1.mul(i * (win_width + collum_width) + endWidth + win_width)).add(n.mul(mid_thickness));
             mesh = new HEC_Box().setFromCorners(p1, p2).create();
             midMesh.add(mesh);
 
             mesh = new HEC_FromQuads(
                     new WB_Quad[]{
                             new WB_Quad(
-                                    rectPts[0].add(v1.mul(i * (win_width + collum_width)+endWidth)).add(v2.mul(bottom_height)),
-                                    rectPts[0].add(v1.mul(i * (win_width + collum_width)+endWidth+win_width)).add(v2.mul(bottom_height)),
-                                    rectPts[0].add(v1.mul(i * (win_width + collum_width)+endWidth+win_width)).add(v2.mul(bottom_height+win_height)),
-                                    rectPts[0].add(v1.mul(i * (win_width + collum_width)+endWidth)).add(v2.mul(bottom_height+win_height))
+                                    rectPts[0].add(v1.mul(i * (win_width + collum_width) + endWidth)).add(v2.mul(bottom_height)),
+                                    rectPts[0].add(v1.mul(i * (win_width + collum_width) + endWidth + win_width)).add(v2.mul(bottom_height)),
+                                    rectPts[0].add(v1.mul(i * (win_width + collum_width) + endWidth + win_width)).add(v2.mul(bottom_height + win_height)),
+                                    rectPts[0].add(v1.mul(i * (win_width + collum_width) + endWidth)).add(v2.mul(bottom_height + win_height))
                             )
                     }
             ).create();
             mesh = new HEM_Lattice().setWidth(frameWidth).setDepth(-frameWidth).apply(mesh);
             frame.add(mesh);
 
-            p1 = rectPts[0].add(v1.mul(i * (win_width + collum_width)+endWidth+frameWidth)).add(v2.mul(bottom_height+frameWidth));
-            p2 = rectPts[3].add(v1.mul(i * (win_width + collum_width)+endWidth+win_width-frameWidth)).sub(v2.mul(frameWidth+topHeight)).add(n.mul(glassThickness));
+            p1 = rectPts[0].add(v1.mul(i * (win_width + collum_width) + endWidth + frameWidth)).add(v2.mul(bottom_height + frameWidth));
+            p2 = rectPts[3].add(v1.mul(i * (win_width + collum_width) + endWidth + win_width - frameWidth)).sub(v2.mul(frameWidth + topHeight)).add(n.mul(glassThickness));
             mesh = new HEC_Box().setFromCorners(p1, p2).create();
             glassMesh.add(mesh);
 
 
-            if(i < winNum-1){
-                p1 = rectPts[0].add(v1.mul(i * (win_width + collum_width)+endWidth+win_width));
+            if (i < winNum - 1) {
+                p1 = rectPts[0].add(v1.mul(i * (win_width + collum_width) + endWidth + win_width));
                 p2 = p1.add(v1.mul(collum_width).add(v2.mul(height))).add(n.mul(col_thickness));
                 mesh = new HEC_Box().setFromCorners(p1, p2).create();
                 collumMesh.add(mesh);

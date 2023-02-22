@@ -1,5 +1,9 @@
 package Test;
 
+import Facade.facade.basic.BasicObject;
+import Facade.facade.unit.styles.F_Example;
+import Facade.facade.unit.styles.F_WindowArray;
+import Facade.facade.unit.styles.S_ExtrudeIn;
 import Tools.GeoTools;
 import guo_cam.CameraController;
 import processing.core.PApplet;
@@ -10,6 +14,7 @@ import renders.UnitRender;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Vector;
+import wblut.processing.WB_Render;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -42,6 +47,10 @@ public class SchoolTest extends PApplet {
 
     private BuildingRender buildingRender;
 
+    private List<BasicObject> panelList;
+
+    private WB_Render render;
+
 
     public void settings() {
         size(800, 800, P3D);
@@ -50,6 +59,8 @@ public class SchoolTest extends PApplet {
     public void setup() {
         cameraController = new CameraController(this, 50000);
         unitRenders = new LinkedList<>();
+        render = new WB_Render(this);
+
 
         units01 = new LinkedList<>();
         units02 = new LinkedList<>();
@@ -59,6 +70,8 @@ public class SchoolTest extends PApplet {
 
         //测试信息方法
         checkInfo();
+
+        initOuterPanel();
     }
 
     private void initBuilding() {
@@ -147,8 +160,21 @@ public class SchoolTest extends PApplet {
             checkInfo();
             ifInfo = false;
         }
+
+        for (var panel : panelList) {
+            panel.draw(render);
+        }
     }
 
+    public void initOuterPanel() {
+        panelList = new LinkedList<>();
+        List<WB_Polygon> panelFaceShapes = new LinkedList<>();
+
+        building01.getWallAbleFaces().forEach(e -> panelFaceShapes.add(e.getShape()));
+        building02.getWallAbleFaces().forEach(e -> panelFaceShapes.add(e.getShape()));
+
+        panelFaceShapes.forEach(e -> panelList.add(new F_WindowArray(e)));
+    }
 
     boolean ifAll = true;
     boolean ifPanel = true;

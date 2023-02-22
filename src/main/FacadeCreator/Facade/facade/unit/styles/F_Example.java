@@ -1,8 +1,10 @@
 package Facade.facade.unit.styles;
 
 import Facade.facade.basic.BasicObject;
+import Tools.GeoTools;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_PolyLine;
+import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Vector;
 import wblut.hemesh.HEC_Box;
 import wblut.hemesh.HE_Face;
@@ -24,6 +26,15 @@ public class F_Example extends BasicObject {
         calculate();
     }
 
+    public F_Example(WB_Polygon polygon) {
+        WB_Point[] pts = GeoTools.polygon2Pts(polygon);
+
+        this.rectPts = pts;
+        initPara();
+        initData();
+        calculate();
+    }
+
     /**
      * ------------- parameters ------------
      */
@@ -39,7 +50,7 @@ public class F_Example extends BasicObject {
         bottom_height = putPara(200, 100, 1000, "bottom_height").getValue();
         top_depth = putPara(400, 100, 1000, "top_depth").getValue();
         glass_offset = putPara(100, 0, 200, "glass_offset").getValue();
-        draw_frame = putPara(false,"draw_frame").getBoolean();
+        draw_frame = putPara(false, "draw_frame").getBoolean();
     }
 
     /**
@@ -75,7 +86,7 @@ public class F_Example extends BasicObject {
 
         HE_Mesh topMesh = new HEC_Box().setFromCorners(rectPts[3].add(0, 0, -this.top_height), rectPts[2].add(n.mul(this.top_depth))).create();
         HE_Mesh bottomMesh = new HEC_Box().setFromCorners(rectPts[0], rectPts[1].add(n.mul(this.top_depth).add(0, 0, this.bottom_height))).create();
-        HE_Mesh glassHemesh = new HEC_Box().setFromCorners(rectPts[0].add(v2.mul(bottom_height)).add(n.mul(glass_offset)), rectPts[2].sub(v2.mul(top_height)).add(n.mul(glass_offset+20))).create();
+        HE_Mesh glassHemesh = new HEC_Box().setFromCorners(rectPts[0].add(v2.mul(bottom_height)).add(n.mul(glass_offset)), rectPts[2].sub(v2.mul(top_height)).add(n.mul(glass_offset + 20))).create();
 //        HE_Mesh glassHemesh = new HEC_FromQuads(new WB_Quad[]{new WB_Quad(
 //                rectPts[0].add(v2.mul(bottom_height)).add(n.mul(glass_offset)),
 //                rectPts[1].add(v2.mul(bottom_height)).add(n.mul(glass_offset)),
@@ -96,10 +107,10 @@ public class F_Example extends BasicObject {
             glassArea += face.getFaceArea();
         }
         glassArea = (int) (glassArea / 1e6);
-        
+
         StyledMesh whiteMesh = new StyledMesh(Material.LightGray).add(topMesh).add(bottomMesh);
         StyledMesh glassMesh = new StyledMesh(Material.Glass).add(glassHemesh);
-        if(draw_frame){
+        if (draw_frame) {
             WB_PolyLine frame = new WB_PolyLine(
                     rectPts[0].add(v2.mul(bottom_height)).add(n.mul(glass_offset)),
                     rectPts[1].add(v2.mul(bottom_height)).add(n.mul(glass_offset)),

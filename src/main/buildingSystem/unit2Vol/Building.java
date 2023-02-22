@@ -7,10 +7,7 @@ import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Segment;
 import wblut.geom.WB_Vector;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 记录Unit之间的关系
@@ -20,20 +17,37 @@ import java.util.Set;
  **/
 public class Building {
 
-    //存储的Unit
+    /**
+     * 存储的Unit
+     */
     private List<Unit> unitList;
 
-    //层数
+    /**
+     * 层数
+     */
     private int layerNumber;
 
-    //总的建筑高度（各层层高相加）
+    /**
+     * 总的建筑高度（各层层高相加）
+     */
     private double height;
 
-    //各层平面的组合（即合并每一层的unit的底面单元）
+    /**
+     * 各层平面的组合（即合并每一层的unit的底面单元）
+     */
     private List<WB_Polygon> planList;
 
     // TODO: 2022/11/13 需要研究更加合理地定义阈值方式
     private double threshold = 10;
+
+    /**
+     * 所有可以初始化为panel的面
+     */
+    private List<Face> allPanelableFaces;
+
+    private List<Face> wallAbleFaces;
+
+    private List<Face> roofAbleFaces;
 
     public Building(List<Unit> unitList) {
         this.unitList = unitList;
@@ -55,6 +69,9 @@ public class Building {
 
         //初始化unit中每个face的ifPanel信息
         initIfPanelStatus();
+
+        //初始化所有的panelable面板
+        initPanelAbleList();
     }
 
     /**
@@ -231,8 +248,7 @@ public class Building {
         WB_Point midPosP2 = f2.getMidPos();
         System.out.println("pts2" + midPosP2);
 
-        return (GeoTools.ifPolyCoverPoly2D(polygon1, polygon2) || GeoTools.ifPolyCoverPoly2D(polygon2, polygon1))
-                && (GeoTools.ifPolyCoverPt2D(polygon1, midPosP2) || GeoTools.ifPolyCoverPt2D(polygon2, midPosP1));
+        return (GeoTools.ifPolyCoverPoly2D(polygon1, polygon2) || GeoTools.ifPolyCoverPoly2D(polygon2, polygon1)) && (GeoTools.ifPolyCoverPt2D(polygon1, midPosP2) || GeoTools.ifPolyCoverPt2D(polygon2, midPosP1));
 
     }
 
@@ -378,6 +394,28 @@ public class Building {
         }
     }
 
+    /**
+     * 建立所有的可以建立面板的face列表
+     */
+    private void initPanelAbleList() {
+        allPanelableFaces = new LinkedList<>();
+        wallAbleFaces = new LinkedList<>();
+        roofAbleFaces = new LinkedList<>();
+
+        for (Unit unit : unitList) {
+            unit.getAllFaces().stream().filter(Face::isIfPanel).forEach(e -> allPanelableFaces.add(e));
+        }
+
+        for (var face : allPanelableFaces) {
+            if (face.getDir().equals(new WB_Vector(0, 0, 1))) {
+                roofAbleFaces.add(face);
+            } else if (!face.getDir().equals(new WB_Vector(0, 0, -1))) {
+                wallAbleFaces.add(face);
+            }
+        }
+
+    }
+
     public List<Unit> getUnitList() {
         return unitList;
     }
@@ -400,5 +438,17 @@ public class Building {
 
     public void setHeight(double height) {
         this.height = height;
+    }
+
+    public List<Face> getAllPanelableFaces() {
+        return allPanelableFaces;
+    }
+
+    public List<Face> getWallAbleFaces() {
+        return wallAbleFaces;
+    }
+
+    public List<Face> getRoofAbleFaces() {
+        return roofAbleFaces;
     }
 }

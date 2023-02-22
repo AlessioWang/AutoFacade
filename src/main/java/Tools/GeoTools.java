@@ -1038,6 +1038,17 @@ public class GeoTools {
         return result;
     }
 
+    public static WB_Point[] polygon2Pts(WB_Polygon polygon) {
+        WB_Coord[] wb_coords = polygon.getPoints().toArray();
+        WB_Point[] pts = new WB_Point[wb_coords.length];
+
+        for (int i = 0; i < wb_coords.length; i++) {
+            WB_Coord coord = wb_coords[i];
+            pts[i] = new WB_Point(coord.xd(), coord.yd(), coord.zd());
+        }
+
+        return pts;
+    }
 }
 
 

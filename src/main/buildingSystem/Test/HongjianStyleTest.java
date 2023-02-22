@@ -6,9 +6,7 @@ import guo_cam.CameraController;
 import processing.core.PApplet;
 import unit2Vol.Unit;
 import unit2Vol.face.Face;
-import wblut.geom.WB_Point;
-import wblut.geom.WB_Polygon;
-import wblut.geom.WB_Vector;
+import wblut.geom.*;
 import wblut.processing.WB_Render;
 
 import java.util.LinkedList;
@@ -43,6 +41,8 @@ public class HongjianStyleTest extends PApplet {
         initUnit();
 
         initPanel();
+
+        checkDir();
     }
 
     private void initUnit() {
@@ -58,13 +58,37 @@ public class HongjianStyleTest extends PApplet {
 
         List<Face> allFaces = unit.getRndFaces();
 
-        allFaces.stream().forEach(e -> panelList.add(new S_ExtrudeIn(e.getShape())));
+//        for (int i = 0; i < allFaces.size(); i++) {
+//            Face face = allFaces.get(i);
+//            System.out.println(face.getDir() + "---" + face.getShape().getNormal());
+//        }
+
+        allFaces.forEach(e -> panelList.add(new S_ExtrudeIn(e.getShape())));
     }
+
+    private void checkDir() {
+        List<Face> allFaces = unit.getRndFaces();
+
+        for (Face f : allFaces) {
+            WB_Vector dir = f.getDir();
+            dir.normalizeSelf();
+
+            WB_Polygon shape = f.getShape();
+            WB_Vector direction = (WB_Vector) shape.getSegment(0).getDirection();
+            WB_Vector direction1 = (WB_Vector) shape.getSegment(1).getDirection();
+
+            WB_Vector cross = direction.cross(direction1);
+            cross.normalizeSelf();
+
+            System.out.println(dir + "___" + cross);
+        }
+
+    }
+
 
     public void draw() {
         background(255);
         cameraController.drawSystem(1000);
-
 
         for (var panel : panelList) {
             panel.draw(render);
