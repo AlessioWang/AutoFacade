@@ -1,13 +1,15 @@
 package Test;
 
-import Facade.facade.unit.styles.S_ExtrudeIn;
 import Tools.GeoTools;
+import facade.basic.ControlPanel;
+import facade.unit.styles.S_ExtrudeIn;
 import guo_cam.CameraController;
 import processing.core.PApplet;
 import unit2Vol.Unit;
 import unit2Vol.face.Face;
 import wblut.geom.*;
 import wblut.processing.WB_Render;
+import wblut.processing.WB_Render3D;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -24,11 +26,13 @@ public class HongjianStyleTest extends PApplet {
 
     private CameraController cameraController;
 
-    private WB_Render render;
+    private WB_Render3D render;
 
     private Unit unit;
 
     private List<S_ExtrudeIn> panelList;
+
+    ControlPanel cp;
 
     public void settings() {
         size(800, 800, P3D);
@@ -36,17 +40,25 @@ public class HongjianStyleTest extends PApplet {
 
     public void setup() {
         cameraController = new CameraController(this, 1000);
-        render = new WB_Render(this);
+        render = new WB_Render3D(this);
 
         initUnit();
 
         initPanel();
 
         checkDir();
+
+        initGUI();
+    }
+
+    private void initGUI() {
+        cp = new ControlPanel(this, ControlPanel.Mode.Slider);
+
+        cp.updatePanel(panelList.get(1), "S_ShaderArray");
     }
 
     private void initUnit() {
-        WB_Point pos = new WB_Point(1000, 0, 2000);
+        WB_Point pos = new WB_Point(500, 800, 1000);
         WB_Polygon base = GeoTools.createRecPolygon(8000, 6000);
         WB_Vector dir = new WB_Vector(0, 1, 0);
 
@@ -57,11 +69,6 @@ public class HongjianStyleTest extends PApplet {
         panelList = new LinkedList<>();
 
         List<Face> allFaces = unit.getRndFaces();
-
-//        for (int i = 0; i < allFaces.size(); i++) {
-//            Face face = allFaces.get(i);
-//            System.out.println(face.getDir() + "---" + face.getShape().getNormal());
-//        }
 
         allFaces.forEach(e -> panelList.add(new S_ExtrudeIn(e.getShape())));
     }
@@ -88,11 +95,12 @@ public class HongjianStyleTest extends PApplet {
 
     public void draw() {
         background(255);
-        cameraController.drawSystem(1000);
+        cameraController.drawSystem(10000);
 
         for (var panel : panelList) {
             panel.draw(render);
         }
+        camera();
     }
 
 }

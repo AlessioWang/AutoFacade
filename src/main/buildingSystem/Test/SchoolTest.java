@@ -1,10 +1,8 @@
 package Test;
 
-import Facade.facade.basic.BasicObject;
-import Facade.facade.unit.styles.F_Example;
-import Facade.facade.unit.styles.F_WindowArray;
-import Facade.facade.unit.styles.S_ExtrudeIn;
 import Tools.GeoTools;
+import facade.basic.BasicObject;
+import facade.unit.styles.S_ExtrudeIn;
 import guo_cam.CameraController;
 import processing.core.PApplet;
 import renders.BuildingRender;
@@ -51,7 +49,6 @@ public class SchoolTest extends PApplet {
 
     private WB_Render render;
 
-
     public void settings() {
         size(800, 800, P3D);
     }
@@ -73,6 +70,8 @@ public class SchoolTest extends PApplet {
 
         initOuterPanel();
     }
+
+
 
     private void initBuilding() {
 
@@ -173,7 +172,9 @@ public class SchoolTest extends PApplet {
         building01.getWallAbleFaces().forEach(e -> panelFaceShapes.add(e.getShape()));
         building02.getWallAbleFaces().forEach(e -> panelFaceShapes.add(e.getShape()));
 
-        panelFaceShapes.forEach(e -> panelList.add(new F_WindowArray(e)));
+//        panelFaceShapes.forEach(e -> panelList.add(new F_WindowArray(e)));
+        panelFaceShapes.forEach(e -> panelList.add(new S_ExtrudeIn(e)));
+
     }
 
     boolean ifAll = true;
