@@ -2,6 +2,7 @@ package Test;
 
 import Tools.GeoTools;
 import facade.basic.BasicObject;
+import facade.unit.styles.F_WindowArray;
 import facade.unit.styles.S_ExtrudeIn;
 import guo_cam.CameraController;
 import processing.core.PApplet;
@@ -172,8 +173,8 @@ public class SchoolTest extends PApplet {
         building01.getWallAbleFaces().forEach(e -> panelFaceShapes.add(e.getShape()));
         building02.getWallAbleFaces().forEach(e -> panelFaceShapes.add(e.getShape()));
 
-//        panelFaceShapes.forEach(e -> panelList.add(new F_WindowArray(e)));
-        panelFaceShapes.forEach(e -> panelList.add(new S_ExtrudeIn(e)));
+        panelFaceShapes.forEach(e -> panelList.add(new F_WindowArray(e)));
+//        panelFaceShapes.forEach(e -> panelList.add(new S_ExtrudeIn(e)));
 
     }
 

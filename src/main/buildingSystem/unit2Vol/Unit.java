@@ -25,13 +25,13 @@ public class Unit {
     private Building building;
 
     //相对世界坐标的位置坐标
-    private final WB_Point pos;
+    private WB_Point pos;
 
     //底面基准线，始终起点在原点，相对位置
-    private final WB_Polygon oriBase;
+    private WB_Polygon oriBase;
 
     //基准线的方向(指相对于x轴的向量方向，polygon中第一个segment的方向)
-    private final WB_Vector dir;
+    private WB_Vector dir;
 
     //真实物理空间的基线，由相对基线、空间位置以及方向确定
     private WB_Polygon realBase;
@@ -75,6 +75,19 @@ public class Unit {
         init();
     }
 
+    public Unit(WB_Polygon realBase, double height) {
+        this.oriBase = realBase;
+        this.realBase = realBase;
+        this.height = height;
+
+        rndFaces = new LinkedList<>();
+        allFaces = new LinkedList<>();
+
+        initFaces();
+        initMidPt();
+        initRndUnitMap();
+    }
+
     /**
      * 初始化基本变量信息
      */
@@ -98,7 +111,6 @@ public class Unit {
 
         unitMap.put(new WB_Vector(0, 0, -1), new LinkedList<>());
         faceDirMap.put(new WB_Vector(0, 0, -1), bottomFace);
-
 
         for (Face face : allFaces) {
             WB_Vector dir = face.getDir();

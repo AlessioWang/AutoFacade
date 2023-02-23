@@ -1,5 +1,6 @@
 package Input;
 
+import Tools.DxfReader.DXFImporter;
 import guo_cam.CameraController;
 import processing.core.PApplet;
 import renders.BuildingRender;
@@ -18,11 +19,15 @@ public class InputTest01 extends PApplet {
         PApplet.main(InputTest01.class.getName());
     }
 
+    private String file = "src\\main\\resources\\dxf\\input_test.dxf";
+
     private CameraController cameraController;
 
     private BuildingRender buildingRender;
 
     private Building building;
+
+    private DXFImporter importer;
 
     public void settings() {
         size(800, 800, P3D);
@@ -32,6 +37,8 @@ public class InputTest01 extends PApplet {
         cameraController = new CameraController(this, 50000);
 
         buildingRender = new BuildingRender(this, building);
+
+        importer = new DXFImporter(file, DXFImporter.UTF_8);
     }
 
     private void initBuilding() {

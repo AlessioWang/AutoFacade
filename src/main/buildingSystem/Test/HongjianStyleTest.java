@@ -46,8 +46,6 @@ public class HongjianStyleTest extends PApplet {
 
         initPanel();
 
-        checkDir();
-
         initGUI();
     }
 
@@ -100,6 +98,7 @@ public class HongjianStyleTest extends PApplet {
         for (var panel : panelList) {
             panel.draw(render);
         }
+
         camera();
     }
 
