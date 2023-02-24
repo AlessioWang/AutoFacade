@@ -18,7 +18,6 @@ import java.util.*;
 public class BuildingInputer {
     private final String path;
 
-
     private double unitHeight = 3500;
 
     private DXFImporter importer;
@@ -50,6 +49,13 @@ public class BuildingInputer {
         importer = new DXFImporter(path, DXFImporter.UTF_8);
         importer.getLayers();
         layerNames = importer.getLayers();
+
+        //test
+        List<Map<WB_Polygon, Integer>> polygonAndColor = importer.getPolygonAndColor("0");
+        for (var pair : polygonAndColor) {
+            System.out.println(pair.entrySet());
+        }
+        System.out.println(polygonAndColor);
     }
 
     private void initRecorder() {
@@ -66,7 +72,7 @@ public class BuildingInputer {
         for (String id : layerNames) {
             List<WB_Polygon> polygons = recorder.get(id);
             double height = Double.parseDouble(id);
-
+            System.out.println(polygons.get(0).getPoints().get(0));
             List<WB_Polygon> movedPolygons = new LinkedList<>();
             polygons.forEach(e -> movedPolygons.add(GeoTools.movePolygon3D(e, new WB_Point(0, 0, height))));
 

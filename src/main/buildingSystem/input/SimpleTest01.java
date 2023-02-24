@@ -1,9 +1,12 @@
 package input;
 
 import facade.basic.BasicObject;
+import facade.unit.styles.F_Example;
+import facade.unit.styles.F_WindowArray;
 import facade.unit.styles.S_ExtrudeIn;
 import guo_cam.CameraController;
 import processing.core.PApplet;
+import renders.BuildingRender;
 import unit2Vol.Building;
 import unit2Vol.face.Face;
 import wblut.processing.WB_Render3D;
@@ -23,6 +26,8 @@ public class SimpleTest01 extends PApplet {
 
     private Building building;
 
+    private BuildingRender buildingRender;
+
     private List<BasicObject> objects;
 
     private CameraController cameraController;
@@ -38,11 +43,13 @@ public class SimpleTest01 extends PApplet {
     }
 
     public void setup() {
-        cameraController = new CameraController(this, 1000);
+        cameraController = new CameraController(this, 10000);
 
         render = new WB_Render3D(this);
 
         new SimpleTest01();
+
+        buildingRender = new BuildingRender(this, building);
     }
 
     public SimpleTest01() {
@@ -56,8 +63,11 @@ public class SimpleTest01 extends PApplet {
         objects = new LinkedList<>();
 
         List<Face> wallAbleFaces = building.getWallAbleFaces();
+        wallAbleFaces.forEach(e -> objects.add(new F_WindowArray(e.getShape())));
 
-        wallAbleFaces.forEach(e -> objects.add(new S_ExtrudeIn(e.getShape())));
+        List<Face> topFaces = building.getRoofAbleFaces();
+        topFaces.forEach(e -> objects.add(new F_Example(e.getShape())));
+
     }
 
     public void draw() {
@@ -68,5 +78,6 @@ public class SimpleTest01 extends PApplet {
             panel.draw(render);
         }
 
+//        buildingRender.renderAll();
     }
 }

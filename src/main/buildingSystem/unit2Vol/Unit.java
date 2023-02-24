@@ -1,6 +1,7 @@
 package unit2Vol;
 
 import Tools.GeoTools;
+import function.Function;
 import unit2Vol.face.BottomFace;
 import unit2Vol.face.Face;
 import unit2Vol.face.RndFace;
@@ -62,6 +63,8 @@ public class Unit {
 
     //几何体的形体中心点
     private WB_Point midPt;
+
+    private Function function = Function.Default;
 
     public Unit(WB_Point pos, WB_Polygon oriBase, WB_Vector dir, double height) {
         this.pos = pos;
@@ -273,5 +276,13 @@ public class Unit {
 
     public List<Face> getRndFaces() {
         return rndFaces;
+    }
+
+    public Function getFunction() {
+        return function;
+    }
+
+    public void setFunction(Function function) {
+        this.function = function;
     }
 }

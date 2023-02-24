@@ -1,5 +1,6 @@
 package unit2Vol.face;
 
+import function.Function;
 import unit2Vol.Unit;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
@@ -10,7 +11,7 @@ import wblut.geom.WB_Vector;
  * @auther Alessio
  * @date 2022/11/9
  **/
-public abstract class  Face {
+public abstract class Face {
 
     //所属的单元
     private final Unit unit;
@@ -58,4 +59,5 @@ public abstract class  Face {
     public void setIfPanel(boolean ifPanel) {
         this.ifPanel = ifPanel;
     }
+
 }

@@ -49,6 +49,7 @@ public class InputTest01 extends PApplet {
 
     public void draw() {
         background(255);
+
         cameraController.drawSystem(1000);
 
         buildingRender.renderAll();
