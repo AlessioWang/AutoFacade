@@ -200,6 +200,14 @@ public class DXFImporter {
         return result.stream().filter(e -> e.getSignedArea() != 0).collect(Collectors.toList());
     }
 
+//    public List<WB_Polygon> get3DPolygons(String layerId) {
+//        List<Z_PolyLine> lines = getDXFPolyLines(layerId);
+//        List<WB_Polygon> result = lines.stream().filter(e -> e.getPolygon() != null).map(Z_PolyLine::getPolygon).collect(Collectors.toList());
+//        result.addAll(getDXFPolyLines(layerId));
+//        return result.stream().filter(e -> e.getSignedArea() != 0).collect(Collectors.toList());
+//    }
+
+
     public List<WB_PolyLine> getPolyLines(String layerId) {
         List<Z_PolyLine> lines = getDXFPolyLines(layerId);
         List<WB_PolyLine> result = lines.stream().filter(e -> e.getPolyLine() != null).map(Z_PolyLine::getPolyLine).collect(Collectors.toList());
@@ -250,6 +258,28 @@ public class DXFImporter {
         return lines;
     }
 
+    public List<Z_PolyLine> getDXF3DPolyLines(String layerId) {
+        DXFLayer layer = doc.getDXFLayer(layerId);
+        List pLines = layer.getDXFEntities(DXFConstants.ENTITY_TYPE_POLYLINE);
+        List<Z_PolyLine> lines = new ArrayList<>();
+        if (pLines != null) {
+            for (Object o : pLines) {
+                DXFPolyline pLine = (DXFPolyline) o;
+                List<WB_Point> pts = new ArrayList<>();
+                for (int i = 0; i < pLine.getVertexCount(); i++) {
+                    DXFVertex vertex = pLine.getVertex(i);
+                    pts.add(new WB_Point(vertex.getX(), vertex.getY(), vertex.getZ()));
+                }
+                if (pLine.isClosed()) {
+                    lines.add(new Z_PolyLine(null, new WB_Polygon(pts)));
+                } else {
+                    lines.add(new Z_PolyLine(new WB_PolyLine(pts), null));
+                }
+            }
+        }
+        return lines;
+    }
+
     public List<Z_PolyLine> getDXF2DPolyLines(String layerId) {
         DXFLayer layer = doc.getDXFLayer(layerId);
         List pLines = layer.getDXFEntities(DXFConstants.ENTITY_TYPE_POLYLINE);
@@ -273,6 +303,10 @@ public class DXFImporter {
         }
         return lines;
     }
+//
+//    public List<WB_Polygon> get3DPolygon(String layerId) {
+//
+//    }
 
     public List<WB_Polygon> get2DPolygon(String layerId) {
         List<Z_PolyLine> lines = getDXF2DPolyLines(layerId);

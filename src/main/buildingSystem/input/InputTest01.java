@@ -1,4 +1,4 @@
-package Input;
+package input;
 
 import Tools.DxfReader.DXFImporter;
 import guo_cam.CameraController;

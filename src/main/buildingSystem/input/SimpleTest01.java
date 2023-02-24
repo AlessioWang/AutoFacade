@@ -1,12 +1,10 @@
-package Input;
+package input;
 
-import Test.HongjianStyleTest;
 import facade.basic.BasicObject;
 import facade.unit.styles.S_ExtrudeIn;
 import guo_cam.CameraController;
 import processing.core.PApplet;
 import unit2Vol.Building;
-import unit2Vol.Unit;
 import unit2Vol.face.Face;
 import wblut.processing.WB_Render3D;
 
@@ -48,7 +46,7 @@ public class SimpleTest01 extends PApplet {
     }
 
     public SimpleTest01() {
-        buildingInputer = new BuildingInputer(file, "0");
+        buildingInputer = new BuildingInputer(file);
 
         test();
     }
