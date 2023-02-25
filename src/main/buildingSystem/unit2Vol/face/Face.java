@@ -28,12 +28,16 @@ public abstract class Face {
     //是否可以放置面板,默认为false
     private boolean ifPanel = false;
 
+    private Function function;
+
+
     public Face(Unit unit, WB_Polygon shape) {
         this.unit = unit;
         this.shape = shape;
 
         dir = shape.getNormal();
         midPos = shape.getCenter();
+        function = unit.getFunction();
     }
 
     public WB_Polygon getShape() {
@@ -60,4 +64,7 @@ public abstract class Face {
         this.ifPanel = ifPanel;
     }
 
+    public Function getFunction() {
+        return function;
+    }
 }

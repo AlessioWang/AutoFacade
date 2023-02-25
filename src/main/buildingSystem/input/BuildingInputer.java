@@ -2,6 +2,8 @@ package input;
 
 import Tools.DxfReader.DXFImporter;
 import Tools.GeoTools;
+import com.groupdocs.viewer.internal.c.a.i.internal.bouncycastle.asn1.cmc.PendInfo;
+import function.Function;
 import unit2Vol.Building;
 import unit2Vol.Unit;
 import wblut.geom.WB_Point;
@@ -11,6 +13,13 @@ import java.util.*;
 
 /**
  * 从dxf文件初始化建筑信息
+ * <p>
+ * dxf文件中：
+ * 图层名表示底面标高
+ * 颜色（Integer）表示功能：
+ * 1 - Classroom
+ * 2 - Transport
+ * 3 - Stair
  *
  * @auther Alessio
  * @date 2023/2/18
@@ -32,6 +41,8 @@ public class BuildingInputer {
 
     private Map<String, List<WB_Polygon>> recorder;
 
+    private Map<String, Map<WB_Polygon, Integer>> layerGeoColorMap;
+
     public BuildingInputer(String path) {
         this.path = path;
 
@@ -41,38 +52,72 @@ public class BuildingInputer {
     private void init() {
         initImporter();
         initRecorder();
-        initUnitsByRecorder();
+        initUnitByMap();
         initBuilding();
+    }
+
+    private void test() {
+        units.forEach(e -> System.out.println(e.getFunction()));
     }
 
     private void initImporter() {
         importer = new DXFImporter(path, DXFImporter.UTF_8);
         importer.getLayers();
         layerNames = importer.getLayers();
-
-        //test
-        List<Map<WB_Polygon, Integer>> polygonAndColor = importer.getPolygonAndColor("0");
-        for (var pair : polygonAndColor) {
-            System.out.println(pair.entrySet());
-        }
-        System.out.println(polygonAndColor);
     }
 
     private void initRecorder() {
         recorder = new HashMap<>();
+        layerGeoColorMap = new HashMap<>();
+
         for (String id : layerNames) {
             List<WB_Polygon> polys = importer.getPolygons(id);
             recorder.put(id, polys);
+
+            Map<WB_Polygon, Integer> polygonAndColor = importer.getPolygonAndColor(id);
+            layerGeoColorMap.put(id, polygonAndColor);
+        }
+    }
+
+    private void initUnitByMap() {
+        units = new LinkedList<>();
+
+        for (String id : layerNames) {
+            double height = Double.parseDouble(id);
+            Map<WB_Polygon, Integer> map = layerGeoColorMap.get(id);
+            List<WB_Polygon> polygons = recorder.get(id);
+
+            for (var poly : polygons) {
+                int color = map.get(poly);
+                WB_Polygon real = GeoTools.movePolygon3D(poly, new WB_Point(0, 0, height));
+                Unit unit = new Unit(real, unitHeight);
+                funcByColor(unit, color);
+                units.add(unit);
+            }
+        }
+    }
+
+    private void funcByColor(Unit unit, Integer color) {
+        switch (color) {
+            case 1:
+                unit.setFunction(Function.ClassRoom);
+                break;
+            case 2:
+                unit.setFunction(Function.Transport);
+                break;
+            case 3:
+                unit.setFunction(Function.Stair);
+                break;
+            default:
+                unit.setFunction(Function.Default);
         }
     }
 
     private void initUnitsByRecorder() {
         units = new LinkedList<>();
-
         for (String id : layerNames) {
             List<WB_Polygon> polygons = recorder.get(id);
             double height = Double.parseDouble(id);
-            System.out.println(polygons.get(0).getPoints().get(0));
             List<WB_Polygon> movedPolygons = new LinkedList<>();
             polygons.forEach(e -> movedPolygons.add(GeoTools.movePolygon3D(e, new WB_Point(0, 0, height))));
 

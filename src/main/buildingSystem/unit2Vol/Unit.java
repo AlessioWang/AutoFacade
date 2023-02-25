@@ -284,5 +284,8 @@ public class Unit {
 
     public void setFunction(Function function) {
         this.function = function;
+        initFaces();
+        initMidPt();
+        initRndUnitMap();
     }
 }

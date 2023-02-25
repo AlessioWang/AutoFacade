@@ -10,15 +10,8 @@ import wblut.geom.WB_Polygon;
  **/
 public class RndFace extends Face {
 
-    private Function function;
-
     public RndFace(Unit unit, WB_Polygon shape) {
         super(unit, shape);
-
-        function = unit.getFunction();
     }
 
-    public Function getFunction() {
-        return function;
-    }
 }

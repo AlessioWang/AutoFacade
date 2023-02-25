@@ -251,8 +251,8 @@ public class DXFImporter {
         return lines;
     }
 
-    public List<Map<WB_Polygon, Integer>> getPolygonAndColor(String layerId) {
-        List<Map<WB_Polygon, Integer>> result = new LinkedList<>();
+    public Map<WB_Polygon, Integer> getPolygonAndColor(String layerId) {
+        Map<WB_Polygon, Integer> p_i = new HashMap<>();
 
         List<Map<Z_PolyLine, Integer>> dxfPolylineMap = getDXFPolylineMap(layerId);
 
@@ -260,13 +260,11 @@ public class DXFImporter {
             Z_PolyLine z_polyLine = pair.keySet().iterator().next();
             if (z_polyLine.getPolygon() != null) {
                 WB_Polygon wb_polygon = z_polyLine.getPolygon();
-                Map<WB_Polygon, Integer> p_i = new HashMap<>();
                 p_i.put(wb_polygon, pair.get(z_polyLine));
-                result.add(p_i);
             }
         }
 
-        return result;
+        return p_i;
     }
 
 

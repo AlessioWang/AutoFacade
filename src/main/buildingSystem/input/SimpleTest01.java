@@ -4,6 +4,7 @@ import facade.basic.BasicObject;
 import facade.unit.styles.F_Example;
 import facade.unit.styles.F_WindowArray;
 import facade.unit.styles.S_ExtrudeIn;
+import function.Function;
 import guo_cam.CameraController;
 import processing.core.PApplet;
 import renders.BuildingRender;
@@ -28,7 +29,7 @@ public class SimpleTest01 extends PApplet {
 
     private BuildingRender buildingRender;
 
-    private List<BasicObject> objects;
+    private List<BasicObject> panels;
 
     private CameraController cameraController;
 
@@ -55,29 +56,44 @@ public class SimpleTest01 extends PApplet {
     public SimpleTest01() {
         buildingInputer = new BuildingInputer(file);
 
-        test();
+        initPanel();
     }
 
-    private void test() {
+    private void initPanel() {
         building = buildingInputer.getBuilding();
-        objects = new LinkedList<>();
+        panels = new LinkedList<>();
 
         List<Face> wallAbleFaces = building.getWallAbleFaces();
-        wallAbleFaces.forEach(e -> objects.add(new F_WindowArray(e.getShape())));
+        for (Face f : wallAbleFaces) {
+            func2Panel(f);
+        }
 
         List<Face> topFaces = building.getRoofAbleFaces();
-        topFaces.forEach(e -> objects.add(new F_Example(e.getShape())));
+        topFaces.forEach(e -> panels.add(new F_Example(e.getShape())));
+    }
 
+    private void func2Panel(Face face) {
+        Function function = face.getFunction();
+        switch (function) {
+            case ClassRoom:
+                panels.add(new S_ExtrudeIn(face.getShape()));
+                break;
+            case Transport:
+                panels.add(new F_WindowArray(face.getShape()));
+                break;
+            case Stair:
+                panels.add(new F_Example(face.getShape()));
+        }
     }
 
     public void draw() {
         background(255);
         cameraController.drawSystem(10000);
 
-        for (var panel : objects) {
+        for (var panel : panels) {
             panel.draw(render);
         }
 
-//        buildingRender.renderAll();
+        buildingRender.renderAll();
     }
 }
