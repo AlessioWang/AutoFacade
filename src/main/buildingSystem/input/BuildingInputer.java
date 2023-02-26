@@ -2,7 +2,6 @@ package input;
 
 import Tools.DxfReader.DXFImporter;
 import Tools.GeoTools;
-import com.groupdocs.viewer.internal.c.a.i.internal.bouncycastle.asn1.cmc.PendInfo;
 import function.Function;
 import unit2Vol.Building;
 import unit2Vol.Unit;
@@ -95,21 +94,23 @@ public class BuildingInputer {
                 units.add(unit);
             }
         }
+
+        System.out.println("unit num" + units.size());
     }
 
     private void funcByColor(Unit unit, Integer color) {
         switch (color) {
             case 1:
-                unit.setFunction(Function.ClassRoom);
+                unit.syncFunc(Function.ClassRoom);
                 break;
             case 2:
-                unit.setFunction(Function.Transport);
+                unit.syncFunc(Function.Transport);
                 break;
             case 3:
-                unit.setFunction(Function.Stair);
+                unit.syncFunc(Function.Stair);
                 break;
             default:
-                unit.setFunction(Function.Default);
+                unit.syncFunc(Function.Default);
         }
     }
 

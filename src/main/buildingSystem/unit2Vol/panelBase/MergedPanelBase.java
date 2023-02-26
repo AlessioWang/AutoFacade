@@ -10,6 +10,7 @@ import java.util.*;
 
 /**
  * 由若干个基础的Face组成的PanelBase
+ *
  * @auther Alessio
  * @date 2022/12/13
  **/
@@ -26,7 +27,7 @@ public class MergedPanelBase extends PanelBase {
 
     @Override
     public void init() {
-        initInfo();
+//        initInfo();
         initShape();
         initDir();
     }
@@ -48,6 +49,7 @@ public class MergedPanelBase extends PanelBase {
             faceList.forEach(e -> polygons.add(e.getShape()));
             shape = unionPolygon(polygons);
         }
+        System.out.println("area : " + shape.getSignedArea());
     }
 
     /**
@@ -76,7 +78,7 @@ public class MergedPanelBase extends PanelBase {
             }
         }
 
-        System.out.println(set);
+        System.out.println("set " + set);
         return new WB_Polygon(new ArrayList<>(set));
     }
 

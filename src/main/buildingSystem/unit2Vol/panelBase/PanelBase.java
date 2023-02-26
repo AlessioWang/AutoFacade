@@ -19,7 +19,8 @@ public abstract class PanelBase {
 
     protected WB_Vector dir;
 
-    public PanelBase() {}
+    public PanelBase() {
+    }
 
     /**
      * 初始化总方法

@@ -12,6 +12,7 @@ import java.util.List;
  * @auther Alessio
  * @date 2022/11/8
  **/
+@Deprecated
 public class Building {
 
     //房屋的编号(唯一互斥)

@@ -75,6 +75,7 @@ public class Unit {
         rndFaces = new LinkedList<>();
         allFaces = new LinkedList<>();
 
+        initRealBase();
         init();
     }
 
@@ -86,16 +87,13 @@ public class Unit {
         rndFaces = new LinkedList<>();
         allFaces = new LinkedList<>();
 
-        initFaces();
-        initMidPt();
-        initRndUnitMap();
+        init();
     }
 
     /**
      * 初始化基本变量信息
      */
     private void init() {
-        initRealBase();
         initFaces();
         initMidPt();
         initRndUnitMap();
@@ -128,11 +126,11 @@ public class Unit {
      * 调用时需要初始化this unit周边unit的信息
      */
     public void initFacePanelStatus() {
-//        //top face
-//        if (upper == null) topFace.setIfPanel(true);
-//
-//        //bottom face
-//        if (lower == null) bottomFace.setIfPanel(true);
+        //top face
+        if (upper == null) topFace.setIfPanel(true);
+
+        //bottom face
+        if (lower == null) bottomFace.setIfPanel(true);
 
         //round face
         for (Face face : allFaces) {
@@ -173,22 +171,40 @@ public class Unit {
         List<WB_Segment> segments = realBase.toSegments();
 
         for (WB_Segment seg : segments) {
-            WB_Polygon shape = GeoTools.getRecBySegAndWidth(seg, height, new WB_Vector(0, 0, 1));
-            allFaces.add(new RndFace(this, shape));
-            rndFaces.add(new RndFace(this, shape));
+            if (seg.getLength() > 0) {
+                WB_Polygon shape = GeoTools.getRecBySegAndWidth(seg, height, new WB_Vector(0, 0, 1));
+                allFaces.add(new RndFace(this, shape));
+                rndFaces.add(new RndFace(this, shape));
+            }
         }
 
         //初始化底面
         WB_Polygon reversePolygon = GeoTools.reversePolygon(realBase);
         bottomFace = new BottomFace(this, reversePolygon);
         allFaces.add(bottomFace);
+        System.out.println("bot add");
 
         //初始化顶面
         WB_Polygon topShape = GeoTools.movePolygon3D(realBase, new WB_Point(0, 0, 1).mul(height));
         topFace = new TopFace(this, topShape);
         allFaces.add(topFace);
+        System.out.println("top add");
     }
 
+
+    /**
+     * 更新每个unit的功能信息属性
+     *
+     * @param function
+     */
+    public void syncFunc(Function function) {
+        this.function = function;
+        updateFaceFunc(function);
+    }
+
+    private void updateFaceFunc(Function function) {
+        allFaces.forEach(e-> e.setFunction(function));
+    }
 
     public WB_Point getMidPt() {
         return midPt;
@@ -282,10 +298,5 @@ public class Unit {
         return function;
     }
 
-    public void setFunction(Function function) {
-        this.function = function;
-        initFaces();
-        initMidPt();
-        initRndUnitMap();
-    }
+
 }

@@ -10,6 +10,7 @@ import processing.core.PApplet;
 import renders.BuildingRender;
 import unit2Vol.Building;
 import unit2Vol.face.Face;
+import unit2Vol.panelBase.PanelBase;
 import wblut.processing.WB_Render3D;
 
 import java.util.LinkedList;
@@ -57,6 +58,8 @@ public class SimpleTest01 extends PApplet {
         buildingInputer = new BuildingInputer(file);
 
         initPanel();
+
+        List<PanelBase> roofBaseList = building.getRoofBaseList();
     }
 
     private void initPanel() {
@@ -69,6 +72,7 @@ public class SimpleTest01 extends PApplet {
         }
 
         List<Face> topFaces = building.getRoofAbleFaces();
+
         topFaces.forEach(e -> panels.add(new F_Example(e.getShape())));
     }
 
@@ -93,6 +97,8 @@ public class SimpleTest01 extends PApplet {
         for (var panel : panels) {
             panel.draw(render);
         }
+
+        render.drawPolygonEdges(building.getRoofBaseList().get(1).getShape());
 
         buildingRender.renderAll();
     }

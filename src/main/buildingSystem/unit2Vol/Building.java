@@ -2,6 +2,8 @@ package unit2Vol;
 
 import Tools.GeoTools;
 import unit2Vol.face.Face;
+import unit2Vol.panelBase.MergedPanelBase;
+import unit2Vol.panelBase.PanelBase;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Segment;
@@ -49,6 +51,8 @@ public class Building {
 
     private List<Face> roofAbleFaces;
 
+    private List<PanelBase> roofBaseList;
+
     public Building(List<Unit> unitList) {
         this.unitList = unitList;
 
@@ -72,6 +76,9 @@ public class Building {
 
         //初始化所有的panelable面板
         initPanelAbleList();
+
+        //获取屋顶的PanelBase
+        initRoofPanelBase();
     }
 
     /**
@@ -119,6 +126,41 @@ public class Building {
         for (int i = 0; i < unitList.size(); i++) {
             unitList.get(i).setId(i);
         }
+    }
+
+    /**
+     * 初始化屋顶的几何形状
+     * 暂定标高一致的就默认是一个屋顶
+     */
+    private void initRoofPanelBase() {
+        roofBaseList = new LinkedList<>();
+
+        System.out.println("roof face num " + roofAbleFaces.size());
+
+        //初始化h
+        double h = roofAbleFaces.get(0).getMidPos().zd();
+
+        List<Face> oneRoof = new LinkedList<>();
+        for (var face : roofAbleFaces) {
+            System.out.println("hhh" + h);
+            if (face.getMidPos().zd() == h) {
+                oneRoof.add(face);
+                System.out.println("in");
+            } else {
+                //添加进list
+                roofBaseList.add(new MergedPanelBase(oneRoof));
+
+                oneRoof.clear();
+                oneRoof.add(face);
+                h = face.getMidPos().zd();
+                System.out.println("out");
+                WB_Point midPos = face.getMidPos();
+                System.out.println("pos " + midPos);
+            }
+        }
+
+        if (oneRoof.size() != 0)
+            roofBaseList.add(new MergedPanelBase(oneRoof));
     }
 
     /**
@@ -403,9 +445,16 @@ public class Building {
         roofAbleFaces = new LinkedList<>();
 
         for (Unit unit : unitList) {
-            unit.getAllFaces().stream().filter(Face::isIfPanel).forEach(e -> allPanelableFaces.add(e));
+//            unit.getAllFaces().stream().filter(Face::isIfPanel).forEach(e -> allPanelableFaces.add(e));
+            List<Face> allFaces = unit.getAllFaces();
+            for (Face face : allFaces) {
+                if(face.isIfPanel()){
+                    allPanelableFaces.add(face);
+                }
+            }
         }
 
+        System.out.println("all panel face "+ allPanelableFaces.size());
         for (var face : allPanelableFaces) {
             if (face.getDir().equals(new WB_Vector(0, 0, 1))) {
                 roofAbleFaces.add(face);
@@ -450,5 +499,9 @@ public class Building {
 
     public List<Face> getRoofAbleFaces() {
         return roofAbleFaces;
+    }
+
+    public List<PanelBase> getRoofBaseList() {
+        return roofBaseList;
     }
 }
