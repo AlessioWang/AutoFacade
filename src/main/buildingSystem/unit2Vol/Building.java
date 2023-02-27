@@ -78,7 +78,8 @@ public class Building {
         initPanelAbleList();
 
         //获取屋顶的PanelBase
-        initRoofPanelBase();
+        initRoofBase();
+//        initRoofPanelBase();
     }
 
     /**
@@ -128,39 +129,32 @@ public class Building {
         }
     }
 
+    private Map<Double, List<Face>> initRoofFaceMap() {
+        Map<Double, List<Face>> map = new HashMap<>();
+
+        for (var face : roofAbleFaces) {
+            double h = face.getMidPos().zd();
+            if (!map.containsKey(h)) {
+                List<Face> faces = new LinkedList<>();
+                faces.add(face);
+                map.put(h, faces);
+            } else {
+                map.get(h).add(face);
+            }
+        }
+        return map;
+    }
+
     /**
      * 初始化屋顶的几何形状
      * 暂定标高一致的就默认是一个屋顶
      */
-    private void initRoofPanelBase() {
+    private void initRoofBase() {
         roofBaseList = new LinkedList<>();
 
-        System.out.println("roof face num " + roofAbleFaces.size());
+        Map<Double, List<Face>> map = initRoofFaceMap();
 
-        //初始化h
-        double h = roofAbleFaces.get(0).getMidPos().zd();
-
-        List<Face> oneRoof = new LinkedList<>();
-        for (var face : roofAbleFaces) {
-            System.out.println("hhh" + h);
-            if (face.getMidPos().zd() == h) {
-                oneRoof.add(face);
-                System.out.println("in");
-            } else {
-                //添加进list
-                roofBaseList.add(new MergedPanelBase(oneRoof));
-
-                oneRoof.clear();
-                oneRoof.add(face);
-                h = face.getMidPos().zd();
-                System.out.println("out");
-                WB_Point midPos = face.getMidPos();
-                System.out.println("pos " + midPos);
-            }
-        }
-
-        if (oneRoof.size() != 0)
-            roofBaseList.add(new MergedPanelBase(oneRoof));
+        Arrays.stream(map.values().toArray()).forEach(e -> roofBaseList.add(new MergedPanelBase((List<Face>) e)));
     }
 
     /**
@@ -187,7 +181,6 @@ public class Building {
     private List<Unit> getNeighborUnits(Unit target, List<Unit> unitList) {
         List<Unit> neighbors = new LinkedList<>();
         double threshold = calculateDisThreshold(target, 1.5);
-
         for (Unit other : unitList) {
             if (other.getId() != target.getId()) {
                 double dis = GeoTools.getDistance3D(target.getMidPt(), other.getMidPt());
@@ -448,13 +441,13 @@ public class Building {
 //            unit.getAllFaces().stream().filter(Face::isIfPanel).forEach(e -> allPanelableFaces.add(e));
             List<Face> allFaces = unit.getAllFaces();
             for (Face face : allFaces) {
-                if(face.isIfPanel()){
+                if (face.isIfPanel()) {
                     allPanelableFaces.add(face);
                 }
             }
         }
 
-        System.out.println("all panel face "+ allPanelableFaces.size());
+        System.out.println("all panel face " + allPanelableFaces.size());
         for (var face : allPanelableFaces) {
             if (face.getDir().equals(new WB_Vector(0, 0, 1))) {
                 roofAbleFaces.add(face);

@@ -92,14 +92,14 @@ public class SimpleTest01 extends PApplet {
 
     public void draw() {
         background(255);
-        cameraController.drawSystem(10000);
+//        cameraController.drawSystem(10000);
+//
+//        for (var panel : panels) {
+//            panel.draw(render);
+//        }
 
-        for (var panel : panels) {
-            panel.draw(render);
-        }
+        render.drawPolygonEdges(building.getRoofBaseList().get(0).getShape());
 
-        render.drawPolygonEdges(building.getRoofBaseList().get(1).getShape());
-
-        buildingRender.renderAll();
+//        buildingRender.renderAll();
     }
 }

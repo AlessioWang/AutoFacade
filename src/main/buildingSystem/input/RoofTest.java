@@ -12,7 +12,8 @@ import wblut.processing.WB_Render3D;
  **/
 public class RoofTest extends PApplet {
 
-    private String file = "src\\main\\resources\\dxf\\roofTest.dxf";
+//    private String file = "src\\main\\resources\\dxf\\roofTest.dxf";
+    private String file = "src\\main\\resources\\dxf\\debugRoof.dxf";
 
     private BuildingInputer buildingInputer;
 

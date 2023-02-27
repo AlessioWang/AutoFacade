@@ -182,13 +182,11 @@ public class Unit {
         WB_Polygon reversePolygon = GeoTools.reversePolygon(realBase);
         bottomFace = new BottomFace(this, reversePolygon);
         allFaces.add(bottomFace);
-        System.out.println("bot add");
 
         //初始化顶面
         WB_Polygon topShape = GeoTools.movePolygon3D(realBase, new WB_Point(0, 0, 1).mul(height));
         topFace = new TopFace(this, topShape);
         allFaces.add(topFace);
-        System.out.println("top add");
     }
 
 
@@ -199,11 +197,12 @@ public class Unit {
      */
     public void syncFunc(Function function) {
         this.function = function;
+
         updateFaceFunc(function);
     }
 
     private void updateFaceFunc(Function function) {
-        allFaces.forEach(e-> e.setFunction(function));
+        allFaces.forEach(e -> e.setFunction(function));
     }
 
     public WB_Point getMidPt() {
@@ -245,7 +244,7 @@ public class Unit {
     public void setLeft(Unit left) {
         this.left = left;
     }
-
+    
     public Unit getRight() {
         return right;
     }
