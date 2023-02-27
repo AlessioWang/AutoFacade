@@ -447,7 +447,6 @@ public class Building {
             }
         }
 
-        System.out.println("all panel face " + allPanelableFaces.size());
         for (var face : allPanelableFaces) {
             if (face.getDir().equals(new WB_Vector(0, 0, 1))) {
                 roofAbleFaces.add(face);

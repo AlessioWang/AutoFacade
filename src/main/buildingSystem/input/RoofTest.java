@@ -4,7 +4,12 @@ import guo_cam.CameraController;
 import processing.core.PApplet;
 import renders.BuildingRender;
 import unit2Vol.Building;
+import unit2Vol.face.Face;
+import wblut.geom.WB_Polygon;
 import wblut.processing.WB_Render3D;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @auther Alessio
@@ -12,7 +17,7 @@ import wblut.processing.WB_Render3D;
  **/
 public class RoofTest extends PApplet {
 
-//    private String file = "src\\main\\resources\\dxf\\roofTest.dxf";
+    //    private String file = "src\\main\\resources\\dxf\\roofTest.dxf";
     private String file = "src\\main\\resources\\dxf\\debugRoof.dxf";
 
     private BuildingInputer buildingInputer;
@@ -25,6 +30,9 @@ public class RoofTest extends PApplet {
 
     private BuildingRender buildingRender;
 
+    List<Face> roofAbleFaces;
+
+    private List<WB_Polygon> roofs;
 
     public static void main(String[] args) {
         PApplet.main(RoofTest.class.getName());
@@ -44,6 +52,11 @@ public class RoofTest extends PApplet {
         building = buildingInputer.getBuilding();
 
         buildingRender = new BuildingRender(this, building);
+
+
+        roofAbleFaces = building.getRoofAbleFaces();
+        roofs = new LinkedList<>();
+        roofAbleFaces.stream().forEach(e -> roofs.add(e.getShape()));
     }
 
     public void draw() {
@@ -53,6 +66,12 @@ public class RoofTest extends PApplet {
 
         render.drawPolygonEdges(building.getRoofBaseList().get(0).getShape());
 
+        pushStyle();
+        stroke(255,0,0);
+        for (var p : roofs) {
+            render.drawPolygonEdges(p);
+        }
+        popStyle();
 //        buildingRender.renderPanelGeo();
     }
 

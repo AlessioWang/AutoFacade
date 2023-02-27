@@ -4,9 +4,11 @@ import org.eclipse.collections.impl.bimap.mutable.HashBiMap;
 import unit2Vol.Unit;
 import unit2Vol.face.Face;
 import wblut.geom.*;
+import wblut.hemesh.HEC_FromPolygons;
+import wblut.hemesh.HE_Halfedge;
+import wblut.hemesh.HE_Mesh;
 import wblut.math.WB_Epsilon;
 
-import java.awt.font.LineMetrics;
 import java.util.*;
 
 /**
@@ -50,11 +52,10 @@ public class MergedPanelBase extends PanelBase {
             List<WB_Polygon> polygons = new LinkedList<>();
             faceList.forEach(e -> polygons.add(e.getShape()));
 
-            //test
-//            unionPoly(polygons);
 
 //            shape = unionPolygon(polygons);
             shape = union(polygons);
+//            shape = unionByMesh(polygons);
         }
         System.out.println("area : " + shape.getSignedArea());
     }
@@ -143,6 +144,27 @@ public class MergedPanelBase extends PanelBase {
         return new WB_Polygon(allCoords);
     }
 
+    private WB_Polygon unionByMesh(List<WB_Polygon> polygons) {
+        List<WB_Point> pts = new LinkedList<>();
+
+        HEC_FromPolygons creator = new HEC_FromPolygons().setPolygons(polygons);
+        HE_Mesh mesh = new HE_Mesh(creator);
+
+        List<HE_Halfedge> allBoundaryHalfedges = mesh.getAllBoundaryHalfedges();
+
+        Set<WB_Point> set = new HashSet<>();
+        for (var edge : allBoundaryHalfedges) {
+            WB_Point startPosition = edge.getStartPosition();
+            WB_Point endPosition = edge.getEndPosition();
+
+            set.add(startPosition);
+            set.add(endPosition);
+        }
+        System.out.println(set);
+        return new WB_Polygon(set);
+//        return GeoTools.multiAlphaShape(polygons,1000,2000);
+    }
+
     private List<WB_Coord> selectSameCoord(WB_Coord target, List<WB_Coord> coords, double threshold) {
         List<WB_Coord> result = new LinkedList<>();
 
@@ -153,13 +175,6 @@ public class MergedPanelBase extends PanelBase {
         }
 
         return result;
-    }
-
-    private boolean ifListContainsCoord(WB_Coord target, List<WB_Coord> coords, double threshold) {
-        for (var coord : coords) {
-            if (ifCoordEquals(target, coord, threshold)) return true;
-        }
-        return false;
     }
 
     private boolean ifCoordEquals(WB_Coord c1, WB_Coord c2, double threshold) {

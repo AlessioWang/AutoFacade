@@ -1049,6 +1049,95 @@ public class GeoTools {
 
         return pts;
     }
+
+    public static WB_Polygon bufferSimplify(WB_Polygon oriPoly, double r, double minEdge) {
+        List<WB_Polygon> buffer = wbgf.createBufferedPolygonsStraight(oriPoly, r);
+        buffer = wbgf.createBufferedPolygonsStraight(buffer.get(0), -r + 0.001);
+        buffer.add(oriPoly);
+        buffer = wbgf.createBufferedPolygonsStraight(buffer, 0);
+        return shellPoly(buffer.get(0));
+    }
+
+    public static WB_Polygon multiAlphaShape(List<WB_Polygon> polygons, double divideR, double r) {
+        List<WB_Point> pts = new LinkedList<>();
+        for (WB_Polygon poly : polygons) {
+            List<WB_Point> ptList = divPolyByLength(poly, divideR);
+            pts.addAll(ptList);
+        }
+
+        WB_AlphaTriangulation2D alpha = new WB_AlphaTriangulation2D(WB_Triangulate.triangulate2D(pts).getTriangles(), pts);
+        int[] edge = alpha.getAlphaEdges(r);
+
+        List<WB_Coord> buffer = new ArrayList<>();
+        for (int i = 0; i < edge.length; i += 2) {
+            WB_Point p = pts.get(edge[i]);
+            buffer.add(p);
+        }
+        return new WB_Polygon(buffer);
+    }
+
+    /**
+     * 东耕关于AlphaShape的方法
+     *
+     * @param oriPoly 原始图形
+     * @param divideR 间隔距离
+     * @param r       滚球的半径
+     * @return
+     */
+    public static WB_Polygon alphaShape(WB_Polygon oriPoly, double divideR, double r) {
+        List<WB_Point> pts = divPolyByLength(oriPoly, divideR);
+        WB_AlphaTriangulation2D alpha = new WB_AlphaTriangulation2D(WB_Triangulate.triangulate2D(pts).getTriangles(), pts);
+
+        int[] edge = alpha.getAlphaEdges(r);
+
+        List<WB_Coord> buffer = new ArrayList<>();
+        for (int i = 0; i < edge.length; i += 2) {
+            WB_Point p = pts.get(edge[i]);
+            buffer.add(p);
+        }
+        return new WB_Polygon(buffer);
+    }
+
+    public static List<WB_Point> divPolyByLength(WB_Polygon poly, double len) {
+        List<WB_Point> divPts = new ArrayList<>();
+        WB_CoordCollection polyPts = poly.getPoints();
+        for (int i = 0; i < polyPts.size(); i++) {
+            WB_Point p1 = new WB_Point(polyPts.get(i));
+            WB_Point p2 = new WB_Point(polyPts.get((i + 1) % polyPts.size()));
+            divPts.add(p1);
+            divPts.addAll(divSegByLength(p1, p2, len));
+        }
+        return divPts;
+    }
+
+    public static List<WB_Point> divSegByLength(WB_Point p1, WB_Point p2, double len) {
+        List<WB_Point> divPts = new ArrayList<>();
+        double lenA = p1.getDistance3D(p2);
+        int num = (int) (lenA / len);
+        if (num > 1) {
+            WB_Vector vec = p2.subToVector3D(p1).div(num);
+            for (int i = 1; i < num; i++) {
+                divPts.add(p1.add(vec.mul(i)));
+            }
+        }
+        return divPts;
+    }
+
+    public static List<WB_Polygon> shellPolys(List<WB_Polygon> polys) {
+        List<WB_Polygon> shells = new ArrayList<>();
+        for (WB_Polygon poly : polys) {
+            shells.add(shellPoly(poly));
+        }
+        return shells;
+    }
+
+    public static WB_Polygon shellPoly(WB_Polygon poly) {
+        int[] ids = poly.getNumberOfPointsPerContour();
+        List<WB_Coord> pts = poly.getPoints().subList(0, ids[0]);
+        double dis = WB_Point.getDistance(pts.get(0), pts.get(pts.size() - 1));
+        if (dis < 0.001f) pts.remove(pts.get(pts.size() - 1));
+        return new WB_Polygon(poly.getPoints().subList(0, ids[0]));
+    }
 }
 
 
