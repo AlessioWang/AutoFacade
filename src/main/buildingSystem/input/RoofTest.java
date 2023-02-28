@@ -68,10 +68,12 @@ public class RoofTest extends PApplet {
 
         pushStyle();
         stroke(255,0,0);
+        fill(0,255,0);
         for (var p : roofs) {
             render.drawPolygonEdges(p);
         }
         popStyle();
+
 //        buildingRender.renderPanelGeo();
     }
 

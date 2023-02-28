@@ -189,7 +189,6 @@ public class Unit {
         allFaces.add(topFace);
     }
 
-
     /**
      * 更新每个unit的功能信息属性
      *

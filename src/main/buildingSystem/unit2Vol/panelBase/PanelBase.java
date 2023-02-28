@@ -1,5 +1,6 @@
 package unit2Vol.panelBase;
 
+import function.Function;
 import unit2Vol.Building;
 import wblut.geom.*;
 
@@ -19,7 +20,10 @@ public abstract class PanelBase {
 
     protected WB_Vector dir;
 
+    protected Function function;
+
     public PanelBase() {
+
     }
 
     /**
@@ -52,5 +56,13 @@ public abstract class PanelBase {
 
     public WB_Vector getDir() {
         return dir;
+    }
+
+    public Function getFunction() {
+        return function;
+    }
+
+    public void setFunction(Function function) {
+        this.function = function;
     }
 }

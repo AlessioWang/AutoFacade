@@ -1,6 +1,9 @@
 package unit2Vol.panelBase;
 
+import Tools.GeoTools;
 import org.eclipse.collections.impl.bimap.mutable.HashBiMap;
+import org.locationtech.jts.geom.*;
+import org.locationtech.jts.operation.buffer.BufferOp;
 import unit2Vol.Unit;
 import unit2Vol.face.Face;
 import wblut.geom.*;
@@ -30,7 +33,7 @@ public class MergedPanelBase extends PanelBase {
 
     @Override
     public void init() {
-//        initInfo();
+        initInfo();
         initShape();
         initDir();
     }
@@ -52,14 +55,17 @@ public class MergedPanelBase extends PanelBase {
             List<WB_Polygon> polygons = new LinkedList<>();
             faceList.forEach(e -> polygons.add(e.getShape()));
 
-
+//------------------------各种合并方法的尝试----------------------------------
 //            shape = unionPolygon(polygons);
-            shape = union(polygons);
 //            shape = unionByMesh(polygons);
+//            shape = union(polygons);
+
+            shape = jtsUnion(polygons);
+            System.out.println("area : " + shape.getSignedArea());
         }
-        System.out.println("area : " + shape.getSignedArea());
     }
 
+    @Deprecated
     private WB_Polygon unionPoly(List<WB_Polygon> polygons) {
         double epsilon = WB_Epsilon.EPSILON;
 
@@ -143,6 +149,50 @@ public class MergedPanelBase extends PanelBase {
 
         return new WB_Polygon(allCoords);
     }
+
+    private WB_Polygon jtsUnion(List<WB_Polygon> origin) {
+        WB_Polygon result = origin.get(0);
+
+        for (int i = 1; i < origin.size(); i++) {
+            result = jtsTwoUnion(result, origin.get(i));
+        }
+
+        return result;
+    }
+
+    private WB_Polygon jtsTwoUnion(WB_Polygon p0, WB_Polygon p1) {
+        Polygon g0 = GeoTools.WB_PolygonToJtsPolygon(p0);
+        Polygon g1 = GeoTools.WB_PolygonToJtsPolygon(p1);
+
+        double h0 = p0.getPoint(0).zd();
+        double h1 = p1.getPoint(0).zd();
+        //判断是否高度一样，不一样给出提示
+        if (Math.abs(h0 - h1) > 1) {
+            System.out.println("h " + Math.abs(h0 - h1));
+            System.out.println("Faces not in same height");
+        }
+
+        Geometry buffer0 = g0.buffer(1, 0, BufferOp.CAP_BUTT);
+        Geometry buffer1 = g1.buffer(1, 0, BufferOp.CAP_BUTT);
+
+        Geometry union = buffer0.union(buffer1);
+        Geometry boundary = union.getBoundary();
+        Coordinate[] coordinates = boundary.getCoordinates();
+
+        GeometryFactory gf = new GeometryFactory();
+        Polygon polygon = gf.createPolygon(coordinates);
+
+        WB_Polygon unionPoly = GeoTools.jtsPolygonToWB_Polygon(polygon);
+        unionPoly = GeoTools.movePolygon3D(unionPoly, new WB_Point(0, 0, h0));
+
+        return unionPoly;
+    }
+
+//    private List<WB_Coord> sortCoord(List<WB_Coord> origin) {
+//        List<WB_Coord> result = new LinkedList<>();
+//
+//
+//    }
 
     private WB_Polygon unionByMesh(List<WB_Polygon> polygons) {
         List<WB_Point> pts = new LinkedList<>();

@@ -49,7 +49,6 @@ public class PanelBaseTest extends PApplet {
 
     private BuildingRender buildingRender;
 
-
     public void settings() {
         size(800, 800, P3D);
     }

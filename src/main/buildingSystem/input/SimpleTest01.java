@@ -11,6 +11,8 @@ import renders.BuildingRender;
 import unit2Vol.Building;
 import unit2Vol.face.Face;
 import unit2Vol.panelBase.PanelBase;
+import unit2Vol.panelBase.SplitPanelBase;
+import wblut.geom.WB_Polygon;
 import wblut.processing.WB_Render3D;
 
 import java.util.LinkedList;
@@ -36,6 +38,14 @@ public class SimpleTest01 extends PApplet {
 
     private WB_Render3D render;
 
+    List<PanelBase> allBases;
+
+    List<PanelBase> classBase;
+    List<PanelBase> transBase;
+    List<PanelBase> stairBase;
+
+    List<SplitPanelBase> splitPanelBases;
+
     public static void main(String[] args) {
         PApplet.main(SimpleTest01.class.getName());
     }
@@ -57,7 +67,9 @@ public class SimpleTest01 extends PApplet {
     public SimpleTest01() {
         buildingInputer = new BuildingInputer(file);
 
-        initPanel();
+//        initPanel();
+
+        initBassWithSplit();
 
         List<PanelBase> roofBaseList = building.getRoofBaseList();
     }
@@ -74,6 +86,42 @@ public class SimpleTest01 extends PApplet {
         List<Face> topFaces = building.getRoofAbleFaces();
 
         topFaces.forEach(e -> panels.add(new F_Example(e.getShape())));
+    }
+
+    //测试分割bases
+    private void initBassWithSplit() {
+        building = buildingInputer.getBuilding();
+        panels = new LinkedList<>();
+
+        splitPanelBases = new LinkedList<>();
+        allBases = new LinkedList<>();
+
+        List<Face> wallAbleFaces = building.getWallAbleFaces();
+
+        for (var face : wallAbleFaces) {
+            SplitPanelBase splitPanelBase = new SplitPanelBase(face, new double[]{0.5});
+            splitPanelBases.add(splitPanelBase);
+        }
+
+        for (var base : splitPanelBases) {
+            allBases.addAll(base.getPanelBases());
+        }
+
+        List<WB_Polygon> polys = new LinkedList<>();
+        allBases.stream().forEach(e -> polys.add(e.getShape()));
+        polys.forEach(e -> panels.add(new F_Example(e)));
+    }
+
+    private void initFuncPanel() {
+        classBase = new LinkedList<>();
+        transBase = new LinkedList<>();
+        stairBase = new LinkedList<>();
+
+        List<Face> wallAbleFaces = building.getWallAbleFaces();
+        for (Face f : wallAbleFaces){
+
+        }
+
     }
 
     private void func2Panel(Face face) {
@@ -102,4 +150,5 @@ public class SimpleTest01 extends PApplet {
 
         buildingRender.renderAll();
     }
+
 }

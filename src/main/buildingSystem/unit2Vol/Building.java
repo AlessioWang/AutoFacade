@@ -40,7 +40,7 @@ public class Building {
     private List<WB_Polygon> planList;
 
     // TODO: 2022/11/13 需要研究更加合理地定义阈值方式
-    private double threshold = 10;
+    private double threshold = 50;
 
     /**
      * 所有可以初始化为panel的面
