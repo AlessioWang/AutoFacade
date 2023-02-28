@@ -30,7 +30,6 @@ public class MergedPanelBase extends PanelBase {
         init();
     }
 
-
     @Override
     public void init() {
         initInfo();

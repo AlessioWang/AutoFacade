@@ -11,6 +11,7 @@ import renders.BuildingRender;
 import unit2Vol.Building;
 import unit2Vol.face.Face;
 import unit2Vol.panelBase.PanelBase;
+import unit2Vol.panelBase.SimplePanelBase;
 import unit2Vol.panelBase.SplitPanelBase;
 import wblut.geom.WB_Polygon;
 import wblut.processing.WB_Render3D;
@@ -46,6 +47,8 @@ public class SimpleTest01 extends PApplet {
 
     List<SplitPanelBase> splitPanelBases;
 
+    List<WB_Polygon> floorPolygon;
+
     public static void main(String[] args) {
         PApplet.main(SimpleTest01.class.getName());
     }
@@ -67,16 +70,23 @@ public class SimpleTest01 extends PApplet {
     public SimpleTest01() {
         buildingInputer = new BuildingInputer(file);
 
+        initBuildingFromDxf();
+
 //        initPanel();
 
-        initBassWithSplit();
+//        initBaseWithSplit();
 
-        List<PanelBase> roofBaseList = building.getRoofBaseList();
+        initFuncPanel();
+
+        initFloor();
+    }
+
+    private void initBuildingFromDxf() {
+        building = buildingInputer.getBuilding();
+        panels = new LinkedList<>();
     }
 
     private void initPanel() {
-        building = buildingInputer.getBuilding();
-        panels = new LinkedList<>();
 
         List<Face> wallAbleFaces = building.getWallAbleFaces();
         for (Face f : wallAbleFaces) {
@@ -88,11 +98,9 @@ public class SimpleTest01 extends PApplet {
         topFaces.forEach(e -> panels.add(new F_Example(e.getShape())));
     }
 
-    //测试分割bases
-    private void initBassWithSplit() {
-        building = buildingInputer.getBuilding();
-        panels = new LinkedList<>();
 
+    //测试分割bases
+    private void initBaseWithSplit() {
         splitPanelBases = new LinkedList<>();
         allBases = new LinkedList<>();
 
@@ -108,20 +116,54 @@ public class SimpleTest01 extends PApplet {
         }
 
         List<WB_Polygon> polys = new LinkedList<>();
-        allBases.stream().forEach(e -> polys.add(e.getShape()));
+        allBases.forEach(e -> polys.add(e.getShape()));
         polys.forEach(e -> panels.add(new F_Example(e)));
     }
 
+    /**
+     * 根据功能和panelBase初始化面板
+     * 增加细分
+     */
     private void initFuncPanel() {
         classBase = new LinkedList<>();
         transBase = new LinkedList<>();
         stairBase = new LinkedList<>();
 
         List<Face> wallAbleFaces = building.getWallAbleFaces();
-        for (Face f : wallAbleFaces){
-
+        for (Face f : wallAbleFaces) {
+            func2Base(f);
         }
 
+        initPanelByBaseFunc(classBase, Function.ClassRoom);
+        initPanelByBaseFunc(transBase, Function.Transport);
+        initPanelByBaseFunc(stairBase, Function.Stair);
+    }
+
+    private void func2Base(Face face) {
+        Function function = face.getFunction();
+        switch (function) {
+            case ClassRoom:
+                classBase.addAll(new SplitPanelBase(face, new double[]{0.5}).getPanelBases());
+                break;
+            case Transport:
+                transBase.addAll(new SplitPanelBase(face, new double[]{0.2, 0.4, 0.6, 0.8}).getPanelBases());
+                break;
+            case Stair:
+                stairBase.add(new SimplePanelBase(face));
+        }
+    }
+
+    private void initPanelByBaseFunc(List<PanelBase> bases, Function function) {
+        switch (function) {
+            case ClassRoom:
+                bases.forEach(e -> panels.add(new S_ExtrudeIn(e.getShape())));
+                break;
+            case Transport:
+                bases.forEach(e -> panels.add(new F_Example(e.getShape())));
+                break;
+            case Stair:
+                bases.forEach(e -> panels.add(new F_WindowArray(e.getShape())));
+        }
     }
 
     private void func2Panel(Face face) {
@@ -138,6 +180,13 @@ public class SimpleTest01 extends PApplet {
         }
     }
 
+    private void initFloor() {
+        floorPolygon = new LinkedList<>();
+
+        List<PanelBase> planBaseList = building.getFloorBaseList();
+        planBaseList.forEach(e -> floorPolygon.add(e.getShape()));
+    }
+
     public void draw() {
         background(255);
         cameraController.drawSystem(10000);
@@ -146,9 +195,15 @@ public class SimpleTest01 extends PApplet {
             panel.draw(render);
         }
 
+        //屋顶
         render.drawPolygonEdges(building.getRoofBaseList().get(0).getShape());
 
-        buildingRender.renderAll();
+        //每层的地面
+        for (var p : floorPolygon) {
+            render.drawPolygonEdges(p);
+        }
+
+//        buildingRender.renderAll();
     }
 
 }

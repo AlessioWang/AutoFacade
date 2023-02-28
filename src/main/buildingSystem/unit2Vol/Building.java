@@ -35,11 +35,14 @@ public class Building {
     private double height;
 
     /**
-     * 各层平面的组合（即合并每一层的unit的底面单元）
+     * 记录每一层的楼板信息
      */
-    private List<WB_Polygon> planList;
+    private Map<Double, List<Face>> floorMap;
 
     // TODO: 2022/11/13 需要研究更加合理地定义阈值方式
+    /**
+     * 判断面是否相邻的阈值精度
+     */
     private double threshold = 50;
 
     /**
@@ -52,6 +55,8 @@ public class Building {
     private List<Face> roofAbleFaces;
 
     private List<PanelBase> roofBaseList;
+
+    private List<PanelBase> floorBaseList;
 
     public Building(List<Unit> unitList) {
         this.unitList = unitList;
@@ -79,6 +84,10 @@ public class Building {
 
         //获取屋顶的PanelBase
         initRoofBase();
+
+        //获取每层楼板信息
+        initFloorList();
+
 //        initRoofPanelBase();
     }
 
@@ -129,6 +138,12 @@ public class Building {
         }
     }
 
+    /**
+     * 记录屋顶face的map
+     * 使用Integer作为key降低浮点误差的影响
+     *
+     * @return
+     */
     private Map<Double, List<Face>> initRoofFaceMap() {
         Map<Double, List<Face>> map = new HashMap<>();
 
@@ -156,6 +171,7 @@ public class Building {
 
         Arrays.stream(map.values().toArray()).forEach(e -> roofBaseList.add(new MergedPanelBase((List<Face>) e)));
     }
+
 
     /**
      * 以单元的信息确定距离的阈值
@@ -430,6 +446,39 @@ public class Building {
     }
 
     /**
+     * 初始化每一层的楼板的面板信息
+     */
+    private void initFloorList() {
+        floorMap = new HashMap<>();
+
+        for (var u : unitList) {
+            List<Face> allFaces = u.getAllFaces();
+            for (var face : allFaces) {
+                if (!face.isIfPanel() && (face.getDir().equals(new WB_Vector(0, 0, 1)))) {
+                    double zd = face.getMidPos().zd();
+                    if (floorMap.containsKey(zd)) {
+                        floorMap.get(zd).add(face);
+                    } else {
+                        LinkedList<Face> faces = new LinkedList<>();
+                        faces.add(face);
+                        floorMap.put(zd, faces);
+                    }
+                }
+            }
+        }
+
+        initFloorBase();
+        System.out.println(floorMap.entrySet());
+    }
+
+    private void initFloorBase() {
+        floorBaseList = new LinkedList<>();
+
+        Arrays.stream(floorMap.values().toArray()).forEach(e -> floorBaseList.add(new MergedPanelBase((List<Face>) e)));
+
+    }
+
+    /**
      * 建立所有的可以建立面板的face列表
      */
     private void initPanelAbleList() {
@@ -495,5 +544,13 @@ public class Building {
 
     public List<PanelBase> getRoofBaseList() {
         return roofBaseList;
+    }
+
+    public void setThreshold(double threshold) {
+        this.threshold = threshold;
+    }
+
+    public List<PanelBase> getFloorBaseList() {
+        return floorBaseList;
     }
 }
