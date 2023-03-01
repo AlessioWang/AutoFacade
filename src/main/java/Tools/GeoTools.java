@@ -994,6 +994,7 @@ public class GeoTools {
 
     /**
      * 鞋带法求多边形面积
+     * 只允许二维图形
      *
      * @param polygon
      * @return
@@ -1038,6 +1039,53 @@ public class GeoTools {
         return result;
     }
 
+    /**
+     * 以wb_polygon为基准创建WB_CoordinateSystem
+     * wb_polygon的基准点在左下角，且点序为逆时针
+     *
+     * @param polygon
+     * @return
+     */
+    private static WB_CoordinateSystem createCsByPolygon(WB_Polygon polygon) {
+        WB_Point origin = polygon.getPoint(0);
+        WB_Point x = polygon.getPoint(1);
+        WB_Point y = polygon.getPoint(3);
+
+        WB_Vector vx = new WB_Vector(origin, x);
+        WB_Vector vy = new WB_Vector(origin, y);
+        WB_Vector vz = vy.cross(vx);
+
+        vx.normalizeSelf();
+        vy.normalizeSelf();
+        vz.normalizeSelf();
+
+        return new WB_CoordinateSystem(origin, vx, vy, vz);
+    }
+
+    /**
+     * 两个确定共面且在xy平面上的wb_polygon的布尔差集
+     *
+     * @param origin
+     * @param other
+     * @return
+     */
+    public static List<WB_Polygon> wb_polygonDifference(WB_Polygon origin, WB_Polygon other) {
+        List<WB_Polygon> result = new LinkedList<>();
+
+        Polygon originJts = GeoTools.WB_PolygonToJtsPolygon(origin);
+        Polygon otherJts = GeoTools.WB_PolygonToJtsPolygon(other);
+
+        Geometry difference = originJts.difference(otherJts);
+
+        int numGeometries = difference.getNumGeometries();
+        for (int i = 0; i < numGeometries; i++) {
+            Geometry g = difference.getGeometryN(i);
+            result.add(GeoTools.jtsPolygonToWB_Polygon((Polygon) g));
+        }
+
+        return result;
+    }
+
     public static WB_Point[] polygon2Pts(WB_Polygon polygon) {
         WB_Coord[] wb_coords = polygon.getPoints().toArray();
         WB_Point[] pts = new WB_Point[wb_coords.length];
@@ -1050,14 +1098,14 @@ public class GeoTools {
         return pts;
     }
 
-    public static WB_Polygon bufferSimplify(WB_Polygon oriPoly, double r, double minEdge) {
-        List<WB_Polygon> buffer = wbgf.createBufferedPolygonsStraight(oriPoly, r);
-        buffer = wbgf.createBufferedPolygonsStraight(buffer.get(0), -r + 0.001);
-        buffer.add(oriPoly);
-        buffer = wbgf.createBufferedPolygonsStraight(buffer, 0);
-        return shellPoly(buffer.get(0));
-    }
-
+    /**
+     * 多重AlphaShape的方法
+     *
+     * @param oriPoly 原始图形
+     * @param divideR 间隔距离
+     * @param r       滚球的半径
+     * @return
+     */
     public static WB_Polygon multiAlphaShape(List<WB_Polygon> polygons, double divideR, double r) {
         List<WB_Point> pts = new LinkedList<>();
         for (WB_Polygon poly : polygons) {
@@ -1137,6 +1185,14 @@ public class GeoTools {
         double dis = WB_Point.getDistance(pts.get(0), pts.get(pts.size() - 1));
         if (dis < 0.001f) pts.remove(pts.get(pts.size() - 1));
         return new WB_Polygon(poly.getPoints().subList(0, ids[0]));
+    }
+
+    public static WB_Polygon bufferSimplify(WB_Polygon oriPoly, double r, double minEdge) {
+        List<WB_Polygon> buffer = wbgf.createBufferedPolygonsStraight(oriPoly, r);
+        buffer = wbgf.createBufferedPolygonsStraight(buffer.get(0), -r + 0.001);
+        buffer.add(oriPoly);
+        buffer = wbgf.createBufferedPolygonsStraight(buffer, 0);
+        return shellPoly(buffer.get(0));
     }
 }
 
