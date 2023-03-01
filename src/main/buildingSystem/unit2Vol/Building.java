@@ -4,6 +4,7 @@ import Tools.GeoTools;
 import unit2Vol.face.Face;
 import unit2Vol.panelBase.MergedPanelBase;
 import unit2Vol.panelBase.PanelBase;
+import unit2Vol.panelBase.SimplePanelBase;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Segment;
@@ -43,7 +44,7 @@ public class Building {
     /**
      * 判断面是否相邻的阈值精度
      */
-    private double threshold = 50;
+    private double threshold = 1000;
 
     /**
      * 所有可以初始化为panel的面
@@ -54,9 +55,15 @@ public class Building {
 
     private List<Face> roofAbleFaces;
 
+
     private List<PanelBase> roofBaseList;
 
     private List<PanelBase> floorBaseList;
+
+    /**
+     * 记录内墙
+     */
+    private List<PanelBase> innerWallBaseList;
 
     public Building(List<Unit> unitList) {
         this.unitList = unitList;
@@ -87,6 +94,9 @@ public class Building {
 
         //获取每层楼板信息
         initFloorList();
+
+        //获取内墙信息
+        initInnerWallList();
 
 //        initRoofPanelBase();
     }
@@ -140,7 +150,6 @@ public class Building {
 
     /**
      * 记录屋顶face的map
-     * 使用Integer作为key降低浮点误差的影响
      *
      * @return
      */
@@ -445,6 +454,21 @@ public class Building {
         }
     }
 
+    private void initInnerWallList() {
+        innerWallBaseList = new LinkedList<>();
+
+        for (var u : unitList) {
+            List<Face> allFaces = u.getAllFaces();
+            for (var face : allFaces) {
+                if (!face.isIfPanel() && (!face.getDir().equals(new WB_Vector(0, 0, 1)))) {
+                    innerWallBaseList.add(new SimplePanelBase(face));
+                }
+            }
+        }
+
+    }
+
+
     /**
      * 初始化每一层的楼板的面板信息
      */
@@ -468,7 +492,6 @@ public class Building {
         }
 
         initFloorBase();
-        System.out.println(floorMap.entrySet());
     }
 
     private void initFloorBase() {
@@ -552,5 +575,9 @@ public class Building {
 
     public List<PanelBase> getFloorBaseList() {
         return floorBaseList;
+    }
+
+    public List<PanelBase> getInnerWallBaseList() {
+        return innerWallBaseList;
     }
 }

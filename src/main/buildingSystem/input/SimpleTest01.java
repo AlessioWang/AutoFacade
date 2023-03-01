@@ -1,5 +1,6 @@
 package input;
 
+import Tools.GeoTools;
 import facade.basic.BasicObject;
 import facade.unit.styles.F_Example;
 import facade.unit.styles.F_WindowArray;
@@ -14,6 +15,8 @@ import unit2Vol.panelBase.PanelBase;
 import unit2Vol.panelBase.SimplePanelBase;
 import unit2Vol.panelBase.SplitPanelBase;
 import wblut.geom.WB_Polygon;
+import wblut.geom.WB_Segment;
+import wblut.geom.WB_Vector;
 import wblut.processing.WB_Render3D;
 
 import java.util.LinkedList;
@@ -47,14 +50,18 @@ public class SimpleTest01 extends PApplet {
 
     List<SplitPanelBase> splitPanelBases;
 
-    List<WB_Polygon> floorPolygon;
+    List<WB_Polygon> parapetPolygons;
+
+    List<WB_Polygon> floorPolygons;
+
+    List<WB_Polygon> innerWallPolygons;
 
     public static void main(String[] args) {
         PApplet.main(SimpleTest01.class.getName());
     }
 
     public void settings() {
-        size(800, 800, P3D);
+        size(1500, 1000, P3D);
     }
 
     public void setup() {
@@ -79,6 +86,10 @@ public class SimpleTest01 extends PApplet {
         initFuncPanel();
 
         initFloor();
+
+        initInnerWall();
+
+        initParapet();
     }
 
     private void initBuildingFromDxf() {
@@ -173,18 +184,35 @@ public class SimpleTest01 extends PApplet {
                 panels.add(new S_ExtrudeIn(face.getShape()));
                 break;
             case Transport:
-                panels.add(new F_WindowArray(face.getShape()));
+                panels.add(new F_Example(face.getShape()));
                 break;
             case Stair:
-                panels.add(new F_Example(face.getShape()));
+                panels.add(new F_WindowArray(face.getShape()));
         }
     }
 
     private void initFloor() {
-        floorPolygon = new LinkedList<>();
+        floorPolygons = new LinkedList<>();
 
         List<PanelBase> planBaseList = building.getFloorBaseList();
-        planBaseList.forEach(e -> floorPolygon.add(e.getShape()));
+        planBaseList.forEach(e -> floorPolygons.add(e.getShape()));
+    }
+
+    private void initInnerWall() {
+        innerWallPolygons = new LinkedList<>();
+
+        List<PanelBase> innerWallBase = building.getInnerWallBaseList();
+        innerWallBase.forEach(e -> innerWallPolygons.add(e.getShape()));
+    }
+
+    private void initParapet() {
+        parapetPolygons = new LinkedList<>();
+        List<PanelBase> roofBaseList = building.getRoofBaseList();
+        for (var base : roofBaseList) {
+            WB_Polygon shape = base.getShape();
+            List<WB_Segment> segments = shape.toSegments();
+            segments.forEach(e -> parapetPolygons.add(GeoTools.getRecBySegAndWidth(e, 1000, new WB_Vector(0, 0, 1))));
+        }
     }
 
     public void draw() {
@@ -195,13 +223,29 @@ public class SimpleTest01 extends PApplet {
             panel.draw(render);
         }
 
+        //每层的地面
+        pushStyle();
+        fill(195,195,195);
+
         //屋顶
         render.drawPolygonEdges(building.getRoofBaseList().get(0).getShape());
+//        render.drawPolygonEdges(building.getRoofBaseList().get(1).getShape());
 
-        //每层的地面
-        for (var p : floorPolygon) {
+        for (var p : parapetPolygons) {
             render.drawPolygonEdges(p);
         }
+
+        noStroke();
+        fill(195,195,195);
+        for (var p : floorPolygons) {
+            render.drawPolygonEdges(p);
+        }
+
+        for (var p : innerWallPolygons) {
+            render.drawPolygonEdges(p);
+        }
+
+        popStyle();
 
 //        buildingRender.renderAll();
     }

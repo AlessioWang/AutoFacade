@@ -123,12 +123,14 @@ public class MergedPanelBase extends PanelBase {
     // TODO: 2023/2/27 有时会存在点序问题
 
     /**
+     * 使用判断点出现的次数合并
      * 合并相邻的空间几何图形
      * 仅适用于顶点相邻的情况
      *
      * @param polygons
      * @return
      */
+    @Deprecated
     private WB_Polygon union(List<WB_Polygon> polygons) {
         double threshold = 0.1;
         List<WB_Coord> allCoords = new LinkedList<>();
