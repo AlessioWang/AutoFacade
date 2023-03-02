@@ -93,7 +93,7 @@ public class DxfInput {
             }
 
             for (WB_Polygon winBound : windowInPanel) {
-                Polygon winJts = GeoTools.WB_PolygonToJtsPolygon(winBound);
+                Polygon winJts = GeoTools.wb_PolygonToJtsPolygon(winBound);
 
                 List<WB_PolyLine> beamsList = new LinkedList<>();
                 for (WB_PolyLine l : beamBounds) {

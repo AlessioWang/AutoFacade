@@ -48,6 +48,13 @@ public class BuildingInputer {
         init();
     }
 
+    public BuildingInputer(String path, double unitHeight) {
+        this.path = path;
+        this.unitHeight = unitHeight;
+
+        init();
+    }
+
     private void init() {
         initImporter();
         initRecorder();
@@ -138,5 +145,7 @@ public class BuildingInputer {
         return building;
     }
 
-
+    public void setUnitHeight(double unitHeight) {
+        this.unitHeight = unitHeight;
+    }
 }

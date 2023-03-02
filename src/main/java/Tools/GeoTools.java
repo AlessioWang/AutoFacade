@@ -2,6 +2,8 @@ package Tools;
 
 
 import org.locationtech.jts.geom.*;
+import org.locationtech.jts.geom.util.GeometryCombiner;
+import org.locationtech.jts.operation.buffer.BufferOp;
 import org.locationtech.jts.operation.polygonize.Polygonizer;
 import wblut.geom.*;
 
@@ -175,7 +177,7 @@ public class GeoTools {
     }
 
 
-    public static Polygon WB_PolygonToJtsPolygon(final WB_Polygon wbp) {
+    public static Polygon wb_PolygonToJtsPolygon(final WB_Polygon wbp) {
         if (wbp.getNumberOfHoles() == 0) {
             if (wbp.getPoint(0).equals(wbp.getPoint(wbp.getNumberOfPoints() - 1))) {
                 Coordinate[] coords = new Coordinate[wbp.getNumberOfPoints()];
@@ -901,7 +903,7 @@ public class GeoTools {
      * @return
      */
     public static boolean ifPolyCoverPoly2D(WB_Polygon shell, WB_PolyLine geo) {
-        Polygon jtsShell = WB_PolygonToJtsPolygon(shell);
+        Polygon jtsShell = wb_PolygonToJtsPolygon(shell);
         LineString lineString = WB_polylineToJtsLinestring(geo);
         return jtsShell.covers(lineString);
     }
@@ -915,7 +917,7 @@ public class GeoTools {
      * @return
      */
     public static boolean ifPolyCoverPt2D(WB_Polygon shell, WB_Point pt) {
-        Polygon jtsShell = WB_PolygonToJtsPolygon(shell);
+        Polygon jtsShell = wb_PolygonToJtsPolygon(shell);
         Point jtsPoint = gf.createPoint(new Coordinate(pt.xd(), pt.yd(), pt.zd()));
         return jtsShell.covers(jtsPoint);
     }
@@ -1051,6 +1053,11 @@ public class GeoTools {
         WB_Point x = polygon.getPoint(1);
         WB_Point y = polygon.getPoint(3);
 
+//        WB_Point origin = new WB_Point(0,0,0);
+//        WB_Point o = polygon.getPoint(0);
+//        WB_Point x = polygon.getPoint(1);
+//        WB_Point y = polygon.getPoint(3);
+
         WB_Vector vx = new WB_Vector(origin, x);
         WB_Vector vy = new WB_Vector(origin, y);
         WB_Vector vz = vy.cross(vx);
@@ -1063,7 +1070,148 @@ public class GeoTools {
     }
 
     /**
-     * 两个确定共面且在xy平面上的wb_polygon的布尔差集
+     * 创建xyz世界坐标系
+     *
+     * @return
+     */
+    private static WB_CoordinateSystem createWorldCS() {
+        WB_Point origin = new WB_Point(0, 0, 0);
+        WB_Vector vx = new WB_Vector(1, 0, 0);
+        WB_Vector vy = new WB_Vector(0, 1, 0);
+        WB_Vector vz = new WB_Vector(0, 0, 1);
+
+        return new WB_CoordinateSystem(origin, vx, vy, vz);
+    }
+
+    public static WB_Polygon transWb_polygonTo2D(WB_Polygon polygon) {
+        WB_CoordinateSystem world = createWorldCS();
+
+        WB_Transform3D transform3D = new WB_Transform3D();
+        transform3D.addFromCSToCS(world, createCsByPolygon(polygon));
+
+        return polygon.apply(transform3D);
+    }
+
+    /**
+     * 将一组拥有相对位置关系的polygon拍平为2D
+     *
+     * @param polygons
+     * @return
+     */
+    public static WB_Polygon[] transMultiWbPolygonsTo2D(WB_Polygon... polygons) {
+        WB_Polygon[] result = new WB_Polygon[polygons.length];
+
+        WB_CoordinateSystem world = createWorldCS();
+        WB_Polygon base = polygons[0];
+
+        WB_Transform3D transform3D = new WB_Transform3D();
+        transform3D.addFromCSToCS(world, createCsByPolygon(base));
+
+        for (int i = 0; i < polygons.length; i++) {
+            WB_Polygon p = polygons[i];
+            result[i] = p.apply(transform3D);
+        }
+
+        return result;
+    }
+
+    public static WB_Polygon[] transMultiWbPolygonsTo2D(List<WB_Polygon> polygons) {
+        WB_Polygon[] result = new WB_Polygon[polygons.size()];
+
+        WB_CoordinateSystem world = createWorldCS();
+        WB_Polygon base = polygons.get(0);
+
+        WB_Transform3D transform3D = new WB_Transform3D();
+        transform3D.addFromCSToCS(world, createCsByPolygon(base));
+
+        for (int i = 0; i < polygons.size(); i++) {
+            WB_Polygon p = polygons.get(i);
+            result[i] = p.apply(transform3D);
+        }
+
+        return result;
+    }
+
+    /**
+     * 两个共面且相交的wb_polygon交集
+     * 需要确定两个面相邻或相交且共面
+     *
+     * @param p1
+     * @param p2
+     * @return
+     */
+    public static WB_Polygon wb_polygonUnion(WB_Polygon p1, WB_Polygon p2) {
+        WB_Polygon[] multi = transMultiWbPolygonsTo2D(p1, p2);
+
+        WB_Polygon poly1 = multi[0];
+        WB_Polygon poly2 = multi[1];
+
+        Polygon jts1 = wb_PolygonToJtsPolygon(poly1);
+        Polygon jts2 = wb_PolygonToJtsPolygon(poly2);
+
+        Geometry buffer1 = jts1.buffer(0, 0, BufferOp.CAP_BUTT);
+        Geometry buffer2 = jts2.buffer(0, 0, BufferOp.CAP_BUTT);
+
+        Geometry union = buffer1.union(buffer2);
+        Coordinate[] coordinates = union.getGeometryN(0).getCoordinates();
+        Polygon polygon = gf.createPolygon(coordinates);
+
+        if (union.getNumGeometries() != 1) {
+            System.out.println("合并的polygon不相邻");
+        }
+
+        WB_Polygon wbUnion = jtsPolygonToWB_Polygon(polygon);
+
+        //trans back to 3D position
+        WB_CoordinateSystem world = createWorldCS();
+        WB_CoordinateSystem polyCS = createCsByPolygon(p1);
+        WB_Transform3D transform3D = new WB_Transform3D();
+        WB_Transform3D back = transform3D.addFromCSToCS(polyCS, world);
+        return wbUnion.apply(back);
+    }
+
+    /**
+     * 两个共面且相交的wb_polygon交集
+     * 需要确定两个面相邻或相交且共面
+     *
+     * @param p1
+     * @param p2
+     * @return
+     */
+    public static WB_Polygon multiWbPolygonUnion(List<WB_Polygon> polygons) {
+        int num = polygons.size();
+
+        if (num == 1) {
+            return polygons.get(0);
+        }
+
+        WB_Polygon[] multi = transMultiWbPolygonsTo2D(polygons);
+        System.out.println("union num" + multi.length);
+        Collection<Geometry> geos = new LinkedList<>();
+        for (var p : multi) {
+            Polygon polygon = wb_PolygonToJtsPolygon(p);
+            geos.add(polygon);
+        }
+
+        Geometry unionCollection = GeometryCombiner.combine(geos);
+        System.out.println("num geo : " + unionCollection.getNumGeometries());
+        Coordinate[] coordinates = unionCollection.buffer(1).getGeometryN(0).getCoordinates();
+        Polygon polygon = gf.createPolygon(coordinates);
+        System.out.println("geo area : " + polygon.getArea());
+        WB_Polygon wbUnion = jtsPolygonToWB_Polygon(polygon);
+
+        //trans back to 3D position
+        WB_CoordinateSystem world = createWorldCS();
+        WB_CoordinateSystem polyCS = createCsByPolygon(polygons.get(0));
+        WB_Transform3D transform3D = new WB_Transform3D();
+        WB_Transform3D back = transform3D.addFromCSToCS(polyCS, world);
+
+        return wbUnion.apply(back);
+    }
+
+
+    /**
+     * 两个确定共面的wb_polygon的布尔差集
      *
      * @param origin
      * @param other
@@ -1072,15 +1220,31 @@ public class GeoTools {
     public static List<WB_Polygon> wb_polygonDifference(WB_Polygon origin, WB_Polygon other) {
         List<WB_Polygon> result = new LinkedList<>();
 
-        Polygon originJts = GeoTools.WB_PolygonToJtsPolygon(origin);
-        Polygon otherJts = GeoTools.WB_PolygonToJtsPolygon(other);
+        WB_Polygon[] multi = transMultiWbPolygonsTo2D(origin, other);
 
-        Geometry difference = originJts.difference(otherJts);
+        WB_Polygon origin2D = multi[0];
+        WB_Polygon other2D = multi[1];
+
+        Polygon originJts = GeoTools.wb_PolygonToJtsPolygon(origin2D);
+        Polygon otherJts = GeoTools.wb_PolygonToJtsPolygon(other2D);
+        Geometry otherBuffer = otherJts.buffer(0, 0, BufferOp.CAP_BUTT);
+
+        Geometry difference = originJts.difference(otherBuffer);
+
+        //trans back
+        WB_CoordinateSystem world = createWorldCS();
+        WB_CoordinateSystem polyCS = createCsByPolygon(origin);
+        WB_Transform3D transform3D = new WB_Transform3D();
+        WB_Transform3D back = transform3D.addFromCSToCS(polyCS, world);
 
         int numGeometries = difference.getNumGeometries();
-        for (int i = 0; i < numGeometries; i++) {
-            Geometry g = difference.getGeometryN(i);
-            result.add(GeoTools.jtsPolygonToWB_Polygon((Polygon) g));
+        System.out.println("pts num" + difference.getNumPoints());
+
+        if (difference.getNumPoints() >= 3) {
+            for (int i = 0; i < numGeometries; i++) {
+                Geometry g = difference.getGeometryN(i);
+                result.add(GeoTools.jtsPolygonToWB_Polygon((Polygon) g).apply(back));
+            }
         }
 
         return result;
@@ -1101,9 +1265,9 @@ public class GeoTools {
     /**
      * 多重AlphaShape的方法
      *
-     * @param oriPoly 原始图形
-     * @param divideR 间隔距离
-     * @param r       滚球的半径
+     * @param polygons
+     * @param divideR
+     * @param r
      * @return
      */
     public static WB_Polygon multiAlphaShape(List<WB_Polygon> polygons, double divideR, double r) {

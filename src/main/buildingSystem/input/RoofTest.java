@@ -4,12 +4,14 @@ import guo_cam.CameraController;
 import processing.core.PApplet;
 import renders.BuildingRender;
 import unit2Vol.Building;
+import unit2Vol.Unit;
 import unit2Vol.face.Face;
 import wblut.geom.WB_Polygon;
 import wblut.processing.WB_Render3D;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @auther Alessio
@@ -34,6 +36,8 @@ public class RoofTest extends PApplet {
 
     private List<WB_Polygon> roofs;
 
+    private List<WB_Polygon> trimmed;
+
     public static void main(String[] args) {
         PApplet.main(RoofTest.class.getName());
     }
@@ -51,12 +55,30 @@ public class RoofTest extends PApplet {
 
         building = buildingInputer.getBuilding();
 
-        buildingRender = new BuildingRender(this, building);
+        building.setHeight(1000);
 
+        buildingRender = new BuildingRender(this, building);
 
         roofAbleFaces = building.getRoofAbleFaces();
         roofs = new LinkedList<>();
         roofAbleFaces.stream().forEach(e -> roofs.add(e.getShape()));
+
+        initTrimmed();
+    }
+
+    public void initTrimmed() {
+        trimmed = new LinkedList<>();
+        List<Unit> unitList = building.getUnitList();
+        List<Face> faces = new LinkedList<>();
+
+        for (var u : unitList) {
+            Map<Face, List<Face>> trimmedFaceMap = u.getTrimmedFaceMap();
+            for (var entry : trimmedFaceMap.entrySet()) {
+                faces.addAll(entry.getValue());
+            }
+        }
+
+        faces.forEach(e -> trimmed.add(e.getShape()));
     }
 
     public void draw() {
@@ -67,14 +89,21 @@ public class RoofTest extends PApplet {
         render.drawPolygonEdges(building.getRoofBaseList().get(0).getShape());
 
         pushStyle();
-        stroke(255,0,0);
-        fill(0,255,0);
+        stroke(255, 0, 0);
+        fill(0, 255, 0);
         for (var p : roofs) {
             render.drawPolygonEdges(p);
         }
         popStyle();
 
-//        buildingRender.renderPanelGeo();
+        pushStyle();
+        fill(255,0,0);
+        for (var p : trimmed) {
+            render.drawPolygonEdges(p);
+        }
+        popStyle();
+
+        buildingRender.renderPanelGeo();
     }
 
 }

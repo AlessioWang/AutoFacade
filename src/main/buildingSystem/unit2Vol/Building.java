@@ -44,7 +44,7 @@ public class Building {
     /**
      * 判断面是否相邻的阈值精度
      */
-    private double threshold = 1000;
+    private double threshold = 100;
 
     /**
      * 所有可以初始化为panel的面
@@ -60,10 +60,7 @@ public class Building {
 
     private List<PanelBase> floorBaseList;
 
-    /**
-     * 被分割的panelBase的集合
-     */
-    private Map<Unit, List<PanelBase>> trimmedBaseMap;
+
 
     /**
      * 记录内墙
@@ -103,7 +100,15 @@ public class Building {
         //获取内墙信息
         initInnerWallList();
 
+        initTrimmedFace();
+
 //        initRoofPanelBase();
+    }
+
+    private void initTrimmedFace() {
+        for (Unit unit : unitList) {
+            unit.initTrimmedFace();
+        }
     }
 
     /**
@@ -531,42 +536,6 @@ public class Building {
                 wallAbleFaces.add(face);
             }
         }
-    }
-
-//    private Map<Face, List<Face>> getOffsetFace(Unit unit) {
-//        List<Face> rndFaces = unit.getRndFaces();
-//
-//        for (var face : rndFaces) {
-//
-//        }
-//
-//    }
-
-    // TODO: 2023/3/1  
-    /**
-     * 根据unit的相邻关系，得到所有的被分割的panelBase以及其对应的unit
-     */
-    private void initTrimmedPanelBaseMap() {
-        trimmedBaseMap = new HashMap<>();
-
-        for (Unit unit : unitList) {
-            List<PanelBase> bases = new LinkedList<>();
-
-            List<Face> allFaces = unit.getAllFaces();
-            for (var f : allFaces) {
-                if (!f.isIfPanel()) {
-                    WB_Vector dir = f.getDir();
-                    //相对的面
-                    List<Face> neiFaces = new LinkedList<>();
-                    List<Unit> neighbor = unit.getUnitMap().get(dir);
-                    for (var u : neighbor) {
-                        List<Face> fs = u.getAllFaces();
-                        fs.stream().filter(e -> e.getDir() == dir.mul(-1)).forEach(neiFaces::add);
-                    }
-                }
-            }
-        }
-
     }
 
     public List<Unit> getUnitList() {

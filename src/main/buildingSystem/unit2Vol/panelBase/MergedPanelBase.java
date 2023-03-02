@@ -162,8 +162,8 @@ public class MergedPanelBase extends PanelBase {
     }
 
     private WB_Polygon jtsTwoUnion(WB_Polygon p0, WB_Polygon p1) {
-        Polygon g0 = GeoTools.WB_PolygonToJtsPolygon(p0);
-        Polygon g1 = GeoTools.WB_PolygonToJtsPolygon(p1);
+        Polygon g0 = GeoTools.wb_PolygonToJtsPolygon(p0);
+        Polygon g1 = GeoTools.wb_PolygonToJtsPolygon(p1);
 
         double h0 = p0.getPoint(0).zd();
         double h1 = p1.getPoint(0).zd();

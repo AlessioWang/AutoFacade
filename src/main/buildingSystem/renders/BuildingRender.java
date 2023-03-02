@@ -71,7 +71,7 @@ public class BuildingRender {
     }
 
     public void renderPanelGeo() {
-        for (UnitRender ur :unitRenders ) {
+        for (UnitRender ur : unitRenders) {
             ur.renderPanelShape();
         }
     }

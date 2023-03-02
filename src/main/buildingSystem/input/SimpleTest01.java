@@ -10,6 +10,7 @@ import guo_cam.CameraController;
 import processing.core.PApplet;
 import renders.BuildingRender;
 import unit2Vol.Building;
+import unit2Vol.Unit;
 import unit2Vol.face.Face;
 import unit2Vol.panelBase.PanelBase;
 import unit2Vol.panelBase.SimplePanelBase;
@@ -21,6 +22,7 @@ import wblut.processing.WB_Render3D;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @auther Alessio
@@ -47,6 +49,7 @@ public class SimpleTest01 extends PApplet {
     List<PanelBase> classBase;
     List<PanelBase> transBase;
     List<PanelBase> stairBase;
+    List<PanelBase> trimmedBase;
 
     List<SplitPanelBase> splitPanelBases;
 
@@ -65,7 +68,7 @@ public class SimpleTest01 extends PApplet {
     }
 
     public void setup() {
-        cameraController = new CameraController(this, 10000);
+        cameraController = new CameraController(this, 1000);
 
         render = new WB_Render3D(this);
 
@@ -84,6 +87,8 @@ public class SimpleTest01 extends PApplet {
 //        initBaseWithSplit();
 
         initFuncPanel();
+
+        initTrimmed();
 
         initFloor();
 
@@ -140,6 +145,7 @@ public class SimpleTest01 extends PApplet {
         transBase = new LinkedList<>();
         stairBase = new LinkedList<>();
 
+
         List<Face> wallAbleFaces = building.getWallAbleFaces();
         for (Face f : wallAbleFaces) {
             func2Base(f);
@@ -148,6 +154,28 @@ public class SimpleTest01 extends PApplet {
         initPanelByBaseFunc(classBase, Function.ClassRoom);
         initPanelByBaseFunc(transBase, Function.Transport);
         initPanelByBaseFunc(stairBase, Function.Stair);
+
+    }
+
+    /**
+     * trim的面版
+     */
+    private void initTrimmed() {
+        trimmedBase = new LinkedList<>();
+
+        List<Unit> unitList = building.getUnitList();
+        List<Face> faces = new LinkedList<>();
+
+        for (var u : unitList) {
+            Map<Face, List<Face>> trimmedFaceMap = u.getTrimmedFaceMap();
+            for (var entry : trimmedFaceMap.entrySet()) {
+                faces.addAll(entry.getValue());
+            }
+        }
+
+        faces.forEach(e -> trimmedBase.add(new SimplePanelBase(e)));
+
+        initPanelByBaseFunc(trimmedBase, Function.Transport);
     }
 
     private void func2Base(Face face) {
@@ -225,7 +253,7 @@ public class SimpleTest01 extends PApplet {
 
         //每层的地面
         pushStyle();
-        fill(195,195,195);
+        fill(195, 195, 195);
 
         //屋顶
         render.drawPolygonEdges(building.getRoofBaseList().get(0).getShape());
@@ -235,17 +263,17 @@ public class SimpleTest01 extends PApplet {
             render.drawPolygonEdges(p);
         }
 
-        noStroke();
-        fill(195,195,195);
-        for (var p : floorPolygons) {
-            render.drawPolygonEdges(p);
-        }
-
-        for (var p : innerWallPolygons) {
-            render.drawPolygonEdges(p);
-        }
-
-        popStyle();
+//        noStroke();
+//        fill(195, 195, 195);
+//        for (var p : floorPolygons) {
+//            render.drawPolygonEdges(p);
+//        }
+//
+//        for (var p : innerWallPolygons) {
+//            render.drawPolygonEdges(p);
+//        }
+//
+//        popStyle();
 
 //        buildingRender.renderAll();
     }

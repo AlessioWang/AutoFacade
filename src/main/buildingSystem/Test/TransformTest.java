@@ -3,6 +3,7 @@ package Test;
 import Tools.GeoTools;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Polygon;
 import wblut.geom.*;
 
@@ -103,8 +104,8 @@ public class TransformTest {
     }
 
     private void difference(WB_Polygon origin, WB_Polygon other) {
-        Polygon originJts = GeoTools.WB_PolygonToJtsPolygon(origin);
-        Polygon otherJts = GeoTools.WB_PolygonToJtsPolygon(other);
+        Polygon originJts = GeoTools.wb_PolygonToJtsPolygon(origin);
+        Polygon otherJts = GeoTools.wb_PolygonToJtsPolygon(other);
 
         Geometry difference = originJts.difference(otherJts);
         Coordinate[] coordinates = difference.getCoordinates();
@@ -115,6 +116,11 @@ public class TransformTest {
         Geometry geometryN = difference.getGeometryN(0);
         System.out.println(geometryN);
         System.out.println(Arrays.toString(coordinates));
+
+        GeometryFactory gf = new GeometryFactory();
+        Polygon polygon = gf.createPolygon(geometryN.getCoordinates());
+        WB_Polygon polygon1 = GeoTools.jtsPolygonToWB_Polygon(polygon);
+        System.out.println("pppp" + Arrays.toString(polygon1.getPoints().toArray()));
     }
 
 }

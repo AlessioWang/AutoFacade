@@ -11,6 +11,7 @@ import wblut.geom.*;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @auther Alessio
@@ -61,9 +62,19 @@ public class Unit {
 
     private Face bottomFace;
 
-    //几何体的形体中心点
+    /**
+     * 被其他unit相邻剪切后的Face
+     */
+    private Map<Face, List<Face>> trimmedFaceMap;
+
+    /**
+     * 几何体的形体中心点
+     */
     private WB_Point midPt;
 
+    /**
+     * unit单元所属的功能
+     */
     private Function function = Function.Default;
 
     public Unit(WB_Point pos, WB_Polygon oriBase, WB_Vector dir, double height) {
@@ -200,6 +211,82 @@ public class Unit {
         updateFaceFunc(function);
     }
 
+    /**
+     * 由一个指定点面获取相邻的face
+     *
+     * @param face
+     * @return
+     */
+    private List<Face> getNeighborFaces(Face face) {
+        WB_Vector faceDir = face.getDir();
+        //获取相邻方向的unit列表
+        List<Unit> units = unitMap.get(faceDir);
+
+        List<Face> neiFaces = new LinkedList<>();
+        for (var unit : units) {
+            List<Face> uFaces = unit.getAllFaces();
+            for (var f : uFaces) {
+                double angle = GeoTools.calAngle(f.getDir(), faceDir);
+                if (angle < 3.15 && angle > 3.14) {
+                    neiFaces.add(f);
+                }
+            }
+        }
+
+        return neiFaces;
+    }
+
+    /**
+     * 合并一个list中所有face的polygon
+     * 默认polygon都是相邻的
+     *
+     * @param faces
+     * @return 合并后的polygon
+     */
+    private WB_Polygon unionFaces(List<Face> faces) {
+        if (faces.size() > 0) {
+            WB_Polygon result = faces.get(0).getShape();
+
+            if (faces.size() == 1)
+                return result;
+            else {
+                List<WB_Polygon> polygons = new LinkedList<>();
+                faces.forEach(e -> polygons.add(e.getShape()));
+
+                System.out.println("input num " + polygons.size());
+                return GeoTools.multiWbPolygonUnion(polygons);
+            }
+        } else return null;
+
+    }
+
+
+    /**
+     * 需要在初始化相邻单元之后调用
+     * 需要外部调用
+     */
+    public void initTrimmedFace() {
+        trimmedFaceMap = new HashMap<>();
+
+        for (var face : allFaces) {
+            //去除外部直接暴露的face
+            if (!face.isIfPanel()) {
+                List<Face> neighborFaces = getNeighborFaces(face);
+                if (neighborFaces.size() > 0) {
+                    System.out.println("++++++");
+                    WB_Polygon unionNeighbor = unionFaces(neighborFaces);
+
+                    List<WB_Polygon> difference = GeoTools.wb_polygonDifference(face.getShape(), unionNeighbor);
+                    List<Face> diffFaces = new LinkedList<>();
+                    difference.forEach(e -> diffFaces.add(new RndFace(this, e)));
+
+                    trimmedFaceMap.put(face, diffFaces);
+                }
+            }
+        }
+
+    }
+
     private void updateFaceFunc(Function function) {
         allFaces.forEach(e -> e.setFunction(function));
     }
@@ -243,7 +330,7 @@ public class Unit {
     public void setLeft(Unit left) {
         this.left = left;
     }
-    
+
     public Unit getRight() {
         return right;
     }
@@ -296,5 +383,7 @@ public class Unit {
         return function;
     }
 
-
+    public Map<Face, List<Face>> getTrimmedFaceMap() {
+        return trimmedFaceMap;
+    }
 }
