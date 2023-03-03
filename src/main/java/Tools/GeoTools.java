@@ -1174,8 +1174,7 @@ public class GeoTools {
      * 两个共面且相交的wb_polygon交集
      * 需要确定两个面相邻或相交且共面
      *
-     * @param p1
-     * @param p2
+     * @param polygons
      * @return
      */
     public static WB_Polygon multiWbPolygonUnion(List<WB_Polygon> polygons) {
@@ -1186,7 +1185,6 @@ public class GeoTools {
         }
 
         WB_Polygon[] multi = transMultiWbPolygonsTo2D(polygons);
-        System.out.println("union num" + multi.length);
         Collection<Geometry> geos = new LinkedList<>();
         for (var p : multi) {
             Polygon polygon = wb_PolygonToJtsPolygon(p);
@@ -1194,10 +1192,10 @@ public class GeoTools {
         }
 
         Geometry unionCollection = GeometryCombiner.combine(geos);
-        System.out.println("num geo : " + unionCollection.getNumGeometries());
+//        System.out.println("num geo : " + unionCollection.getNumGeometries());
         Coordinate[] coordinates = unionCollection.buffer(1).getGeometryN(0).getCoordinates();
         Polygon polygon = gf.createPolygon(coordinates);
-        System.out.println("geo area : " + polygon.getArea());
+//        System.out.println("geo area : " + polygon.getArea());
         WB_Polygon wbUnion = jtsPolygonToWB_Polygon(polygon);
 
         //trans back to 3D position
@@ -1238,12 +1236,14 @@ public class GeoTools {
         WB_Transform3D back = transform3D.addFromCSToCS(polyCS, world);
 
         int numGeometries = difference.getNumGeometries();
-        System.out.println("pts num" + difference.getNumPoints());
 
-        if (difference.getNumPoints() >= 3) {
+        if (difference.getNumPoints() >= 4) {
             for (int i = 0; i < numGeometries; i++) {
                 Geometry g = difference.getGeometryN(i);
-                result.add(GeoTools.jtsPolygonToWB_Polygon((Polygon) g).apply(back));
+
+                WB_Polygon polygonBack = GeoTools.toWB_Polygon((Polygon) g).apply(back);
+                WB_Polygon reverse = reversePolygon(polygonBack);
+                result.add(reverse);
             }
         }
 
@@ -1357,6 +1357,51 @@ public class GeoTools {
         buffer.add(oriPoly);
         buffer = wbgf.createBufferedPolygonsStraight(buffer, 0);
         return shellPoly(buffer.get(0));
+    }
+
+    public static WB_Polygon toWB_Polygon(Geometry g) {
+        if (g.getGeometryType().equalsIgnoreCase("Polygon")) {
+            Polygon p = (Polygon) g;
+            Coordinate[] coordOut = p.getExteriorRing().getCoordinates();
+            coordOut = subLast(coordOut);
+            WB_Point[] outPt = new WB_Point[coordOut.length];
+            for (int i = 0; i < coordOut.length; i++) {
+                outPt[i] = new WB_Point(coordOut[i].x, coordOut[i].y, coordOut[i].z);
+            }
+            int num = p.getNumInteriorRing();
+            if (num == 0) {
+                return new WB_Polygon(outPt);
+            } else {
+                WB_Point[][] ptsIn = new WB_Point[num][];
+                for (int i = 0; i < num; i++) {
+                    Coordinate[] coords = p.getInteriorRingN(i).getCoordinates();
+                    /**
+                     * LineString 也需sublast
+                     */
+                    // System.out.println(coords[0]+" &&
+                    // "+coords[coords.length-1]);/
+                    WB_Point[] pts = new WB_Point[coords.length];
+                    for (int j = 0; j < coords.length; j++) {
+                        pts[j] = new WB_Point(coords[j].x, coords[j].y, coords[i].z);
+                    }
+                    ptsIn[i] = pts;
+                }
+                return new WB_Polygon(outPt, ptsIn);
+            }
+        } else {
+            System.out.println("type is : " + g.getGeometryType());
+            System.out.println("this Geometry is not a Polygon!");
+            return null;
+        }
+    }
+
+    public static Coordinate[] subLast(Coordinate... coords) {
+        Coordinate[] cs = new Coordinate[coords.length - 1];
+        int i = 0;
+        for (; i < coords.length - 1; i++) {
+            cs[i] = coords[i];
+        }
+        return cs;
     }
 }
 

@@ -253,7 +253,7 @@ public class Unit {
                 List<WB_Polygon> polygons = new LinkedList<>();
                 faces.forEach(e -> polygons.add(e.getShape()));
 
-                System.out.println("input num " + polygons.size());
+//                System.out.println("input num " + polygons.size());
                 return GeoTools.multiWbPolygonUnion(polygons);
             }
         } else return null;
@@ -261,24 +261,26 @@ public class Unit {
     }
 
 
+    private double minArea = 1;
+
     /**
+     * 获取trimmed face
      * 需要在初始化相邻单元之后调用
      * 需要外部调用
      */
     public void initTrimmedFace() {
         trimmedFaceMap = new HashMap<>();
 
-        for (var face : allFaces) {
+        for (var face : rndFaces) {
             //去除外部直接暴露的face
             if (!face.isIfPanel()) {
                 List<Face> neighborFaces = getNeighborFaces(face);
                 if (neighborFaces.size() > 0) {
-                    System.out.println("++++++");
                     WB_Polygon unionNeighbor = unionFaces(neighborFaces);
 
                     List<WB_Polygon> difference = GeoTools.wb_polygonDifference(face.getShape(), unionNeighbor);
                     List<Face> diffFaces = new LinkedList<>();
-                    difference.forEach(e -> diffFaces.add(new RndFace(this, e)));
+                    difference.stream().filter(e -> Math.abs(e.getSignedArea()) > minArea).forEach(e -> diffFaces.add(new RndFace(this, e)));
 
                     trimmedFaceMap.put(face, diffFaces);
                 }

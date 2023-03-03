@@ -47,7 +47,6 @@ public class MergedPanelBase extends PanelBase {
      */
     @Override
     public void initShape() {
-        System.out.println("face list size " + faceList.size());
         if (faceList.size() == 1) {
             shape = faceList.get(0).getShape();
         } else {
@@ -60,7 +59,6 @@ public class MergedPanelBase extends PanelBase {
 //            shape = union(polygons);
 
             shape = jtsUnion(polygons);
-            System.out.println("area : " + shape.getSignedArea());
         }
     }
 

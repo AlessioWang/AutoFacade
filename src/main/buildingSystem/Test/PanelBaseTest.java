@@ -177,7 +177,6 @@ public class PanelBaseTest extends PApplet {
         List<Face> facesSingle = new LinkedList<>();
         List<Face> facesSplit = new LinkedList<>();
 
-
         for (int i = 0; i < units.size(); i++) {
             Unit unit = units.get(i);
 

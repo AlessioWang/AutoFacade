@@ -20,6 +20,7 @@ import wblut.geom.WB_Segment;
 import wblut.geom.WB_Vector;
 import wblut.processing.WB_Render3D;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -64,11 +65,11 @@ public class SimpleTest01 extends PApplet {
     }
 
     public void settings() {
-        size(1500, 1000, P3D);
+        size(1500, 800, P3D);
     }
 
     public void setup() {
-        cameraController = new CameraController(this, 1000);
+        cameraController = new CameraController(this, 10000);
 
         render = new WB_Render3D(this);
 
@@ -147,6 +148,7 @@ public class SimpleTest01 extends PApplet {
 
 
         List<Face> wallAbleFaces = building.getWallAbleFaces();
+
         for (Face f : wallAbleFaces) {
             func2Base(f);
         }
@@ -170,6 +172,8 @@ public class SimpleTest01 extends PApplet {
             Map<Face, List<Face>> trimmedFaceMap = u.getTrimmedFaceMap();
             for (var entry : trimmedFaceMap.entrySet()) {
                 faces.addAll(entry.getValue());
+                List<Face> value = entry.getValue();
+//                value.forEach(e-> System.out.println(Arrays.toString(e.getShape().getPoints().toArray())));
             }
         }
 
@@ -255,25 +259,24 @@ public class SimpleTest01 extends PApplet {
         pushStyle();
         fill(195, 195, 195);
 
-        //屋顶
+//        屋顶
         render.drawPolygonEdges(building.getRoofBaseList().get(0).getShape());
-//        render.drawPolygonEdges(building.getRoofBaseList().get(1).getShape());
 
         for (var p : parapetPolygons) {
             render.drawPolygonEdges(p);
         }
 
-//        noStroke();
-//        fill(195, 195, 195);
-//        for (var p : floorPolygons) {
-//            render.drawPolygonEdges(p);
-//        }
-//
-//        for (var p : innerWallPolygons) {
-//            render.drawPolygonEdges(p);
-//        }
-//
-//        popStyle();
+        noStroke();
+        fill(195, 195, 195);
+        for (var p : floorPolygons) {
+            render.drawPolygonEdges(p);
+        }
+
+        for (var p : innerWallPolygons) {
+            render.drawPolygonEdges(p);
+        }
+
+        popStyle();
 
 //        buildingRender.renderAll();
     }
