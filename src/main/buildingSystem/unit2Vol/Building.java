@@ -55,11 +55,11 @@ public class Building {
 
     private List<Face> roofAbleFaces;
 
+    private Map<Face, List<Face>> trimmedFaceMap;
 
     private List<PanelBase> roofBaseList;
 
     private List<PanelBase> floorBaseList;
-
 
 
     /**
@@ -97,18 +97,22 @@ public class Building {
         //获取每层楼板信息
         initFloorList();
 
+        initTrimmedFace();
+
         //获取内墙信息
         initInnerWallList();
-
-        initTrimmedFace();
 
 //        initRoofPanelBase();
     }
 
     private void initTrimmedFace() {
+        trimmedFaceMap = new HashMap<>();
         for (Unit unit : unitList) {
             unit.initTrimmedFace();
+
+            trimmedFaceMap.putAll(unit.getTrimmedFaceMap());
         }
+
     }
 
     /**
@@ -464,11 +468,17 @@ public class Building {
         }
     }
 
+    // TODO: 2023/3/3 去重
     private void initInnerWallList() {
         innerWallBaseList = new LinkedList<>();
 
         for (var u : unitList) {
             List<Face> allFaces = u.getAllFaces();
+            System.out.println("all " + allFaces.size());
+            Set<Face> faces = trimmedFaceMap.keySet();
+            allFaces.stream().filter(faces::contains).forEach(allFaces::remove);
+            System.out.println("remove " + allFaces.size());
+
             for (var face : allFaces) {
                 if (!face.isIfPanel() && (!face.getDir().equals(new WB_Vector(0, 0, 1)))) {
                     innerWallBaseList.add(new SimplePanelBase(face));
@@ -520,7 +530,6 @@ public class Building {
         roofAbleFaces = new LinkedList<>();
 
         for (Unit unit : unitList) {
-//            unit.getAllFaces().stream().filter(Face::isIfPanel).forEach(e -> allPanelableFaces.add(e));
             List<Face> allFaces = unit.getAllFaces();
             for (Face face : allFaces) {
                 if (face.isIfPanel()) {
@@ -588,5 +597,9 @@ public class Building {
 
     public List<PanelBase> getInnerWallBaseList() {
         return innerWallBaseList;
+    }
+
+    public Map<Face, List<Face>> getTrimmedFaceMap() {
+        return trimmedFaceMap;
     }
 }

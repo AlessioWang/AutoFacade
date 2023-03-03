@@ -20,10 +20,7 @@ import wblut.geom.WB_Segment;
 import wblut.geom.WB_Vector;
 import wblut.processing.WB_Render3D;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @auther Alessio
@@ -168,14 +165,8 @@ public class SimpleTest01 extends PApplet {
         List<Unit> unitList = building.getUnitList();
         List<Face> faces = new LinkedList<>();
 
-        for (var u : unitList) {
-            Map<Face, List<Face>> trimmedFaceMap = u.getTrimmedFaceMap();
-            for (var entry : trimmedFaceMap.entrySet()) {
-                faces.addAll(entry.getValue());
-                List<Face> value = entry.getValue();
-//                value.forEach(e-> System.out.println(Arrays.toString(e.getShape().getPoints().toArray())));
-            }
-        }
+        Set<Map.Entry<Face, List<Face>>> entries = building.getTrimmedFaceMap().entrySet();
+        entries.forEach(e -> faces.addAll(e.getValue()));
 
         faces.forEach(e -> trimmedBase.add(new SimplePanelBase(e)));
 
@@ -266,8 +257,6 @@ public class SimpleTest01 extends PApplet {
             render.drawPolygonEdges(p);
         }
 
-        noStroke();
-        fill(195, 195, 195);
         for (var p : floorPolygons) {
             render.drawPolygonEdges(p);
         }
