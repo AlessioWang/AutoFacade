@@ -10,6 +10,7 @@ import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Segment;
 import wblut.geom.WB_Vector;
 
+import javax.xml.transform.Source;
 import java.util.*;
 
 /**
@@ -54,6 +55,8 @@ public class Building {
     private List<Face> wallAbleFaces;
 
     private List<Face> roofAbleFaces;
+
+    private List<Face> unPanelAbleFaces;
 
     private Map<Face, List<Face>> trimmedFaceMap;
 
@@ -468,24 +471,23 @@ public class Building {
         }
     }
 
-    // TODO: 2023/3/3 去重
+    /**
+     * 初始化去除了trimmed face的内墙
+     */
     private void initInnerWallList() {
         innerWallBaseList = new LinkedList<>();
+        List<Face> innerFaces = new LinkedList<>();
 
-        for (var u : unitList) {
-            List<Face> allFaces = u.getAllFaces();
-            System.out.println("all " + allFaces.size());
-            Set<Face> faces = trimmedFaceMap.keySet();
-            allFaces.stream().filter(faces::contains).forEach(allFaces::remove);
-            System.out.println("remove " + allFaces.size());
+        List<Face> allFaces = unPanelAbleFaces;
+        Set<Face> faces = trimmedFaceMap.keySet();
 
-            for (var face : allFaces) {
-                if (!face.isIfPanel() && (!face.getDir().equals(new WB_Vector(0, 0, 1)))) {
-                    innerWallBaseList.add(new SimplePanelBase(face));
-                }
+        allFaces.stream().filter(e -> !faces.contains(e)).forEach(innerFaces::add);
+
+        for (var face : innerFaces) {
+            if (!face.isIfPanel() && (!face.getDir().equals(new WB_Vector(0, 0, 1)))) {
+                innerWallBaseList.add(new SimplePanelBase(face));
             }
         }
-
     }
 
 
@@ -528,12 +530,15 @@ public class Building {
         allPanelableFaces = new LinkedList<>();
         wallAbleFaces = new LinkedList<>();
         roofAbleFaces = new LinkedList<>();
+        unPanelAbleFaces = new LinkedList<>();
 
         for (Unit unit : unitList) {
             List<Face> allFaces = unit.getAllFaces();
             for (Face face : allFaces) {
                 if (face.isIfPanel()) {
                     allPanelableFaces.add(face);
+                } else {
+                    unPanelAbleFaces.add(face);
                 }
             }
         }
@@ -544,6 +549,7 @@ public class Building {
             } else if (!face.getDir().equals(new WB_Vector(0, 0, -1))) {
                 wallAbleFaces.add(face);
             }
+
         }
     }
 

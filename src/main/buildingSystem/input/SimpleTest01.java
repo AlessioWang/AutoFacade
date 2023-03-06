@@ -29,6 +29,7 @@ import java.util.*;
 public class SimpleTest01 extends PApplet {
 
     private String file = "src\\main\\resources\\dxf\\input_test.dxf";
+//    private String file = "src\\main\\resources\\dxf\\innerWallTest.dxf";
 
     private BuildingInputer buildingInputer;
 

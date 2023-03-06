@@ -40,6 +40,20 @@ public abstract class Face {
         function = unit.getFunction();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Face)) {
+            return false;
+        }
+
+        return ((Face) obj).shape == this.shape && ((Face) obj).unit == this.unit;
+    }
+
+    @Override
+    public int hashCode() {
+        return shape.hashCode()+ unit.hashCode();
+    }
+
     public WB_Polygon getShape() {
         return shape;
     }
