@@ -4,6 +4,7 @@ import Tools.GeoTools;
 import facade.basic.BasicObject;
 import facade.unit.styles.F_Example;
 import facade.unit.styles.F_WindowArray;
+import facade.unit.styles.RoofSimple;
 import facade.unit.styles.S_ExtrudeIn;
 import function.Function;
 import guo_cam.CameraController;
@@ -85,7 +86,9 @@ public class SimpleTest01 extends PApplet {
 
 //        initBaseWithSplit();
 
-        initFuncPanel();
+        initRoofPanels();
+
+//        initFuncPanel();
 
         initTrimmed();
 
@@ -215,6 +218,13 @@ public class SimpleTest01 extends PApplet {
         }
     }
 
+    private void initRoofPanels() {
+        List<PanelBase> roofBaseList = building.getRoofBaseList();
+        for (var p : roofBaseList) {
+            panels.add(new RoofSimple(p.getShape()));
+        }
+    }
+
     private void initFloor() {
         floorPolygons = new LinkedList<>();
 
@@ -239,6 +249,7 @@ public class SimpleTest01 extends PApplet {
         }
     }
 
+
     public void draw() {
         background(255);
         cameraController.drawSystem(10000);
@@ -254,9 +265,9 @@ public class SimpleTest01 extends PApplet {
 //        屋顶
         render.drawPolygonEdges(building.getRoofBaseList().get(0).getShape());
 
-        for (var p : parapetPolygons) {
-            render.drawPolygonEdges(p);
-        }
+//        for (var p : parapetPolygons) {
+//            render.drawPolygonEdges(p);
+//        }
 
         for (var p : floorPolygons) {
             render.drawPolygonEdges(p);

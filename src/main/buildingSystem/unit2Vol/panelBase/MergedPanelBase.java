@@ -187,33 +187,6 @@ public class MergedPanelBase extends PanelBase {
         return unionPoly;
     }
 
-//    private List<WB_Coord> sortCoord(List<WB_Coord> origin) {
-//        List<WB_Coord> result = new LinkedList<>();
-//
-//
-//    }
-
-    private WB_Polygon unionByMesh(List<WB_Polygon> polygons) {
-        List<WB_Point> pts = new LinkedList<>();
-
-        HEC_FromPolygons creator = new HEC_FromPolygons().setPolygons(polygons);
-        HE_Mesh mesh = new HE_Mesh(creator);
-
-        List<HE_Halfedge> allBoundaryHalfedges = mesh.getAllBoundaryHalfedges();
-
-        Set<WB_Point> set = new HashSet<>();
-        for (var edge : allBoundaryHalfedges) {
-            WB_Point startPosition = edge.getStartPosition();
-            WB_Point endPosition = edge.getEndPosition();
-
-            set.add(startPosition);
-            set.add(endPosition);
-        }
-        System.out.println(set);
-        return new WB_Polygon(set);
-//        return GeoTools.multiAlphaShape(polygons,1000,2000);
-    }
-
     private List<WB_Coord> selectSameCoord(WB_Coord target, List<WB_Coord> coords, double threshold) {
         List<WB_Coord> result = new LinkedList<>();
 
