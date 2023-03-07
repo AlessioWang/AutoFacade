@@ -25,11 +25,15 @@ public class Building {
      */
     private List<Unit> unitList;
 
-
     /**
      * 存储每层的单元信息
      */
     private Map<Double, List<Unit>> eachFloorUnits;
+
+    /**
+     * 存储每层梁的信息
+     */
+    private Map<Double, List<Beam>> beamMap;
 
     /**
      * 层数
@@ -45,6 +49,7 @@ public class Building {
      * 记录每一层的楼板信息
      */
     private Map<Double, List<Face>> floorMap;
+
 
     // TODO: 2022/11/13 需要研究更加合理地定义阈值方式
     /**
@@ -69,7 +74,6 @@ public class Building {
 
     private List<PanelBase> floorBaseList;
 
-
     /**
      * 记录内墙
      */
@@ -93,6 +97,9 @@ public class Building {
         //初始化每层的unit信息
         initEachFloorUnits();
 
+        //初始化每层的beam信息
+        initBeamMap();
+
         //给Unit的rndUnitMap赋值
         setNeiUnitMap();
 
@@ -114,9 +121,37 @@ public class Building {
         //获取内墙信息
         initInnerWallList();
 
-//        initRoofPanelBase();
     }
 
+    /**
+     * 初始化每层的beam信息
+     */
+    private void initBeamMap() {
+        beamMap = new HashMap<>();
+
+        for (var set : eachFloorUnits.entrySet()) {
+            List<Unit> units = set.getValue();
+            Set<WB_Segment> segSet = new HashSet<>();
+
+            for (Unit u : units) {
+                WB_Polygon realBase = u.getRealBase();
+                List<WB_Segment> segments = realBase.toSegments();
+                List<WB_Segment> moved = new LinkedList<>();
+                segments.forEach(e -> moved.add((WB_Segment) GeoTools.moveWb_Line3D(e, new WB_Point(0, 0, u.getHeight()))));
+                segSet.addAll(moved);
+            }
+
+            List<Beam> beams = new LinkedList<>();
+
+            segSet.forEach(e -> beams.add(new Beam(e)));
+
+            beamMap.put(set.getKey(), beams);
+        }
+    }
+
+    /**
+     * 初始化每一层包含的unit信息
+     */
     private void initEachFloorUnits() {
         eachFloorUnits = new HashMap<>();
 
@@ -133,6 +168,9 @@ public class Building {
         }
     }
 
+    /**
+     * 初始化trimmed face的信息
+     */
     private void initTrimmedFace() {
         trimmedFaceMap = new HashMap<>();
         for (Unit unit : unitList) {
@@ -639,5 +677,13 @@ public class Building {
 
     public Map<Face, List<Face>> getTrimmedFaceMap() {
         return trimmedFaceMap;
+    }
+
+    public Map<Double, List<Unit>> getEachFloorUnits() {
+        return eachFloorUnits;
+    }
+
+    public Map<Double, List<Beam>> getBeamMap() {
+        return beamMap;
     }
 }

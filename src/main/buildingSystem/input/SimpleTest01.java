@@ -7,6 +7,7 @@ import function.Function;
 import guo_cam.CameraController;
 import processing.core.PApplet;
 import renders.BuildingRender;
+import unit2Vol.Beam;
 import unit2Vol.Building;
 import unit2Vol.Unit;
 import unit2Vol.face.Face;
@@ -85,11 +86,13 @@ public class SimpleTest01 extends PApplet {
 
         initRoofPanels();
 
+        initBeams();
+
         initInnerPanel();
 
         initFloorPanel();
 
-        initFuncPanel();
+//        initFuncPanel();
 
         initTrimmed();
 
@@ -103,7 +106,10 @@ public class SimpleTest01 extends PApplet {
         panels = new LinkedList<>();
     }
 
-    private void initPanel() {
+    /**
+     * 测试最简单的创建panel
+     */
+    private void initPanelSimple() {
 
         List<Face> wallAbleFaces = building.getWallAbleFaces();
         for (Face f : wallAbleFaces) {
@@ -217,6 +223,16 @@ public class SimpleTest01 extends PApplet {
         }
     }
 
+    private void initBeams() {
+        Map<Double, List<Beam>> beamMap = building.getBeamMap();
+
+        Set<Map.Entry<Double, List<Beam>>> entries = beamMap.entrySet();
+        for (var entry : entries) {
+            List<Beam> beams = entry.getValue();
+            beams.forEach(e -> panels.add(new RecBeam(e.getSegment())));
+        }
+    }
+
     private void initRoofPanels() {
         List<PanelBase> roofBaseList = building.getRoofBaseList();
         for (var p : roofBaseList) {
@@ -224,18 +240,18 @@ public class SimpleTest01 extends PApplet {
         }
     }
 
-    private void initInnerPanel(){
+    private void initInnerPanel() {
         List<PanelBase> innerBaseList = building.getInnerWallBaseList();
         for (var p : innerBaseList) {
-            SimplePanel simplePanel = new SimplePanel(p.getShape(),50);
+            SimplePanel simplePanel = new SimplePanel(p.getShape(), 50);
             panels.add(simplePanel);
         }
     }
 
-    private void initFloorPanel(){
+    private void initFloorPanel() {
         List<PanelBase> list = building.getFloorBaseList();
         for (var p : list) {
-            SimplePanel simplePanel = new SimplePanel(p.getShape(),200);
+            SimplePanel simplePanel = new SimplePanel(p.getShape(), 100);
             panels.add(simplePanel);
         }
     }

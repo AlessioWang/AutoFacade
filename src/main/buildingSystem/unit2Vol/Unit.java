@@ -394,4 +394,8 @@ public class Unit {
     public WB_Point getPos() {
         return pos;
     }
+
+    public WB_Polygon getRealBase() {
+        return realBase;
+    }
 }

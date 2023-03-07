@@ -738,6 +738,12 @@ public class GeoTools {
         return origin.apply(transform3D);
     }
 
+    public static WB_Line moveWb_Line3D(WB_Line origin, WB_Point pos) {
+        WB_Transform3D transform3D = new WB_Transform3D();
+        transform3D.addTranslate(pos);
+        return origin.apply(transform3D);
+    }
+
     public static WB_PolyLine movePolyline(WB_PolyLine origin, WB_Point pos) {
         WB_Transform2D transform2D = new WB_Transform2D();
         transform2D.addTranslate2D(pos);
