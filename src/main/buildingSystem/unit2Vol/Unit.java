@@ -91,6 +91,7 @@ public class Unit {
     }
 
     public Unit(WB_Polygon realBase, double height) {
+        this.pos = realBase.getPoint(0);
         this.oriBase = realBase;
         this.realBase = realBase;
         this.height = height;
@@ -388,5 +389,9 @@ public class Unit {
 
     public Map<Face, List<Face>> getTrimmedFaceMap() {
         return trimmedFaceMap;
+    }
+
+    public WB_Point getPos() {
+        return pos;
     }
 }

@@ -10,7 +10,6 @@ import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Segment;
 import wblut.geom.WB_Vector;
 
-import javax.xml.transform.Source;
 import java.util.*;
 
 /**
@@ -25,6 +24,12 @@ public class Building {
      * 存储的Unit
      */
     private List<Unit> unitList;
+
+
+    /**
+     * 存储每层的单元信息
+     */
+    private Map<Double, List<Unit>> eachFloorUnits;
 
     /**
      * 层数
@@ -56,7 +61,7 @@ public class Building {
 
     private List<Face> roofAbleFaces;
 
-    private List<Face> unPanelAbleFaces;
+    private List<Face> unPanelAbleRndFaces;
 
     private Map<Face, List<Face>> trimmedFaceMap;
 
@@ -85,6 +90,9 @@ public class Building {
         initUnitsPosNeighbor();
         initHeight();
 
+        //初始化每层的unit信息
+        initEachFloorUnits();
+
         //给Unit的rndUnitMap赋值
         setNeiUnitMap();
 
@@ -100,12 +108,29 @@ public class Building {
         //获取每层楼板信息
         initFloorList();
 
+        //被遮挡切割的面的信息
         initTrimmedFace();
 
         //获取内墙信息
         initInnerWallList();
 
 //        initRoofPanelBase();
+    }
+
+    private void initEachFloorUnits() {
+        eachFloorUnits = new HashMap<>();
+
+        for (Unit u : unitList) {
+            WB_Point pos = u.getPos();
+            double h = pos.zd();
+            if (eachFloorUnits.containsKey(h)) {
+                eachFloorUnits.get(h).add(u);
+            } else {
+                List<Unit> units = new LinkedList<>();
+                units.add(u);
+                eachFloorUnits.put(h, units);
+            }
+        }
     }
 
     private void initTrimmedFace() {
@@ -196,6 +221,13 @@ public class Building {
         Map<Double, List<Face>> map = initRoofFaceMap();
 
         Arrays.stream(map.values().toArray()).forEach(e -> roofBaseList.add(new MergedPanelBase((List<Face>) e)));
+
+        for (PanelBase roof : roofBaseList) {
+            //如果roof的面是朝下的，则翻转
+            if (roof.getShape().getNormal().zd() < 0) {
+                roof.reverseShape();
+            }
+        }
     }
 
 
@@ -478,7 +510,7 @@ public class Building {
         innerWallBaseList = new LinkedList<>();
         List<Face> innerFaces = new LinkedList<>();
 
-        List<Face> allFaces = unPanelAbleFaces;
+        List<Face> allFaces = unPanelAbleRndFaces;
         Set<Face> faces = trimmedFaceMap.keySet();
 
         allFaces.stream().filter(e -> !faces.contains(e)).forEach(innerFaces::add);
@@ -520,7 +552,6 @@ public class Building {
         floorBaseList = new LinkedList<>();
 
         Arrays.stream(floorMap.values().toArray()).forEach(e -> floorBaseList.add(new MergedPanelBase((List<Face>) e)));
-
     }
 
     /**
@@ -530,18 +561,19 @@ public class Building {
         allPanelableFaces = new LinkedList<>();
         wallAbleFaces = new LinkedList<>();
         roofAbleFaces = new LinkedList<>();
-        unPanelAbleFaces = new LinkedList<>();
+        unPanelAbleRndFaces = new LinkedList<>();
 
         for (Unit unit : unitList) {
             List<Face> allFaces = unit.getAllFaces();
             for (Face face : allFaces) {
                 if (face.isIfPanel()) {
                     allPanelableFaces.add(face);
-                } else {
-                    unPanelAbleFaces.add(face);
+                } else if ((face.getDir().zd() != 1) && (face.getDir().zd() != -1)) {
+                    unPanelAbleRndFaces.add(face);
                 }
             }
         }
+
 
         for (var face : allPanelableFaces) {
             if (face.getDir().equals(new WB_Vector(0, 0, 1))) {

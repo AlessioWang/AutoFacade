@@ -5,6 +5,7 @@ import org.locationtech.jts.geom.*;
 import org.locationtech.jts.geom.util.GeometryCombiner;
 import org.locationtech.jts.operation.buffer.BufferOp;
 import org.locationtech.jts.operation.polygonize.Polygonizer;
+import org.locationtech.jts.simplify.TopologyPreservingSimplifier;
 import wblut.geom.*;
 
 import java.util.*;
@@ -1175,6 +1176,47 @@ public class GeoTools {
      * 需要确定两个面相邻或相交且共面
      *
      * @param polygons
+     * @param simpleTolerance 简化图形的阈值，根据本身尺寸确定
+     * @return
+     */
+    public static WB_Polygon multiWbPolygonUnion(List<WB_Polygon> polygons, double simpleTolerance) {
+        int num = polygons.size();
+
+        if (num == 1) {
+            return polygons.get(0);
+        }
+
+        WB_Polygon[] multi = transMultiWbPolygonsTo2D(polygons);
+        Collection<Geometry> geos = new LinkedList<>();
+        for (var p : multi) {
+            Polygon polygon = wb_PolygonToJtsPolygon(p);
+            geos.add(polygon);
+        }
+
+        Geometry unionCollection = GeometryCombiner.combine(geos);
+        Coordinate[] coordinates = unionCollection.buffer(1).getGeometryN(0).getCoordinates();
+        Polygon polygon = gf.createPolygon(coordinates);
+
+        TopologyPreservingSimplifier tp = new TopologyPreservingSimplifier(polygon);
+        tp.setDistanceTolerance(simpleTolerance);
+        Geometry geometryN = tp.getResultGeometry().getGeometryN(0);
+
+        WB_Polygon wbUnion = jtsPolygonToWB_Polygon((Polygon) geometryN);
+
+        //trans back to 3D position
+        WB_CoordinateSystem world = createWorldCS();
+        WB_CoordinateSystem polyCS = createCsByPolygon(polygons.get(0));
+        WB_Transform3D transform3D = new WB_Transform3D();
+        WB_Transform3D back = transform3D.addFromCSToCS(polyCS, world);
+
+        return wbUnion.apply(back);
+    }
+
+    /**
+     * 两个共面且相交的wb_polygon交集
+     * 需要确定两个面相邻或相交且共面
+     *
+     * @param polygons
      * @return
      */
     public static WB_Polygon multiWbPolygonUnion(List<WB_Polygon> polygons) {
@@ -1192,10 +1234,8 @@ public class GeoTools {
         }
 
         Geometry unionCollection = GeometryCombiner.combine(geos);
-//        System.out.println("num geo : " + unionCollection.getNumGeometries());
         Coordinate[] coordinates = unionCollection.buffer(1).getGeometryN(0).getCoordinates();
         Polygon polygon = gf.createPolygon(coordinates);
-//        System.out.println("geo area : " + polygon.getArea());
         WB_Polygon wbUnion = jtsPolygonToWB_Polygon(polygon);
 
         //trans back to 3D position

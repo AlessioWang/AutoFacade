@@ -2,10 +2,7 @@ package input;
 
 import Tools.GeoTools;
 import facade.basic.BasicObject;
-import facade.unit.styles.F_Example;
-import facade.unit.styles.F_WindowArray;
-import facade.unit.styles.RoofSimple;
-import facade.unit.styles.S_ExtrudeIn;
+import facade.unit.styles.*;
 import function.Function;
 import guo_cam.CameraController;
 import processing.core.PApplet;
@@ -88,11 +85,13 @@ public class SimpleTest01 extends PApplet {
 
         initRoofPanels();
 
-//        initFuncPanel();
+        initInnerPanel();
+
+        initFloorPanel();
+
+        initFuncPanel();
 
         initTrimmed();
-
-        initFloor();
 
         initInnerWall();
 
@@ -225,13 +224,23 @@ public class SimpleTest01 extends PApplet {
         }
     }
 
-    private void initFloor() {
-        floorPolygons = new LinkedList<>();
-
-        List<PanelBase> planBaseList = building.getFloorBaseList();
-        planBaseList.forEach(e -> floorPolygons.add(e.getShape()));
+    private void initInnerPanel(){
+        List<PanelBase> innerBaseList = building.getInnerWallBaseList();
+        for (var p : innerBaseList) {
+            SimplePanel simplePanel = new SimplePanel(p.getShape(),50);
+            panels.add(simplePanel);
+        }
     }
 
+    private void initFloorPanel(){
+        List<PanelBase> list = building.getFloorBaseList();
+        for (var p : list) {
+            SimplePanel simplePanel = new SimplePanel(p.getShape(),200);
+            panels.add(simplePanel);
+        }
+    }
+
+    @Deprecated
     private void initInnerWall() {
         innerWallPolygons = new LinkedList<>();
 
@@ -263,15 +272,15 @@ public class SimpleTest01 extends PApplet {
         fill(195, 195, 195);
 
 //        屋顶
-        render.drawPolygonEdges(building.getRoofBaseList().get(0).getShape());
+//        render.drawPolygonEdges(building.getRoofBaseList().get(0).getShape());
 
 //        for (var p : parapetPolygons) {
 //            render.drawPolygonEdges(p);
 //        }
 
-        for (var p : floorPolygons) {
-            render.drawPolygonEdges(p);
-        }
+//        for (var p : floorPolygons) {
+//            render.drawPolygonEdges(p);
+//        }
 
         for (var p : innerWallPolygons) {
             render.drawPolygonEdges(p);

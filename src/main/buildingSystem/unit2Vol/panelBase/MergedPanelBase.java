@@ -150,41 +150,7 @@ public class MergedPanelBase extends PanelBase {
     }
 
     private WB_Polygon jtsUnion(List<WB_Polygon> origin) {
-        WB_Polygon result = origin.get(0);
-
-        for (int i = 1; i < origin.size(); i++) {
-            result = jtsTwoUnion(result, origin.get(i));
-        }
-
-        return result;
-    }
-
-    private WB_Polygon jtsTwoUnion(WB_Polygon p0, WB_Polygon p1) {
-        Polygon g0 = GeoTools.wb_PolygonToJtsPolygon(p0);
-        Polygon g1 = GeoTools.wb_PolygonToJtsPolygon(p1);
-
-        double h0 = p0.getPoint(0).zd();
-        double h1 = p1.getPoint(0).zd();
-        //判断是否高度一样，不一样给出提示
-        if (Math.abs(h0 - h1) > 1) {
-            System.out.println("h " + Math.abs(h0 - h1));
-            System.out.println("Faces not in same height");
-        }
-
-        Geometry buffer0 = g0.buffer(1, 0, BufferOp.CAP_BUTT);
-        Geometry buffer1 = g1.buffer(1, 0, BufferOp.CAP_BUTT);
-
-        Geometry union = buffer0.union(buffer1);
-        Geometry boundary = union.getBoundary();
-        Coordinate[] coordinates = boundary.getCoordinates();
-
-        GeometryFactory gf = new GeometryFactory();
-        Polygon polygon = gf.createPolygon(coordinates);
-
-        WB_Polygon unionPoly = GeoTools.jtsPolygonToWB_Polygon(polygon);
-        unionPoly = GeoTools.movePolygon3D(unionPoly, new WB_Point(0, 0, h0));
-
-        return unionPoly;
+        return GeoTools.multiWbPolygonUnion(origin, 10);
     }
 
     private List<WB_Coord> selectSameCoord(WB_Coord target, List<WB_Coord> coords, double threshold) {

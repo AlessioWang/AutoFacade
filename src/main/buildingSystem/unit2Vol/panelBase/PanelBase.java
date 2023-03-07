@@ -1,5 +1,6 @@
 package unit2Vol.panelBase;
 
+import Tools.GeoTools;
 import function.Function;
 import unit2Vol.Building;
 import wblut.geom.*;
@@ -45,6 +46,13 @@ public abstract class PanelBase {
      * 初始化信息
      */
     public abstract void initInfo();
+
+    /**
+     * 翻转基准面的点序
+     */
+    public void reverseShape() {
+        shape = GeoTools.reversePolygon(shape);
+    }
 
     public WB_Polygon getShape() {
         return shape;
