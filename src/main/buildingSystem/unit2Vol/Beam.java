@@ -1,5 +1,6 @@
 package unit2Vol;
 
+import function.PosType;
 import wblut.geom.WB_PolyLine;
 import wblut.geom.WB_Segment;
 
@@ -17,8 +18,18 @@ public class Beam {
 
     private double height = 1000;
 
+    /**
+     * 默认轴线居中
+     */
+    private PosType posType = PosType.Center;
+
     public Beam(WB_Segment segment) {
         this.segment = segment;
+    }
+
+    public Beam(WB_Segment segment, PosType posType) {
+        this.segment = segment;
+        this.posType = posType;
     }
 
     public double getWidth() {
@@ -39,5 +50,13 @@ public class Beam {
 
     public WB_Segment getSegment() {
         return segment;
+    }
+
+    public PosType getPosType() {
+        return posType;
+    }
+
+    public void setPosType(PosType posType) {
+        this.posType = posType;
     }
 }

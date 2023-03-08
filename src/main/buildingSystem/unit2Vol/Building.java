@@ -1,15 +1,14 @@
 package unit2Vol;
 
 import Tools.GeoTools;
+import function.PosType;
 import unit2Vol.face.Face;
 import unit2Vol.panelBase.MergedPanelBase;
 import unit2Vol.panelBase.PanelBase;
 import unit2Vol.panelBase.SimplePanelBase;
-import wblut.geom.WB_Point;
-import wblut.geom.WB_Polygon;
-import wblut.geom.WB_Segment;
-import wblut.geom.WB_Vector;
+import wblut.geom.*;
 
+import javax.swing.text.Segment;
 import java.util.*;
 
 /**
@@ -98,7 +97,7 @@ public class Building {
         initEachFloorUnits();
 
         //初始化每层的beam信息
-        initBeamMap();
+        initBeam();
 
         //给Unit的rndUnitMap赋值
         setNeiUnitMap();
@@ -124,30 +123,67 @@ public class Building {
     }
 
     /**
-     * 初始化每层的beam信息
+     * key = 0 -> side  边缘的 Segment
+     * key = 1 -> center 中间的 Segment
+     *
+     * @param origin
+     * @return
      */
-    private void initBeamMap() {
+    private Map<Integer, List<WB_Segment>> dispatchSegment(List<WB_Segment> origin) {
+        List<WB_Segment> inner = new LinkedList<>();
+        List<WB_Segment> side = new LinkedList<>();
+
+        for (WB_Segment seg : origin) {
+            WB_Point start = (WB_Point) seg.getOrigin();
+            WB_Point end = (WB_Point) seg.getEndpoint();
+
+            for (WB_Segment s : origin) {
+                if (Math.abs(start.getDistance3D(s.getEndpoint())) < 1 || Math.abs(end.getDistance3D(s.getOrigin())) < 1) {
+                    inner.add(seg);
+                } else {
+                    side.add(seg);
+                }
+                break;
+            }
+        }
+        Map<Integer, List<WB_Segment>> result = new HashMap<>();
+
+        result.put(0, side);
+        result.put(1, inner);
+
+        return result;
+    }
+
+    private void initBeam() {
         beamMap = new HashMap<>();
 
         for (var set : eachFloorUnits.entrySet()) {
-            List<Unit> units = set.getValue();
-            Set<WB_Segment> segSet = new HashSet<>();
+            double h = set.getValue().get(0).getHeight();
 
-            for (Unit u : units) {
-                WB_Polygon realBase = u.getRealBase();
-                List<WB_Segment> segments = realBase.toSegments();
-                List<WB_Segment> moved = new LinkedList<>();
-                segments.forEach(e -> moved.add((WB_Segment) GeoTools.moveWb_Line3D(e, new WB_Point(0, 0, u.getHeight()))));
-                segSet.addAll(moved);
-            }
+            List<WB_Segment> allSeg = new LinkedList<>();
+            set.getValue().forEach(e -> allSeg.addAll(e.getRealBase().toSegments()));
+
+            List<WB_Segment> moved = new LinkedList<>();
+            allSeg.forEach(e -> moved.add((WB_Segment) GeoTools.moveWb_Line3D(e, new WB_Point(0, 0, h))));
+
+            Map<Integer, List<WB_Segment>> integerListMap = dispatchSegment(moved);
 
             List<Beam> beams = new LinkedList<>();
-
-            segSet.forEach(e -> beams.add(new Beam(e)));
+            Set<Map.Entry<Integer, List<WB_Segment>>> entries = integerListMap.entrySet();
+            for (var entry : entries) {
+                Integer type = entry.getKey();
+                if (type == 0) {
+                    entry.getValue().forEach(e -> beams.add(new Beam(e, PosType.Side)));
+                } else {
+                    entry.getValue().forEach(e -> beams.add(new Beam(e, PosType.Center)));
+                }
+            }
 
             beamMap.put(set.getKey(), beams);
         }
+
     }
+
 
     /**
      * 初始化每一层包含的unit信息

@@ -8,6 +8,7 @@ import org.locationtech.jts.operation.polygonize.Polygonizer;
 import org.locationtech.jts.simplify.TopologyPreservingSimplifier;
 import wblut.geom.*;
 
+import javax.swing.text.Segment;
 import java.util.*;
 
 /**
@@ -402,18 +403,6 @@ public class GeoTools {
 
             return new WB_Polygon(newExteriorPoints, newInteriorPoints);
         }
-    }
-
-
-    /**
-     * 检查两个WB_Polygon是否同向
-     *
-     * @param p1 polygon1
-     * @param p2 polygon2
-     * @return boolean
-     */
-    public static boolean isNormalEquals(final WB_Polygon p1, final WB_Polygon p2) {
-        return p1.getNormal().equals(p2.getNormal());
     }
 
     /**
@@ -1441,6 +1430,12 @@ public class GeoTools {
         }
     }
 
+    /**
+     * 去掉最后一个点
+     *
+     * @param coords
+     * @return
+     */
     public static Coordinate[] subLast(Coordinate... coords) {
         Coordinate[] cs = new Coordinate[coords.length - 1];
         int i = 0;
@@ -1449,6 +1444,7 @@ public class GeoTools {
         }
         return cs;
     }
+
 }
 
 

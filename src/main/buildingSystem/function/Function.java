@@ -23,4 +23,7 @@ public enum Function {
         return function;
     }
 
+    public void setFunction(String function) {
+        this.function = function;
+    }
 }

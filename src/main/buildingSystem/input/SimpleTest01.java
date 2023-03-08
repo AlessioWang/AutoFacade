@@ -4,6 +4,7 @@ import Tools.GeoTools;
 import facade.basic.BasicObject;
 import facade.unit.styles.*;
 import function.Function;
+import function.PosType;
 import guo_cam.CameraController;
 import processing.core.PApplet;
 import renders.BuildingRender;
@@ -27,6 +28,7 @@ import java.util.*;
  **/
 public class SimpleTest01 extends PApplet {
 
+//    private String file = "src\\main\\resources\\dxf\\beamTest.dxf";
     private String file = "src\\main\\resources\\dxf\\input_test.dxf";
 //    private String file = "src\\main\\resources\\dxf\\innerWallTest.dxf";
 
@@ -92,7 +94,7 @@ public class SimpleTest01 extends PApplet {
 
         initFloorPanel();
 
-//        initFuncPanel();
+        initFuncPanel();
 
         initTrimmed();
 
@@ -171,7 +173,6 @@ public class SimpleTest01 extends PApplet {
     private void initTrimmed() {
         trimmedBase = new LinkedList<>();
 
-        List<Unit> unitList = building.getUnitList();
         List<Face> faces = new LinkedList<>();
 
         Set<Map.Entry<Face, List<Face>>> entries = building.getTrimmedFaceMap().entrySet();
@@ -229,7 +230,13 @@ public class SimpleTest01 extends PApplet {
         Set<Map.Entry<Double, List<Beam>>> entries = beamMap.entrySet();
         for (var entry : entries) {
             List<Beam> beams = entry.getValue();
-            beams.forEach(e -> panels.add(new RecBeam(e.getSegment())));
+            for (Beam b : beams) {
+                if (b.getPosType() == PosType.Center) {
+                    panels.add(new RecBeam(b.getSegment(), RecBeam.BeamType.Center));
+                } else
+                    panels.add(new RecBeam(b.getSegment(), RecBeam.BeamType.Side));
+            }
+//            beams.forEach(e -> panels.add(new RecBeam(e.getSegment(), RecBeam.BeamType.Side)));
         }
     }
 
@@ -251,7 +258,7 @@ public class SimpleTest01 extends PApplet {
     private void initFloorPanel() {
         List<PanelBase> list = building.getFloorBaseList();
         for (var p : list) {
-            SimplePanel simplePanel = new SimplePanel(p.getShape(), 100);
+            SimplePanel simplePanel = new SimplePanel(p.getShape(), 200);
             panels.add(simplePanel);
         }
     }
