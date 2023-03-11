@@ -7,8 +7,13 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="AutoFacade" />
-        <module name="facade-creator" />
+        <module name="FacadeCreator" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="AutoFacade (1)" target="13" />
+      <module name="facade-creator" target="1.7" />
+      <module name="FacedeCreator" target="13" />
+    </bytecodeTargetLevel>
   </component>
 </project>
