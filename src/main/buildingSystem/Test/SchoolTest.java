@@ -7,9 +7,9 @@ import facade.unit.styles.S_ExtrudeIn;
 import guo_cam.CameraController;
 import processing.core.PApplet;
 import renders.BuildingRender;
+import renders.UnitRender;
 import unit2Vol.Building;
 import unit2Vol.Unit;
-import renders.UnitRender;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Vector;
@@ -174,7 +174,7 @@ public class SchoolTest extends PApplet {
         building02.getWallAbleFaces().forEach(e -> panelFaceShapes.add(e.getShape()));
 
         panelFaceShapes.forEach(e -> panelList.add(new F_WindowArray(e)));
-//        panelFaceShapes.forEach(e -> panelList.add(new S_ExtrudeIn(e)));
+        panelFaceShapes.forEach(e -> panelList.add(new S_ExtrudeIn(e)));
 
     }
 

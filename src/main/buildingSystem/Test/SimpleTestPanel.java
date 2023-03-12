@@ -61,6 +61,8 @@ public class SimpleTestPanel extends PApplet {
 
         initPanel();
 
+
+        WB_Polygon p = new WB_Polygon();
     }
 
     private void initBuilding() {

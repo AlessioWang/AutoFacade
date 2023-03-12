@@ -1,7 +1,6 @@
 package input;
 
 import Tools.GeoTools;
-
 import facade.basic.BasicObject;
 import facade.unit.styles.*;
 import function.Function;
@@ -11,7 +10,6 @@ import processing.core.PApplet;
 import renders.BuildingRender;
 import unit2Vol.Beam;
 import unit2Vol.Building;
-import unit2Vol.Unit;
 import unit2Vol.face.Face;
 import unit2Vol.panelBase.PanelBase;
 import unit2Vol.panelBase.SimplePanelBase;
@@ -21,7 +19,10 @@ import wblut.geom.WB_Segment;
 import wblut.geom.WB_Vector;
 import wblut.processing.WB_Render3D;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @auther Alessio
@@ -86,7 +87,6 @@ public class SimpleTest01 extends PApplet {
 //        initPanel();
 
 //        initBaseWithSplit();
-
         initRoofPanels();
 
         initBeams();

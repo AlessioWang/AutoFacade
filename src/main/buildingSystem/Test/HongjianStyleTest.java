@@ -7,8 +7,9 @@ import guo_cam.CameraController;
 import processing.core.PApplet;
 import unit2Vol.Unit;
 import unit2Vol.face.Face;
-import wblut.geom.*;
-import wblut.processing.WB_Render;
+import wblut.geom.WB_Point;
+import wblut.geom.WB_Polygon;
+import wblut.geom.WB_Vector;
 import wblut.processing.WB_Render3D;
 
 import java.util.LinkedList;
