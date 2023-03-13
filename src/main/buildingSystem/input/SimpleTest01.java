@@ -2,6 +2,7 @@ package input;
 
 import Tools.GeoTools;
 import facade.basic.BasicObject;
+import facade.unit.sjStyles.S_Quad_Hole;
 import facade.unit.styles.*;
 import function.Function;
 import function.PosType;
@@ -188,7 +189,8 @@ public class SimpleTest01 extends PApplet {
         Function function = face.getFunction();
         switch (function) {
             case ClassRoom:
-                classBase.addAll(new SplitPanelBase(face, new double[]{0.5}).getPanelBases());
+//                classBase.addAll(new SplitPanelBase(face, new double[]{0.5}).getPanelBases());
+                classBase.add(new SimplePanelBase(face));
                 break;
             case Transport:
                 transBase.addAll(new SplitPanelBase(face, new double[]{0.2, 0.4, 0.6, 0.8}).getPanelBases());
@@ -201,7 +203,7 @@ public class SimpleTest01 extends PApplet {
     private void initPanelByBaseFunc(List<PanelBase> bases, Function function) {
         switch (function) {
             case ClassRoom:
-                bases.forEach(e -> panels.add(new S_ExtrudeIn(e.getShape())));
+                bases.forEach(e -> panels.add(new S_Quad_Hole(e.getShape())));
                 break;
             case Transport:
                 bases.forEach(e -> panels.add(new F_Example(e.getShape())));
