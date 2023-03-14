@@ -8,7 +8,6 @@ import org.locationtech.jts.operation.polygonize.Polygonizer;
 import org.locationtech.jts.simplify.TopologyPreservingSimplifier;
 import wblut.geom.*;
 
-import javax.swing.text.Segment;
 import java.util.*;
 
 /**
@@ -1048,11 +1047,6 @@ public class GeoTools {
         WB_Point origin = polygon.getPoint(0);
         WB_Point x = polygon.getPoint(1);
         WB_Point y = polygon.getPoint(3);
-
-//        WB_Point origin = new WB_Point(0,0,0);
-//        WB_Point o = polygon.getPoint(0);
-//        WB_Point x = polygon.getPoint(1);
-//        WB_Point y = polygon.getPoint(3);
 
         WB_Vector vx = new WB_Vector(origin, x);
         WB_Vector vy = new WB_Vector(origin, y);
