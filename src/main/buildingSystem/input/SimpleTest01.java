@@ -31,8 +31,9 @@ import java.util.Set;
  **/
 public class SimpleTest01 extends PApplet {
 
-//    private String file = "src\\main\\resources\\dxf\\beamTest.dxf";
-    private String file = "src\\main\\resources\\dxf\\input_test.dxf";
+    //    private String file = "src\\main\\resources\\dxf\\beamTest.dxf";
+//    private String file = "src\\main\\resources\\dxf\\input_test.dxf";
+    private String file = "src\\main\\resources\\dxf\\input_test_complete.dxf";
 //    private String file = "src\\main\\resources\\dxf\\innerWallTest.dxf";
 
     private BuildingInputer buildingInputer;
@@ -88,6 +89,7 @@ public class SimpleTest01 extends PApplet {
 //        initPanel();
 
 //        initBaseWithSplit();
+
         initRoofPanels();
 
         initBeams();
@@ -158,6 +160,7 @@ public class SimpleTest01 extends PApplet {
 
         List<Face> wallAbleFaces = building.getWallAbleFaces();
 
+
         for (Face f : wallAbleFaces) {
             func2Base(f);
         }
@@ -187,29 +190,62 @@ public class SimpleTest01 extends PApplet {
         Function function = face.getFunction();
         switch (function) {
             case ClassRoom:
-//                classBase.addAll(new SplitPanelBase(face, new double[]{0.5}).getPanelBases());
-                classBase.add(new SimplePanelBase(face));
+                classBase.addAll(new SplitPanelBase(face, new double[]{0.5}).getPanelBases());
+//                classBase.add(new SimplePanelBase(face));
                 break;
             case Transport:
-                transBase.addAll(new SplitPanelBase(face, new double[]{0.2, 0.4, 0.6, 0.8}).getPanelBases());
+                transBase.addAll(getPanelBaseByLength(face));
                 break;
             case Stair:
                 stairBase.add(new SimplePanelBase(face));
         }
     }
 
+    /**
+     * 根据的长度确定分段个数
+     *
+     * @param face
+     * @return
+     */
+    private List<PanelBase> getPanelBaseByLength(Face face) {
+        List<PanelBase> result = new LinkedList<>();
+
+        WB_Polygon shape = face.getShape();
+        List<WB_Segment> segments = shape.toSegments();
+
+        double maxL = Double.MIN_VALUE;
+        for (WB_Segment s : segments) {
+            if (s.getLength() > maxL)
+                maxL = s.getLength();
+        }
+
+        if (maxL <= 5000) {
+            result.add(new SimplePanelBase(face));
+        } else if (maxL > 5000 && maxL <= 10000) {
+            result.addAll(new SplitPanelBase(face, new double[]{0.5}).getPanelBases());
+        } else {
+            result.addAll(new SplitPanelBase(face, new double[]{0.25, 0.5, 0.75}).getPanelBases());
+        }
+
+        return result;
+    }
+
     private void initPanelByBaseFunc(List<PanelBase> bases, Function function) {
         switch (function) {
             case ClassRoom:
+                bases.forEach(e -> panels.add(new S_ExtrudeIn(e.getShape())));
 //                bases.forEach(e -> panels.add(new S_Quad_Hole(e.getShape())));
-                bases.forEach(e -> panels.add(new S_Corner_Component_Lib(e.getShape())));
+//                bases.forEach(e -> panels.add(new S_Corner_Component_Lib(e.getShape())));
 //                bases.forEach(e -> panels.add(new S_Arc_Stretch(e.getShape())));
                 break;
             case Transport:
-                bases.forEach(e -> panels.add(new F_Example(e.getShape())));
+//                bases.forEach(e -> panels.add(new F_WindowArray(e.getShape())));
+                bases.forEach(e -> panels.add(new S_Corner_Component_Lib(e.getShape())));
                 break;
             case Stair:
-                bases.forEach(e -> panels.add(new F_WindowArray(e.getShape())));
+//                bases.forEach(e -> panels.add(new F_WindowArray(e.getShape())));
+                bases.forEach(e -> panels.add(new F_Example(e.getShape())));
+//                bases.forEach(e -> panels.add(new S_Quad_Hole(e.getShape())));
         }
     }
 
