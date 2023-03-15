@@ -2,7 +2,7 @@ package input;
 
 import Tools.GeoTools;
 import facade.basic.BasicObject;
-import facade.unit.sjStyles.S_Quad_Hole;
+import facade.unit.sjStyles.S_Corner_Component_Lib;
 import facade.unit.styles.*;
 import function.Function;
 import function.PosType;
@@ -156,7 +156,6 @@ public class SimpleTest01 extends PApplet {
         transBase = new LinkedList<>();
         stairBase = new LinkedList<>();
 
-
         List<Face> wallAbleFaces = building.getWallAbleFaces();
 
         for (Face f : wallAbleFaces) {
@@ -166,7 +165,6 @@ public class SimpleTest01 extends PApplet {
         initPanelByBaseFunc(classBase, Function.ClassRoom);
         initPanelByBaseFunc(transBase, Function.Transport);
         initPanelByBaseFunc(stairBase, Function.Stair);
-
     }
 
     /**
@@ -203,7 +201,9 @@ public class SimpleTest01 extends PApplet {
     private void initPanelByBaseFunc(List<PanelBase> bases, Function function) {
         switch (function) {
             case ClassRoom:
-                bases.forEach(e -> panels.add(new S_Quad_Hole(e.getShape())));
+//                bases.forEach(e -> panels.add(new S_Quad_Hole(e.getShape())));
+                bases.forEach(e -> panels.add(new S_Corner_Component_Lib(e.getShape())));
+//                bases.forEach(e -> panels.add(new S_Arc_Stretch(e.getShape())));
                 break;
             case Transport:
                 bases.forEach(e -> panels.add(new F_Example(e.getShape())));

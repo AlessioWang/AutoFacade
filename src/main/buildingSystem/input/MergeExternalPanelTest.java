@@ -1,7 +1,7 @@
 package input;
 
 import facade.basic.BasicObject;
-import facade.unit.sjStyles.Changed_S_Corner_Component_Lib;
+import facade.unit.sjStyles.S_Arc_Stretch;
 import guo_cam.CameraController;
 import processing.core.PApplet;
 import renders.BuildingRender;
@@ -10,7 +10,6 @@ import unit2Vol.face.Face;
 import wblut.geom.WB_Polygon;
 import wblut.processing.WB_Render3D;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -70,18 +69,22 @@ public class MergeExternalPanelTest extends PApplet {
         initPanel();
     }
 
+    WB_Polygon base;
+
     public void initPanel() {
         panels = new LinkedList<>();
 
         List<Face> wallAbleFaces = building.getWallAbleFaces();
 
-        Face face = wallAbleFaces.get(0);
-        System.out.println(Arrays.toString(face.getShape().getPoints().toArray()));
-        panels.add(new Changed_S_Corner_Component_Lib(face.getShape()));
+        Face face = wallAbleFaces.get(3);
+
+//        Changed_S_Corner_Component_Lib panel = new Changed_S_Corner_Component_Lib(face.getShape());
+//        base = panel.getBasePolygon();
+//        panels.add(panel);
 //        panels.add(new S_Corner_Component_Lib(face.getShape()));
 //        panels.add(new S_Corner_Component_Lib(face.getShape(), new WB_Transform3D().addTranslate(new WB_Point(0, 0, 1000))));
 
-//        wallAbleFaces.forEach(e -> panels.add(new S_Corner_Component_Lib(e.getShape())));
+        wallAbleFaces.forEach(e -> panels.add(new S_Arc_Stretch(e.getShape())));
     }
 
     public void draw() {
@@ -93,6 +96,8 @@ public class MergeExternalPanelTest extends PApplet {
         }
 
         buildingRender.renderPanelGeo();
+
+//        render.drawPolygonEdges(base);
     }
 
 }

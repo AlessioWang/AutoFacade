@@ -16,7 +16,7 @@ import java.util.List;
  * @date 2022/12/28
  **/
 
-// TODO: 2022/12/30 未完全解决转交的问题
+// TODO: 2022/12/30 未完全解决转角的问题
 public class EdgePanelBase extends PanelBase {
     //输入的faces
     private final List<Face> faceList;
