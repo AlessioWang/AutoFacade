@@ -1,14 +1,17 @@
 package unit2Vol;
 
 import Tools.GeoTools;
+import function.Function;
 import function.PosType;
 import unit2Vol.face.Face;
 import unit2Vol.panelBase.MergedPanelBase;
 import unit2Vol.panelBase.PanelBase;
 import unit2Vol.panelBase.SimplePanelBase;
-import wblut.geom.*;
+import wblut.geom.WB_Point;
+import wblut.geom.WB_Polygon;
+import wblut.geom.WB_Segment;
+import wblut.geom.WB_Vector;
 
-import javax.swing.text.Segment;
 import java.util.*;
 
 /**
@@ -603,10 +606,15 @@ public class Building {
     private void initFloorList() {
         floorMap = new HashMap<>();
 
-        for (var u : unitList) {
+        // 所有类型为stair的单元都不拥有楼板
+        List<Unit> floorUnits = new LinkedList<>();
+        unitList.stream().filter(e -> e.getFunction() != Function.Stair).forEach(floorUnits::add);
+
+        for (var u : floorUnits) {
             List<Face> allFaces = u.getAllFaces();
             for (var face : allFaces) {
                 if (!face.isIfPanel() && (face.getDir().equals(new WB_Vector(0, 0, 1)))) {
+
                     double zd = face.getMidPos().zd();
                     if (floorMap.containsKey(zd)) {
                         floorMap.get(zd).add(face);

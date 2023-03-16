@@ -2,17 +2,13 @@ package unit2Vol.panelBase;
 
 import Tools.GeoTools;
 import org.eclipse.collections.impl.bimap.mutable.HashBiMap;
-import org.locationtech.jts.geom.*;
-import org.locationtech.jts.operation.buffer.BufferOp;
 import unit2Vol.Unit;
 import unit2Vol.face.Face;
-import wblut.geom.*;
-import wblut.hemesh.HEC_FromPolygons;
-import wblut.hemesh.HE_Halfedge;
-import wblut.hemesh.HE_Mesh;
-import wblut.math.WB_Epsilon;
+import wblut.geom.WB_Polygon;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 由若干个基础的Face组成的PanelBase
@@ -62,116 +58,19 @@ public class MergedPanelBase extends PanelBase {
         }
     }
 
-    @Deprecated
-    private WB_Polygon unionPoly(List<WB_Polygon> polygons) {
-        double epsilon = WB_Epsilon.EPSILON;
-
-        System.out.println(epsilon);
-        Map<WB_Coord, Integer> map = new HashMap<>();
-
-        for (WB_Polygon polygon : polygons) {
-            int size = polygon.getPoints().size();
-            List<WB_Coord> wb_coords = polygon.getPoints().subList(0, size - 1);
-            for (var coord : wb_coords) {
-                if (map.containsKey(coord)) {
-                    map.replace(coord, map.get(coord) + 1);
-                } else {
-                    map.put(coord, 1);
-                }
-            }
-        }
-
-        System.out.println(map.entrySet());
-        System.out.println(map.entrySet().size());
-
-        return new WB_Polygon();
-    }
-
-    /**
-     * 合并相邻的空间几何图形
-     * 仅适用于顶点相邻的情况
-     *
-     * @param polygons
-     * @return
-     */
-    @Deprecated
-    private WB_Polygon unionPolygon(List<WB_Polygon> polygons) {
-        WB_Polygon base = polygons.get(0);
-
-        List<WB_Coord> basePoints = base.getPoints().subList(0, 3);
-        Set<WB_Coord> set = new HashSet<>(basePoints);
-
-        for (int i = 1; i < polygons.size(); i++) {
-            WB_Polygon p = polygons.get(i);
-            List<WB_Coord> wb_coords = p.getPoints().toList();
-            for (WB_Coord c : wb_coords) {
-                if (set.contains(c)) {
-                    set.remove(c);
-                } else {
-                    set.add(c);
-                    System.out.println(c);
-                }
-            }
-        }
-
-        System.out.println("set" + set.size());
-        return new WB_Polygon(new ArrayList<>(set));
-    }
-
-    // TODO: 2023/2/27 有时会存在点序问题
-
-    /**
-     * 使用判断点出现的次数合并
-     * 合并相邻的空间几何图形
-     * 仅适用于顶点相邻的情况
-     *
-     * @param polygons
-     * @return
-     */
-    @Deprecated
-    private WB_Polygon union(List<WB_Polygon> polygons) {
-        double threshold = 0.1;
-        List<WB_Coord> allCoords = new LinkedList<>();
-
-        for (WB_Polygon polygon : polygons) {
-            int size = polygon.getPoints().size();
-            List<WB_Coord> wb_coords = polygon.getPoints().subList(0, size - 1);
-            for (var coord : wb_coords) {
-                List<WB_Coord> sameCoords = selectSameCoord(coord, allCoords, threshold);
-                if (allCoords.size() == 0 || sameCoords.size() == 0) {
-                    allCoords.add(coord);
-                } else {
-                    allCoords.removeAll(sameCoords);
-                }
-            }
-        }
-
-        return new WB_Polygon(allCoords);
-    }
-
     private WB_Polygon jtsUnion(List<WB_Polygon> origin) {
-        return GeoTools.multiWbPolygonUnion(origin, 10);
-    }
+        WB_Polygon polygon = GeoTools.multiWbPolygonUnion(origin, 10);
 
-    private List<WB_Coord> selectSameCoord(WB_Coord target, List<WB_Coord> coords, double threshold) {
-        List<WB_Coord> result = new LinkedList<>();
+        /**
+         * 保证合并后的面方向与原本的一致
+         */
 
-        for (var coord : coords) {
-            if (ifCoordEquals(target, coord, threshold)) {
-                result.add(coord);
-            }
+        if (polygon.getNormal() != origin.get(0).getNormal()){
+            polygon = GeoTools.reversePolygon(polygon);
         }
 
-        return result;
+        return polygon;
     }
-
-    private boolean ifCoordEquals(WB_Coord c1, WB_Coord c2, double threshold) {
-        WB_Point p1 = (WB_Point) c1;
-        WB_Point p2 = (WB_Point) c2;
-
-        return Math.abs(p1.getDistance3D(p2)) < threshold;
-    }
-
 
     /**
      * 初始化基础信息

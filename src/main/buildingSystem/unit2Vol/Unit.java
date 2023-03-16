@@ -283,8 +283,10 @@ public class Unit {
                     List<Face> diffFaces = new LinkedList<>();
                     difference.stream().filter(e -> Math.abs(e.getSignedArea()) > minArea).forEach(e -> diffFaces.add(new RndFace(this, e)));
 
-                    if (diffFaces.size() > 0)
+                    if (diffFaces.size() > 0) {
+                        diffFaces.forEach(e -> e.setFunction(function));
                         trimmedFaceMap.put(face, diffFaces);
+                    }
                 }
             }
         }

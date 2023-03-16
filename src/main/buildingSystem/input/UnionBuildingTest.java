@@ -12,6 +12,7 @@ import renders.BuildingRender;
 import unit2Vol.Beam;
 import unit2Vol.Building;
 import unit2Vol.face.Face;
+import unit2Vol.panelBase.MergedPanelBase;
 import unit2Vol.panelBase.PanelBase;
 import unit2Vol.panelBase.SimplePanelBase;
 import unit2Vol.panelBase.SplitPanelBase;
@@ -21,39 +22,15 @@ import wblut.geom.WB_Segment;
 import wblut.geom.WB_Vector;
 import wblut.processing.WB_Render3D;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @auther Alessio
- * @date 2023/2/23
+ * @date 2023/3/16
  **/
-public class SimpleTest01 extends PApplet {
+public class UnionBuildingTest extends PApplet {
 
-    /**
-     * 测试梁
-     */
-//    private String file = "src\\main\\resources\\dxf\\beamTest.dxf";
-    /**
-     * 基础测试
-     */
-//    private String file = "src\\main\\resources\\dxf\\input_test.dxf";
-//    private String file = "src\\main\\resources\\dxf\\oneUnit.dxf";
-    /**
-     * 复杂测试
-     */
-//    private String file = "src\\main\\resources\\dxf\\input_test_complete.dxf";
-//    private String file = "src\\main\\resources\\dxf\\input_test_complete_change.dxf";
-//    private String file = "src\\main\\resources\\dxf\\input_test_complete_not_rec.dxf";
-    private String file = "src\\main\\resources\\dxf\\input_test_rotate_not_rec.dxf";
-//    private String file = "src\\main\\resources\\dxf\\input_test_rotate.dxf";
-
-    /**
-     * 内墙测试
-     */
-//    private String file = "src\\main\\resources\\dxf\\innerWallTest.dxf";
+    private String file = "src\\main\\resources\\dxf\\input_test.dxf";
 
     private BuildingInputer buildingInputer;
 
@@ -85,7 +62,7 @@ public class SimpleTest01 extends PApplet {
     WB_Polygon ground;
 
     public static void main(String[] args) {
-        PApplet.main(SimpleTest01.class.getName());
+        PApplet.main(UnionBuildingTest.class.getName());
     }
 
     public void settings() {
@@ -104,14 +81,10 @@ public class SimpleTest01 extends PApplet {
         initGround();
     }
 
-    public SimpleTest01() {
+    public UnionBuildingTest() {
         buildingInputer = new BuildingInputer(file, 3500);
 
         initBuildingFromDxf();
-
-//        initPanel();
-
-//        initBaseWithSplit();
 
         initRoofPanels();
 
@@ -159,9 +132,19 @@ public class SimpleTest01 extends PApplet {
         stairBase = new LinkedList<>();
 
         List<Face> wallAbleFaces = building.getWallAbleFaces();
+
+        List<Face> stairMerges = new LinkedList<>();
+
         for (Face f : wallAbleFaces) {
-            func2Base(f);
+            if (f.getFunction().equals(Function.Stair) && Objects.equals(f.getDir(), new WB_Vector(0, -1, 0))) {
+                stairMerges.add(f);
+            } else {
+                func2Base(f);
+            }
         }
+
+        MergedPanelBase stair = new MergedPanelBase(stairMerges);
+        panels.add(new F_Example(stair.getShape()));
 
         initPanelByBaseFunc(classBase, Function.ClassRoom);
         initPanelByBaseFunc(transBase, Function.Transport);
@@ -179,14 +162,10 @@ public class SimpleTest01 extends PApplet {
         Set<Map.Entry<Face, List<Face>>> entries = building.getTrimmedFaceMap().entrySet();
         entries.forEach(e -> faces.addAll(e.getValue()));
 
-//        faces.forEach(e -> trimmedBase.add(new SimplePanelBase(e)));
-
-        for (var f : faces) {
-            List<PanelBase> panelBaseByLength = getPanelBaseByLength(f);
-            trimmedBase.addAll(panelBaseByLength);
-        }
+        faces.forEach(e -> trimmedBase.add(new SimplePanelBase(e)));
 
         faces.forEach(this::func2Panel);
+
     }
 
     private void func2Base(Face face) {
@@ -237,18 +216,12 @@ public class SimpleTest01 extends PApplet {
         switch (function) {
             case ClassRoom:
                 bases.forEach(e -> panels.add(new S_ExtrudeIn(e.getShape())));
-//                bases.forEach(e -> panels.add(new S_Quad_Hole(e.getShape())));
-//                bases.forEach(e -> panels.add(new S_Corner_Component_Lib(e.getShape())));
-//                bases.forEach(e -> panels.add(new S_Arc_Stretch(e.getShape())));
                 break;
             case Transport:
-//                bases.forEach(e -> panels.add(new F_WindowArray(e.getShape())));
                 bases.forEach(e -> panels.add(new S_Corner_Component_Lib(e.getShape())));
                 break;
             case Stair:
-//                bases.forEach(e -> panels.add(new F_WindowArray(e.getShape())));
                 bases.forEach(e -> panels.add(new F_Example(e.getShape())));
-//                bases.forEach(e -> panels.add(new S_Quad_Hole(e.getShape())));
         }
     }
 
@@ -323,7 +296,6 @@ public class SimpleTest01 extends PApplet {
         }
     }
 
-
     public void draw() {
         background(255);
         cameraController.drawSystem(10000);
@@ -332,32 +304,7 @@ public class SimpleTest01 extends PApplet {
             panel.draw(render);
         }
 
-//        //每层的地面
-//        pushStyle();
-//        fill(195, 195, 195);
 
-//        屋顶
-//        render.drawPolygonEdges(building.getRoofBaseList().get(0).getShape());
-
-//        for (var p : parapetPolygons) {
-//            render.drawPolygonEdges(p);
-//        }
-
-//        for (var p : floorPolygons) {
-//            render.drawPolygonEdges(p);
-//        }
-
-//        for (var p : innerWallPolygons) {
-//            render.drawPolygonEdges(p);
-//        }
-//        popStyle();
-
-        pushStyle();
-        fill(71, 158, 128);
-        render.drawPolygonEdges(ground);
-        popStyle();
-
-//        buildingRender.renderAll();
     }
 
 }
