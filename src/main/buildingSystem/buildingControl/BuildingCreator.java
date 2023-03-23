@@ -67,18 +67,39 @@ public class BuildingCreator {
             funcBaseMap.put(f, baseList);
         }
 
+        initOutWallPanel(allPanelableFaces);
+
+        initRoof();
+
+        initInnerWall();
+
+        // TODO: 2023/3/23  roof, inner walls, floor
+    }
+
+    /**
+     * 初始化外墙信息到map
+     *
+     * @param allFaces
+     */
+    private void initOutWallPanel(List<Face> allFaces) {
         //添加trimmed face 到 all panelable face
         Map<Face, List<Face>> trimmedFaceMap = building.getTrimmedFaceMap();
         Set<Map.Entry<Face, List<Face>>> entries = trimmedFaceMap.entrySet();
         for (var e : entries) {
-            allPanelableFaces.addAll(e.getValue());
+            allFaces.addAll(e.getValue());
         }
 
-        for (var face : allPanelableFaces) {
+        for (var face : allFaces) {
             func2Base(face, funcBaseMap);
         }
+    }
 
-        // TODO: 2023/3/23  roof, inner walls, floor
+    private void initRoof() {
+
+    }
+
+    private void initInnerWall() {
+
     }
 
     /**
@@ -116,8 +137,7 @@ public class BuildingCreator {
 
         double maxL = Double.MIN_VALUE;
         for (WB_Segment s : segments) {
-            if (s.getLength() > maxL)
-                maxL = s.getLength();
+            if (s.getLength() > maxL) maxL = s.getLength();
         }
 
         if (maxL <= 4000) {
