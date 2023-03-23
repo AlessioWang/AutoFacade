@@ -417,42 +417,6 @@ public class Building {
     }
 
     /**
-     * 无法使用
-     * Jts的covers方法只能判断二维图形
-     *
-     * @param f1
-     * @param f2
-     * @return
-     */
-    @Deprecated
-    private boolean checkFaceNeiTest02(Face f1, Face f2) {
-        WB_Polygon polygon1 = f1.getShape();
-        WB_Polygon polygon2 = f2.getShape();
-
-        WB_Point midPosP1 = f1.getMidPos();
-        System.out.println("pts1" + midPosP1);
-        WB_Point midPosP2 = f2.getMidPos();
-        System.out.println("pts2" + midPosP2);
-
-        return (GeoTools.ifPolyCoverPoly2D(polygon1, polygon2) || GeoTools.ifPolyCoverPoly2D(polygon2, polygon1)) && (GeoTools.ifPolyCoverPt2D(polygon1, midPosP2) || GeoTools.ifPolyCoverPt2D(polygon2, midPosP1));
-
-    }
-
-    // TODO: 2022/11/30 寻找更合适的判断方法
-
-    /**
-     * 通过两个面的中心点是否在一个距离内来判断
-     *
-     * @param f1
-     * @param f2
-     * @return
-     */
-    @Deprecated
-    private boolean checkFaceNeiTest(Face f1, Face f2) {
-        return GeoTools.getDistance3D(f1.getMidPos(), f2.getMidPos()) < 1;
-    }
-
-    /**
      * 检测两个face是否相邻
      * 通过判断两个face的中心点的向量到水平与数值方向的投影长度与两边长和的关系
      *
@@ -656,14 +620,12 @@ public class Building {
             }
         }
 
-
         for (var face : allPanelableFaces) {
             if (face.getDir().equals(new WB_Vector(0, 0, 1))) {
                 roofAbleFaces.add(face);
             } else if (!face.getDir().equals(new WB_Vector(0, 0, -1))) {
                 wallAbleFaces.add(face);
             }
-
         }
     }
 

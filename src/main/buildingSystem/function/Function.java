@@ -11,7 +11,8 @@ public enum Function {
     Default("default"),
     ClassRoom("classroom"),
     Stair("stair"),
-    Transport("transport");
+    Transport("transport"),
+    Roof("roof");
 
     private String function;
 
@@ -25,5 +26,9 @@ public enum Function {
 
     public void setFunction(String function) {
         this.function = function;
+    }
+
+    public static Function[] getAllFuncTypes() {
+        return Function.values();
     }
 }

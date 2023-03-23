@@ -62,10 +62,6 @@ public class BuildingInputer {
         initBuilding();
     }
 
-    private void test() {
-        units.forEach(e -> System.out.println(e.getFunction()));
-    }
-
     private void initImporter() {
         importer = new DXFImporter(path, DXFImporter.UTF_8);
         importer.getLayers();
