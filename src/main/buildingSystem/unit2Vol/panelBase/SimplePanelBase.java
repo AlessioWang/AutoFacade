@@ -1,6 +1,5 @@
 package unit2Vol.panelBase;
 
-import org.aspectj.org.eclipse.jdt.internal.compiler.parser.TheOriginalJDTScannerClass;
 import unit2Vol.face.Face;
 import wblut.geom.WB_Polygon;
 
@@ -15,14 +14,18 @@ public class SimplePanelBase extends PanelBase {
         this.face = face;
 
         init();
+
+        initWidth();
     }
 
-    public SimplePanelBase (Face face, WB_Polygon polygon){
+    public SimplePanelBase(Face face, WB_Polygon polygon) {
         this.face = face;
         shape = polygon;
 
         initInfo();
         initDir();
+
+        initWidth();
     }
 
 
@@ -36,6 +39,22 @@ public class SimplePanelBase extends PanelBase {
     @Override
     public void initDir() {
         dir = face.getDir();
+
+        /**
+         * 一定程度上解决浮点误差问题
+         * 权宜之计
+         */
+        if (Math.abs(dir.xd() - 0) < 0.01) {
+            dir.setX(0);
+        }
+
+        if (Math.abs(dir.yd() - 0) < 0.01) {
+            dir.setY(0);
+        }
+
+        if (Math.abs(dir.zd() - 0) < 0.01) {
+            dir.setZ(0);
+        }
     }
 
     @Override

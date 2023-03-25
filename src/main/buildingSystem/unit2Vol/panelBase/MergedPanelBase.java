@@ -17,7 +17,7 @@ import java.util.Map;
  * @date 2022/12/13
  **/
 public class MergedPanelBase extends PanelBase {
-    private final List<Face> faceList;
+    private List<Face> faceList;
 
     private Map<Face, Unit> faceUnitMap;
 
@@ -26,11 +26,24 @@ public class MergedPanelBase extends PanelBase {
         init();
     }
 
+    public MergedPanelBase(LinkedList<PanelBase> panelBaseList) {
+        initFromPanelBases(panelBaseList);
+        init();
+    }
+
+    private void initFromPanelBases(List<PanelBase> panelBaseList) {
+        faceList = new LinkedList<>();
+
+        panelBaseList.forEach(e -> faceList.add(e.getFace()));
+    }
+
     @Override
     public void init() {
         initInfo();
         initShape();
         initDir();
+
+        initWidth();
     }
 
     @Override
@@ -65,7 +78,7 @@ public class MergedPanelBase extends PanelBase {
          * 保证合并后的面方向与原本的一致
          */
 
-        if (polygon.getNormal() != origin.get(0).getNormal()){
+        if (polygon.getNormal().getAngle(origin.get(0).getNormal()) > 0.1) {
             polygon = GeoTools.reversePolygon(polygon);
         }
 

@@ -1,20 +1,15 @@
 package input;
 
 import buildingControl.BuildingCreator;
+import buildingControl.FacadeMatcher;
 import facade.basic.BasicObject;
-import facade.unit.styles.F_Example;
-import facade.unit.styles.S_ExtrudeIn;
-import function.Function;
 import guo_cam.CameraController;
 import processing.core.PApplet;
-import renders.BuildingRender;
-import unit2Vol.panelBase.PanelBase;
+import wblut.geom.WB_Point;
+import wblut.geom.WB_Polygon;
 import wblut.processing.WB_Render3D;
 
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * @auther Alessio
@@ -22,7 +17,8 @@ import java.util.Set;
  **/
 public class CreatorTest extends PApplet {
 
-    private String file = "src\\main\\resources\\dxf\\input_test_complete.dxf";
+    private String file = "src\\main\\resources\\dxf\\school01.dxf";
+//    private String file = "src\\main\\resources\\dxf\\school02.dxf";
 
     BuildingCreator bc;
 
@@ -30,9 +26,11 @@ public class CreatorTest extends PApplet {
 
     private WB_Render3D render;
 
-    private BuildingRender buildingRender;
-
     private List<BasicObject> panels;
+
+    private FacadeMatcher facadeMatcher;
+
+    WB_Polygon ground;
 
     public static void main(String[] args) {
         PApplet.main(CreatorTest.class.getName());
@@ -45,43 +43,33 @@ public class CreatorTest extends PApplet {
     public void setup() {
         bc = new BuildingCreator(file);
 
-        panels = new LinkedList<>();
+        facadeMatcher = new FacadeMatcher(bc);
 
         cameraController = new CameraController(this, 10000);
 
         render = new WB_Render3D(this);
 
-        buildingRender = new BuildingRender(this, bc.getBuilding());
+        init();
 
-        initPanels();
+        initGround();
     }
 
-    public void initPanels() {
-        Map<Function, List<PanelBase>> funcBaseMap = bc.getFuncBaseMap();
+    /**
+     * 地面
+     */
+    private void initGround() {
+        WB_Point[] pts = new WB_Point[]{
+                new WB_Point(0, 0, 0),
+                new WB_Point(-0, 100000, 0),
+                new WB_Point(100000, 100000, 0),
+                new WB_Point(100000, 0, 0),
+        };
 
-        Set<Map.Entry<Function, List<PanelBase>>> entries = funcBaseMap.entrySet();
-
-        for (var en : entries) {
-            Function func = en.getKey();
-            List<PanelBase> bases = en.getValue();
-            System.out.println("func ------------>" +func);
-            System.out.println("size _____________>" + bases.size());
-
-            initPanelByBaseFunc(bases, func);
-        }
+        ground = new WB_Polygon(pts);
     }
 
-    private void initPanelByBaseFunc(List<PanelBase> bases, Function function) {
-        switch (function) {
-            case ClassRoom:
-                bases.forEach(e -> panels.add(new S_ExtrudeIn(e.getShape())));
-                break;
-            case Transport:
-                bases.forEach(e -> panels.add(new F_Example(e.getShape())));
-                break;
-            case Stair:
-                bases.forEach(e -> panels.add(new F_Example(e.getShape())));
-        }
+    private void init() {
+        panels = facadeMatcher.getPanels();
     }
 
     public void draw() {
@@ -92,6 +80,10 @@ public class CreatorTest extends PApplet {
             panel.draw(render);
         }
 
+        pushStyle();
+        fill(71, 158, 128);
+        render.drawPolygonEdges(ground);
+        popStyle();
     }
 
 }

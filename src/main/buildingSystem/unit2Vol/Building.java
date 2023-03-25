@@ -331,7 +331,7 @@ public class Building {
      */
     private List<Unit> getNeighborUnits(Unit target, List<Unit> unitList) {
         List<Unit> neighbors = new LinkedList<>();
-        double threshold = calculateDisThreshold(target, 2);
+        double threshold = calculateDisThreshold(target, 10);
         for (Unit other : unitList) {
             if (other.getId() != target.getId()) {
                 double dis = GeoTools.getDistance3D(target.getMidPt(), other.getMidPt());

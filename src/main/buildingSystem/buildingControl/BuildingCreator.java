@@ -4,11 +4,14 @@ import function.Function;
 import input.BuildingInputer;
 import unit2Vol.Building;
 import unit2Vol.face.Face;
+import unit2Vol.panelBase.MergedPanelBase;
 import unit2Vol.panelBase.PanelBase;
 import unit2Vol.panelBase.SimplePanelBase;
 import unit2Vol.panelBase.SplitPanelBase;
 import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Segment;
+import wblut.geom.WB_Vector;
+import wblut.math.WB_Epsilon;
 
 import java.util.*;
 
@@ -25,11 +28,12 @@ public class BuildingCreator {
      */
     private String file;
 
-    private double height = 3500;
+    private double height = 3000;
 
     private Building building;
 
     private Map<Function, List<PanelBase>> funcBaseMap;
+
 
     public BuildingCreator(String file) {
         this.file = file;
@@ -73,7 +77,9 @@ public class BuildingCreator {
 
         initInnerWall();
 
-        // TODO: 2023/3/23  roof, inner walls, floor
+        initFloor();
+
+        mergeByFuc(Function.Open);
     }
 
     /**
@@ -94,12 +100,66 @@ public class BuildingCreator {
         }
     }
 
-    private void initRoof() {
+    private void mergeByFuc(Function func) {
+        List<PanelBase> baseList = funcBaseMap.get(func);
+        List<PanelBase> stairsMerge = getMergeFacesByFunc(baseList);
+        funcBaseMap.replace(func, stairsMerge);
+    }
 
+    /**
+     * 合并同向的指定功能的PanelBase
+     *
+     * @param bases
+     * @return
+     */
+    private List<PanelBase> getMergeFacesByFunc(List<PanelBase> bases) {
+        List<PanelBase> result = new LinkedList<>();
+
+        Map<WB_Vector, List<PanelBase>> map = new HashMap<>();
+        WB_Epsilon.EPSILON = 1;
+
+        for (var base : bases) {
+            WB_Vector dir = base.getDir();
+            if (map.containsKey(dir)) {
+                map.get(dir).add(base);
+            } else {
+                List<PanelBase> pbs = new LinkedList<>();
+                pbs.add(base);
+                map.put(dir, pbs);
+            }
+        }
+
+        Set<Map.Entry<WB_Vector, List<PanelBase>>> entries = map.entrySet();
+        for (var entry : entries) {
+            List<PanelBase> value = entry.getValue();
+            System.out.println(entry.getKey());
+            System.out.println(value.size());
+            result.add(new MergedPanelBase((LinkedList<PanelBase>) value));
+        }
+
+        return result;
+    }
+
+    private void initRoof() {
+        List<PanelBase> panelBases = funcBaseMap.get(Function.Roof);
+
+        List<PanelBase> roofBaseList = building.getRoofBaseList();
+
+        panelBases.addAll(roofBaseList);
     }
 
     private void initInnerWall() {
+        List<PanelBase> panelBases = funcBaseMap.get(Function.InnerWall);
 
+        List<PanelBase> innerWallBase = building.getInnerWallBaseList();
+        panelBases.addAll(innerWallBase);
+    }
+
+    private void initFloor() {
+        List<PanelBase> panelBases = funcBaseMap.get(Function.Floor);
+
+        List<PanelBase> list = building.getFloorBaseList();
+        panelBases.addAll(list);
     }
 
     /**
@@ -113,13 +173,16 @@ public class BuildingCreator {
         List<PanelBase> panelBases = map.get(function);
         switch (function) {
             case ClassRoom:
-                panelBases.addAll(new SplitPanelBase(face, new double[]{0.5}).getPanelBases());
+                panelBases.addAll(getPanelBaseByLength(face));
                 break;
             case Transport:
                 panelBases.addAll(getPanelBaseByLength(face));
                 break;
             case Stair:
                 panelBases.add(new SimplePanelBase(face));
+            case Open:
+                panelBases.add(new SimplePanelBase(face));
+
         }
     }
 
@@ -140,14 +203,34 @@ public class BuildingCreator {
             if (s.getLength() > maxL) maxL = s.getLength();
         }
 
-        if (maxL <= 4000) {
-            result.add(new SimplePanelBase(face));
-        } else if (maxL > 4000 && maxL <= 8000) {
-            result.addAll(new SplitPanelBase(face, new double[]{0.5}).getPanelBases());
-        } else {
-            result.addAll(new SplitPanelBase(face, new double[]{0.25, 0.5, 0.75}).getPanelBases());
+        double[] pattern = splitPatternByLength(maxL, 5000);
+        List<SimplePanelBase> bases = new SplitPanelBase(face, pattern).getPanelBases();
+
+        result.addAll(bases);
+
+        return result;
+    }
+
+    /**
+     * 设定face分割的阈值，获取split的数组
+     *
+     * @param sideLength
+     * @param divideL
+     * @return
+     */
+    private double[] splitPatternByLength(double sideLength, double divideL) {
+        int num = (int) Math.ceil(sideLength / divideL);
+
+        double[] result = new double[num - 1];
+        double step = 1.0 / num;
+
+        if (num > 1) {
+            for (int i = 0; i < num - 1; i++) {
+                result[i] = step * (i + 1);
+            }
         }
 
+//        System.out.println("pattern : " + Arrays.toString(result));
         return result;
     }
 

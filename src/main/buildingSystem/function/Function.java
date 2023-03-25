@@ -9,10 +9,20 @@ package function;
 public enum Function {
 
     Default("default"),
+
     ClassRoom("classroom"),
+
     Stair("stair"),
+
     Transport("transport"),
-    Roof("roof");
+
+    Roof("roof"),
+
+    InnerWall("innerWall"),
+
+    Floor("floor"),
+
+    Open("open");
 
     private String function;
 

@@ -98,7 +98,6 @@ public class BuildingInputer {
             }
         }
 
-        System.out.println("unit num" + units.size());
     }
 
     private void funcByColor(Unit unit, Integer color) {
@@ -111,6 +110,9 @@ public class BuildingInputer {
                 break;
             case 3:
                 unit.syncFunc(Function.Stair);
+                break;
+            case 4:
+                unit.syncFunc(Function.Open);
                 break;
             default:
                 unit.syncFunc(Function.Default);

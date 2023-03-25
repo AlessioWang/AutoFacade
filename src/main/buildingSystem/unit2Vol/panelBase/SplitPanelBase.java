@@ -1,9 +1,10 @@
 package unit2Vol.panelBase;
 
-import org.junit.Test;
 import unit2Vol.face.Face;
-import unit2Vol.face.RndFace;
-import wblut.geom.*;
+import wblut.geom.WB_Point;
+import wblut.geom.WB_Polygon;
+import wblut.geom.WB_Segment;
+import wblut.geom.WB_Vector;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -103,6 +104,7 @@ public class SplitPanelBase extends PanelBase {
         WB_Point p1 = face.getShape().getPoint(1);
         WB_Point p2 = face.getShape().getPoint(2);
         result.add(new WB_Polygon(tempOrigin, p1, p2, tempEnd));
+
 
         return result;
     }

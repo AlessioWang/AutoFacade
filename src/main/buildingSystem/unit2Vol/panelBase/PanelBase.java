@@ -3,7 +3,10 @@ package unit2Vol.panelBase;
 import Tools.GeoTools;
 import function.Function;
 import unit2Vol.Building;
+import unit2Vol.face.Face;
 import wblut.geom.*;
+
+import java.util.List;
 
 /**
  * 由face中的基本几何信息组合或者拆分的Class
@@ -15,6 +18,8 @@ import wblut.geom.*;
  * @date 2022/12/12
  **/
 public abstract class PanelBase {
+    protected Face face;
+
     protected WB_Polygon shape;
 
     protected Building building;
@@ -22,6 +27,8 @@ public abstract class PanelBase {
     protected WB_Vector dir;
 
     protected Function function;
+
+    protected double widthLength;
 
     public PanelBase() {
 
@@ -54,6 +61,22 @@ public abstract class PanelBase {
         shape = GeoTools.reversePolygon(shape);
     }
 
+    public void initWidth() {
+        List<WB_Segment> segments = shape.toSegments();
+        WB_Vector vz = new WB_Vector(0, 0, 1);
+
+        for (WB_Segment segment : segments) {
+            WB_Vector dir = (WB_Vector) segment.getDirection();
+            dir.normalizeSelf();
+
+            double area = Math.abs(vz.cross(dir).normalizeSelf());
+            if (area > 0.01) {
+                widthLength = segment.getLength();
+                return;
+            }
+        }
+    }
+
     public WB_Polygon getShape() {
         return shape;
     }
@@ -70,7 +93,15 @@ public abstract class PanelBase {
         return function;
     }
 
+    public Face getFace() {
+        return face;
+    }
+
     public void setFunction(Function function) {
         this.function = function;
+    }
+
+    public double getWidthLength() {
+        return widthLength;
     }
 }

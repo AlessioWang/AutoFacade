@@ -1,7 +1,7 @@
 package input;
 
 import facade.basic.BasicObject;
-import facade.unit.styles.S_ExtrudeIn;
+import facade.unit.styles.F_TwoWindow;
 import guo_cam.CameraController;
 import processing.core.PApplet;
 import renders.BuildingRender;
@@ -63,11 +63,12 @@ public class UnionTest extends PApplet {
         List<Face> wallAbleFaces = building.getWallAbleFaces();
         List<Face> unionFaces = new LinkedList<>();
 
-        wallAbleFaces.stream().filter(e -> Objects.equals(e.getDir(), new WB_Vector(0, -1, 0))).forEach(unionFaces::add);
+        wallAbleFaces.stream().filter(e -> Objects.equals(e.getDir(), new WB_Vector(1, 0, 0))).forEach(unionFaces::add);
 
         MergedPanelBase mergedPanelBase = new MergedPanelBase(unionFaces);
 
-        panels.add(new S_ExtrudeIn(mergedPanelBase.getShape()));
+//        panels.add(new F_OneHole(mergedPanelBase.getShape()));
+        panels.add(new F_TwoWindow(mergedPanelBase.getShape()));
 
         System.out.println("sss " + panels.size());
     }
@@ -80,7 +81,7 @@ public class UnionTest extends PApplet {
             panel.draw(render);
         }
 
-        buildingRender.renderAll();
+//        buildingRender.renderAll();
     }
 
 
