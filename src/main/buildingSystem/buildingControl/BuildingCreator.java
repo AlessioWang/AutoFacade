@@ -28,7 +28,7 @@ public class BuildingCreator {
      */
     private String file;
 
-    private double height = 3000;
+    private double height = 4000;
 
     private Building building;
 
@@ -37,6 +37,13 @@ public class BuildingCreator {
 
     public BuildingCreator(String file) {
         this.file = file;
+
+        init();
+    }
+
+    public BuildingCreator(String file, double height) {
+        this.file = file;
+        this.height = height;
 
         init();
     }
@@ -173,10 +180,10 @@ public class BuildingCreator {
         List<PanelBase> panelBases = map.get(function);
         switch (function) {
             case ClassRoom:
-                panelBases.addAll(getPanelBaseByLength(face));
+                panelBases.addAll(getPanelBaseByLength(face, 5000));
                 break;
             case Transport:
-                panelBases.addAll(getPanelBaseByLength(face));
+                panelBases.addAll(getPanelBaseByLength(face, 8000));
                 break;
             case Stair:
                 panelBases.add(new SimplePanelBase(face));
@@ -192,7 +199,7 @@ public class BuildingCreator {
      * @param face
      * @return
      */
-    private List<PanelBase> getPanelBaseByLength(Face face) {
+    private List<PanelBase> getPanelBaseByLength(Face face,double length) {
         List<PanelBase> result = new LinkedList<>();
 
         WB_Polygon shape = face.getShape();
@@ -203,7 +210,7 @@ public class BuildingCreator {
             if (s.getLength() > maxL) maxL = s.getLength();
         }
 
-        double[] pattern = splitPatternByLength(maxL, 5000);
+        double[] pattern = splitPatternByLength(maxL, length);
         List<SimplePanelBase> bases = new SplitPanelBase(face, pattern).getPanelBases();
 
         result.addAll(bases);

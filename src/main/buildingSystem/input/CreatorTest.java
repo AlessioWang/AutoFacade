@@ -17,7 +17,8 @@ import java.util.List;
  **/
 public class CreatorTest extends PApplet {
 
-    private String file = "src\\main\\resources\\dxf\\school01.dxf";
+//    private String file = "src\\main\\resources\\dxf\\school01.dxf";
+    private String file = "src\\main\\resources\\dxf\\schoolsmall.dxf";
 //    private String file = "src\\main\\resources\\dxf\\school02.dxf";
 
     BuildingCreator bc;
@@ -30,7 +31,7 @@ public class CreatorTest extends PApplet {
 
     private FacadeMatcher facadeMatcher;
 
-    WB_Polygon ground;
+    private WB_Polygon ground;
 
     public static void main(String[] args) {
         PApplet.main(CreatorTest.class.getName());
@@ -41,11 +42,11 @@ public class CreatorTest extends PApplet {
     }
 
     public void setup() {
-        bc = new BuildingCreator(file);
+        bc = new BuildingCreator(file, 4000);
 
         facadeMatcher = new FacadeMatcher(bc);
 
-        cameraController = new CameraController(this, 10000);
+        cameraController = new CameraController(this, 5000);
 
         render = new WB_Render3D(this);
 

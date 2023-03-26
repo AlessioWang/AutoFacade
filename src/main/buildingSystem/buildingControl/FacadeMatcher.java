@@ -1,6 +1,7 @@
 package buildingControl;
 
 import facade.basic.BasicObject;
+import facade.unit.sjStyles.S_Corner_Component_Lib;
 import facade.unit.styles.*;
 import function.Function;
 import unit2Vol.panelBase.PanelBase;
@@ -56,11 +57,13 @@ public class FacadeMatcher {
         switch (function) {
             case ClassRoom:
                 setPanelStyleByLength(bases, 4000);
-//                bases.forEach(e -> panels.add(new S_Corner_Component_Lib(e.getShape())));
                 bases.forEach(e -> panels.add(new F_TwoWindow(e.getShape())));
                 break;
             case Transport:
-                bases.forEach(e -> panels.add(new F_WindowArray(e.getShape())));
+                setPanelStyleByLength(bases, 4000);
+                bases.forEach(e -> panels.add(new S_Corner_Component_Lib(e.getShape())));
+//                bases.forEach(e -> panels.add(new S_Corner_Component_Lib(e.getShape())));
+//                bases.forEach(e -> panels.add(new S_Quad_Hole(e.getShape())));
                 break;
             case Stair:
                 bases.forEach(e -> panels.add(new F_Example(e.getShape())));
@@ -75,6 +78,7 @@ public class FacadeMatcher {
                 bases.forEach(e -> panels.add(new SimplePanel(e.getShape(), 200)));
                 break;
             case Open:
+                setPanelStyleByLength(bases, 8500);
                 bases.forEach(e -> panels.add(new F_OneHole(e.getShape())));
                 break;
         }
