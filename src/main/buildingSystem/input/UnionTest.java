@@ -1,7 +1,7 @@
 package input;
 
 import facade.basic.BasicObject;
-import facade.unit.styles.RoofSimple;
+import facade.unit.sjStyles.S_Corner_Frame_Component_Lib_;
 import guo_cam.CameraController;
 import processing.core.PApplet;
 import renders.BuildingRender;
@@ -68,12 +68,12 @@ public class UnionTest extends PApplet {
 
         List<Face> unionFaces = new LinkedList<>();
 
-        wallAbleFaces.stream().filter(e -> Objects.equals(e.getDir(), new WB_Vector(0, 0, 1))).forEach(unionFaces::add);
+        wallAbleFaces.stream().filter(e -> Objects.equals(e.getDir(), new WB_Vector(0, -1, 0))).forEach(unionFaces::add);
 
         MergedPanelBase mergedPanelBase = new MergedPanelBase(unionFaces);
 
         List<PanelBase> roofBaseList = building.getFloorBaseList();
-        panels.add(new RoofSimple(mergedPanelBase.getShape()));
+        panels.add(new S_Corner_Frame_Component_Lib_(mergedPanelBase.getShape()));
 //        panels.add(new RoofSimple(roofBaseList.get(0).getShape()));
 
     }
