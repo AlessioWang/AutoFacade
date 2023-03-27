@@ -1,13 +1,14 @@
 package input;
 
 import facade.basic.BasicObject;
-import facade.unit.styles.F_TwoWindow;
+import facade.unit.styles.RoofSimple;
 import guo_cam.CameraController;
 import processing.core.PApplet;
 import renders.BuildingRender;
 import unit2Vol.Building;
 import unit2Vol.face.Face;
 import unit2Vol.panelBase.MergedPanelBase;
+import unit2Vol.panelBase.PanelBase;
 import wblut.geom.WB_Vector;
 import wblut.processing.WB_Render3D;
 
@@ -46,6 +47,8 @@ public class UnionTest extends PApplet {
     public void setup() {
         cameraController = new CameraController(this, 10000);
 
+        cameraController.getCamera().setPerspective(false);
+
         render = new WB_Render3D(this);
 
         buildingInputer = new BuildingInputer(file, 3500);
@@ -60,22 +63,24 @@ public class UnionTest extends PApplet {
     }
 
     public void init() {
-        List<Face> wallAbleFaces = building.getWallAbleFaces();
+        List<Face> wallAbleFaces = building.getAllPanelableFaces();
+
+
         List<Face> unionFaces = new LinkedList<>();
 
-        wallAbleFaces.stream().filter(e -> Objects.equals(e.getDir(), new WB_Vector(1, 0, 0))).forEach(unionFaces::add);
+        wallAbleFaces.stream().filter(e -> Objects.equals(e.getDir(), new WB_Vector(0, 0, 1))).forEach(unionFaces::add);
 
         MergedPanelBase mergedPanelBase = new MergedPanelBase(unionFaces);
 
-//        panels.add(new F_OneHole(mergedPanelBase.getShape()));
-        panels.add(new F_TwoWindow(mergedPanelBase.getShape()));
+        List<PanelBase> roofBaseList = building.getFloorBaseList();
+        panels.add(new RoofSimple(mergedPanelBase.getShape()));
+//        panels.add(new RoofSimple(roofBaseList.get(0).getShape()));
 
-        System.out.println("sss " + panels.size());
     }
 
     public void draw() {
         background(255);
-        cameraController.drawSystem(10000);
+//        cameraController.drawSystem(10000);
 
         for (var panel : panels) {
             panel.draw(render);

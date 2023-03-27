@@ -183,7 +183,7 @@ public class BuildingCreator {
                 panelBases.addAll(getPanelBaseByLength(face, 5000));
                 break;
             case Transport:
-                panelBases.addAll(getPanelBaseByLength(face, 8000));
+                panelBases.addAll(getPanelBaseByLength(face, 5000));
                 break;
             case Stair:
                 panelBases.add(new SimplePanelBase(face));

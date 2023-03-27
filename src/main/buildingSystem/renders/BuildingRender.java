@@ -75,4 +75,16 @@ public class BuildingRender {
             ur.renderPanelShape();
         }
     }
+
+    public void renderInnerGeo() {
+        for (UnitRender ur : unitRenders) {
+            ur.renderInnerShape();
+        }
+    }
+
+    public void renderBaseBoundary() {
+        for (UnitRender ur : unitRenders) {
+            ur.renderBaseBoundary();
+        }
+    }
 }

@@ -278,7 +278,6 @@ public class SimpleTest01 extends PApplet {
                 } else
                     panels.add(new RecBeam(b.getSegment(), RecBeam.BeamType.Side));
             }
-//            beams.forEach(e -> panels.add(new RecBeam(e.getSegment(), RecBeam.BeamType.Side)));
         }
     }
 

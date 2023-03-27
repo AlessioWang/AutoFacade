@@ -1,5 +1,6 @@
 package renders;
 
+import function.Function;
 import processing.core.PApplet;
 import unit2Vol.Unit;
 import unit2Vol.face.Face;
@@ -36,13 +37,47 @@ public class UnitRender {
 
     private List<WB_Polygon> panelFaceShapes;
 
+    private List<WB_Polygon> innerFaceShapes;
+
+    private List<WB_Polygon> unitBoundaryShapes;
+
+    private Function function;
+
+    //red
+    private int[] classColor;
+
+    //blue
+    private int[] openColor;
+
+    //yellow
+    private int[] transColor;
+
+    //green
+    private int[] stairColor;
+
     public UnitRender(PApplet applet, Unit unit) {
         this.applet = applet;
         this.unit = unit;
 
         render = new WB_Render(applet);
 
+        initColor();
+        initFunc();
         initGeos();
+    }
+
+    private void initColor() {
+        classColor = new int[]{239, 0, 23};
+
+        openColor = new int[]{57, 130, 159};
+
+        transColor = new int[]{255, 226, 141};
+
+        stairColor = new int[]{71, 158, 128};
+    }
+
+    private void initFunc() {
+        function = unit.getFunction();
     }
 
     /**
@@ -64,6 +99,8 @@ public class UnitRender {
         topPt = unit.getTopFace().getMidPos();
 
         initPanelFaceGeos();
+        initInnerFaceGeos();
+        initUnitBoundary();
     }
 
     /**
@@ -75,18 +112,68 @@ public class UnitRender {
         unit.getAllFaces().stream().filter(Face::isIfPanel).forEach(e -> panelFaceShapes.add(e.getShape()));
     }
 
+
+    /**
+     * 初始化ifPanel为false的geos
+     */
+    private void initInnerFaceGeos() {
+        innerFaceShapes = new LinkedList<>();
+
+        unit.getAllFaces().stream().filter(e -> !e.isIfPanel()).forEach(e -> innerFaceShapes.add(e.getShape()));
+    }
+
+    /**
+     * 底面轮廓
+     */
+    private void initUnitBoundary() {
+        unitBoundaryShapes = new LinkedList<>();
+
+        unitBoundaryShapes.add(unit.getRealBase());
+    }
+
+    public void renderInnerShape() {
+        applet.pushStyle();
+        applet.fill(124, 149, 234, 240);
+        for (WB_Polygon p : innerFaceShapes) {
+            render.drawPolygonEdges(p);
+        }
+        applet.popStyle();
+    }
+
     public void renderPanelShape() {
         applet.pushStyle();
-        applet.fill(100, 100, 0, 90);
+        applet.fill(89, 194, 101, 240);
         for (WB_Polygon p : panelFaceShapes) {
             render.drawPolygonEdges(p);
         }
         applet.popStyle();
     }
 
+    /**
+     * 根据功能着色
+     */
+    private void fillColor(int alpha) {
+        switch (function) {
+            case ClassRoom:
+                applet.fill(classColor[0], classColor[1], classColor[2], alpha);
+                break;
+            case Transport:
+                applet.fill(transColor[0], transColor[1], transColor[2], alpha);
+                break;
+            case Open:
+                applet.fill(openColor[0], openColor[1], openColor[2], alpha);
+                break;
+            case Stair:
+                applet.fill(stairColor[0], stairColor[1], stairColor[2], alpha);
+                break;
+            default:
+                applet.fill(100, 100, 100, alpha);
+        }
+    }
+
     public void renderRndShape() {
         applet.pushStyle();
-        applet.fill(0, 100, 0, 30);
+        fillColor(200);
         for (WB_Polygon p : rndShapes) {
             render.drawPolygonEdges(p);
         }
@@ -95,14 +182,23 @@ public class UnitRender {
 
     public void renderTopShape() {
         applet.pushStyle();
-        applet.fill(100, 0, 0, 50);
+        fillColor(150);
         render.drawPolygonEdges(topShape);
         applet.popStyle();
     }
 
     public void renderBottomShape() {
         applet.pushStyle();
-        applet.fill(0, 0, 100, 50);
+        fillColor(150);
+        render.drawPolygonEdges(bottomShape);
+        applet.popStyle();
+    }
+
+    public void renderBaseBoundary() {
+        applet.pushStyle();
+        applet.noFill();
+        applet.strokeWeight(3);
+        applet.stroke(150, 0, 0);
         render.drawPolygonEdges(bottomShape);
         applet.popStyle();
     }
@@ -140,11 +236,11 @@ public class UnitRender {
      * 除了panel geo信息
      */
     public void renderAll() {
-        renderRndShape();
+//        renderRndShape();
         renderRndShape();
         renderTopShape();
         renderBottomShape();
-        renderFaceMidPt();
+//        renderFaceMidPt();
         renderPosPt();
         renderId();
     }

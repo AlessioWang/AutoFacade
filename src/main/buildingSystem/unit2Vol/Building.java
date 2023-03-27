@@ -7,10 +7,7 @@ import unit2Vol.face.Face;
 import unit2Vol.panelBase.MergedPanelBase;
 import unit2Vol.panelBase.PanelBase;
 import unit2Vol.panelBase.SimplePanelBase;
-import wblut.geom.WB_Point;
-import wblut.geom.WB_Polygon;
-import wblut.geom.WB_Segment;
-import wblut.geom.WB_Vector;
+import wblut.geom.*;
 
 import java.util.*;
 
@@ -38,6 +35,11 @@ public class Building {
     private Map<Double, List<Beam>> beamMap;
 
     /**
+     * 存储每层柱子的信息
+     */
+    private Map<Double, List<WB_Point>> columnBaseMap;
+
+    /**
      * 层数
      */
     private int layerNumber;
@@ -51,7 +53,6 @@ public class Building {
      * 记录每一层的楼板信息
      */
     private Map<Double, List<Face>> floorMap;
-
 
     // TODO: 2022/11/13 需要研究更加合理地定义阈值方式
     /**
@@ -101,6 +102,9 @@ public class Building {
 
         //初始化每层的beam信息
         initBeam();
+
+        //初始化每层column信息
+        initColumn();
 
         //给Unit的rndUnitMap赋值
         setNeiUnitMap();
@@ -157,6 +161,9 @@ public class Building {
         return result;
     }
 
+    /**
+     * 初始化梁的信息
+     */
     private void initBeam() {
         beamMap = new HashMap<>();
 
@@ -183,6 +190,27 @@ public class Building {
             }
 
             beamMap.put(set.getKey(), beams);
+        }
+    }
+
+    /**
+     * 初始化柱子信息
+     */
+    private void initColumn() {
+        columnBaseMap = new HashMap<>();
+
+        for (var set : eachFloorUnits.entrySet()) {
+            double h = set.getKey();
+
+            List<Unit> units = set.getValue();
+
+            List<WB_Coord> coords = new LinkedList<>();
+            units.forEach(e -> coords.addAll(e.getRealBase().getPoints().toList()));
+
+            List<WB_Point> pts = new LinkedList<>();
+            coords.forEach(e -> pts.add(new WB_Point(e.xd(), e.yd(), e.zd())));
+
+            columnBaseMap.put(h, pts);
         }
 
     }
@@ -629,6 +657,7 @@ public class Building {
         }
     }
 
+
     public List<Unit> getUnitList() {
         return unitList;
     }
@@ -691,5 +720,9 @@ public class Building {
 
     public Map<Double, List<Beam>> getBeamMap() {
         return beamMap;
+    }
+
+    public Map<Double, List<WB_Point>> getColumnBaseMap() {
+        return columnBaseMap;
     }
 }
