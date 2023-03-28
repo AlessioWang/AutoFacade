@@ -187,9 +187,13 @@ public class BuildingCreator {
                 break;
             case Stair:
                 panelBases.add(new SimplePanelBase(face));
+                break;
             case Open:
                 panelBases.add(new SimplePanelBase(face));
-
+                break;
+            case Handrail:
+                panelBases.add(new SimplePanelBase(face));
+                break;
         }
     }
 
@@ -199,7 +203,7 @@ public class BuildingCreator {
      * @param face
      * @return
      */
-    private List<PanelBase> getPanelBaseByLength(Face face,double length) {
+    private List<PanelBase> getPanelBaseByLength(Face face, double length) {
         List<PanelBase> result = new LinkedList<>();
 
         WB_Polygon shape = face.getShape();

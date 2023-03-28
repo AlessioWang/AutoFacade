@@ -1,6 +1,7 @@
 package buildingControl;
 
 import facade.basic.BasicObject;
+import facade.basic.Material;
 import facade.unit.sjStyles.S_Corner_Component_Lib;
 import facade.unit.styles.*;
 import function.Function;
@@ -80,7 +81,7 @@ public class FacadeMatcher {
         for (var entry : entries) {
             List<WB_Point> pts = entry.getValue();
 
-            pts.forEach(e->panels.add(new ColumnSimple(e, 4000, 500)) );
+            pts.forEach(e -> panels.add(new ColumnSimple(e, 4000, 400)));
         }
     }
 
@@ -88,27 +89,65 @@ public class FacadeMatcher {
         switch (function) {
             case ClassRoom:
                 setPanelStyleByLength(bases, 4200);
-                bases.forEach(e -> panels.add(new F_TwoWindow(e.getShape())));
+                try {
+//                    bases.forEach(e -> panels.add(new F_TwoWindow(e.getShape())));
+                    bases.forEach(e -> panels.add(new S_ExtrudeIn(e.getShape())));
+                } catch (Exception ignored) {
+                    System.out.println("Classroom wrong");
+                }
                 break;
             case Transport:
-                setPanelStyleByLength(bases, 4000);
-                bases.forEach(e -> panels.add(new S_Corner_Component_Lib(e.getShape())));
+                setPanelStyleByLength(bases, 3000);
+                try {
+                    bases.forEach(e -> panels.add(new S_Corner_Component_Lib(e.getShape())));
+                } catch (Exception ignored) {
+                    System.out.println("Transport wrong");
+                }
                 break;
             case Stair:
-                bases.forEach(e -> panels.add(new F_Example(e.getShape())));
-                break;
-            case Roof:
-                bases.forEach(e -> panels.add(new RoofSimple(e.getShape())));
-                break;
-            case InnerWall:
-                bases.forEach(e -> panels.add(new SimplePanel(e.getShape(), 50)));
-                break;
-            case Floor:
-                bases.forEach(e -> panels.add(new SimplePanel(e.getShape(), 200)));
+                try {
+//                    bases.forEach(e -> panels.add(new F_Example(e.getShape())));
+                    bases.forEach(e -> panels.add(new F_WindowArray(e.getShape())));
+                } catch (Exception ignored) {
+                    System.out.println("Stair wrong");
+                }
                 break;
             case Open:
                 setPanelStyleByLength(bases, 8500);
-                bases.forEach(e -> panels.add(new F_OneHole(e.getShape())));
+                try {
+                    F_OneHole.material = Material.DarkGray;
+                    bases.forEach(e -> panels.add(new F_OneHole(e.getShape())));
+                } catch (Exception ignored) {
+                    System.out.println("Open wrong");
+                }
+                break;
+            case Roof:
+                try {
+                    bases.forEach(e -> panels.add(new RoofSimple(e.getShape())));
+                } catch (Exception ignored) {
+                    System.out.println("Roof wrong");
+                }
+                break;
+            case InnerWall:
+                try {
+                    bases.forEach(e -> panels.add(new SimplePanel(e.getShape(), 50)));
+                } catch (Exception ignored) {
+                    System.out.println("InnerWall wrong");
+                }
+                break;
+            case Floor:
+                try {
+                    bases.forEach(e -> panels.add(new SimplePanel(e.getShape(), 200)));
+                } catch (Exception ignored) {
+                    System.out.println("Floor wrong");
+                }
+                break;
+            case Handrail:
+                try {
+                    bases.forEach(e -> panels.add(new Handrail(e.getShape())));
+                } catch (Exception ignored) {
+                    System.out.println("Handrail wrong");
+                }
                 break;
         }
     }

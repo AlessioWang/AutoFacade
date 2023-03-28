@@ -24,9 +24,10 @@ import java.util.Set;
  **/
 public class CreatorTest extends PApplet {
 
-    //    private String file = "src\\main\\resources\\dxf\\school01.dxf";
-    private String file = "src\\main\\resources\\dxf\\schoolsmall.dxf";
-//    private String file = "src\\main\\resources\\dxf\\school02.dxf";
+        private String file = "src\\main\\resources\\dxf\\school01.dxf";
+//    private String file = "src\\main\\resources\\dxf\\schoolsmall.dxf";
+//    private String file = "src\\main\\resources\\dxf\\schoolBig.dxf";
+//    private String file = "src\\main\\resources\\dxf\\schoolBigWithRail.dxf";
 
     BuildingCreator bc;
 
@@ -113,10 +114,15 @@ public class CreatorTest extends PApplet {
      */
     private void initGround() {
         WB_Point[] pts = new WB_Point[]{
-                new WB_Point(0, 0, 0),
-                new WB_Point(-0, 100000, 0),
+//                new WB_Point(0, 0, 0),
+//                new WB_Point(-0, 150000, 0),
+//                new WB_Point(150000, 150000, 0),
+//                new WB_Point(150000, 0, 0),
+
+                new WB_Point(-100000, -100000, 0),
+                new WB_Point(-100000, 100000, 0),
                 new WB_Point(100000, 100000, 0),
-                new WB_Point(100000, 0, 0),
+                new WB_Point(100000, -100000, 0),
         };
 
         ground = new WB_Polygon(pts);
@@ -130,7 +136,7 @@ public class CreatorTest extends PApplet {
 
     public void draw() {
         background(255);
-        cameraController.drawSystem(10000);
+//        cameraController.drawSystem(10000);
         cameraController.getCamera().setPerspective(isPerspective);
 
         for (var panel : panels) {

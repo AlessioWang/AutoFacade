@@ -114,6 +114,9 @@ public class BuildingInputer {
             case 4:
                 unit.syncFunc(Function.Open);
                 break;
+            case 5:
+                unit.syncFunc(Function.Handrail);
+                break;
             default:
                 unit.syncFunc(Function.Default);
         }

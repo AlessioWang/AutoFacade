@@ -22,7 +22,9 @@ public enum Function {
 
     Floor("floor"),
 
-    Open("open");
+    Open("open"),
+
+    Handrail("handrail");
 
     private String function;
 

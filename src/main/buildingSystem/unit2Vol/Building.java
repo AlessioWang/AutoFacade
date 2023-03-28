@@ -205,7 +205,11 @@ public class Building {
             List<Unit> units = set.getValue();
 
             List<WB_Coord> coords = new LinkedList<>();
-            units.forEach(e -> coords.addAll(e.getRealBase().getPoints().toList()));
+//            units.forEach(e -> coords.addAll(e.getRealBase().getPoints().toList()));
+            /**
+             * 临时出图
+             */
+            units.stream().filter(e -> e.getFunction() == Function.Stair).forEach(e -> coords.addAll(e.getRealBase().getPoints().toList()));
 
             List<WB_Point> pts = new LinkedList<>();
             coords.forEach(e -> pts.add(new WB_Point(e.xd(), e.yd(), e.zd())));
@@ -600,7 +604,9 @@ public class Building {
 
         // 所有类型为stair的单元都不拥有楼板
         List<Unit> floorUnits = new LinkedList<>();
+//        unitList.stream().filter(e -> e.getFunction() != Function.Stair).forEach(floorUnits::add);
         unitList.stream().filter(e -> e.getFunction() != Function.Stair).forEach(floorUnits::add);
+//        unitList.stream().filter(e -> e.getFunction() == Function.Handrail).forEach(floorUnits::add);
 
         for (var u : floorUnits) {
             List<Face> allFaces = u.getAllFaces();
