@@ -209,7 +209,7 @@ public class Building {
             /**
              * 临时出图
              */
-            units.stream().filter(e -> e.getFunction() == Function.Stair).forEach(e -> coords.addAll(e.getRealBase().getPoints().toList()));
+            units.stream().filter(e -> e.getFunction() == Function.Transport).forEach(e -> coords.addAll(e.getRealBase().getPoints().toList()));
 
             List<WB_Point> pts = new LinkedList<>();
             coords.forEach(e -> pts.add(new WB_Point(e.xd(), e.yd(), e.zd())));
@@ -604,14 +604,13 @@ public class Building {
 
         // 所有类型为stair的单元都不拥有楼板
         List<Unit> floorUnits = new LinkedList<>();
-//        unitList.stream().filter(e -> e.getFunction() != Function.Stair).forEach(floorUnits::add);
         unitList.stream().filter(e -> e.getFunction() != Function.Stair).forEach(floorUnits::add);
-//        unitList.stream().filter(e -> e.getFunction() == Function.Handrail).forEach(floorUnits::add);
 
         for (var u : floorUnits) {
             List<Face> allFaces = u.getAllFaces();
             for (var face : allFaces) {
-                if (!face.isIfPanel() && (face.getDir().equals(new WB_Vector(0, 0, 1)))) {
+                if (Math.abs(face.getMidPos().zd() - 0) < 10
+                        || (!face.isIfPanel() && (face.getDir().equals(new WB_Vector(0, 0, 1))))) {
 
                     double zd = face.getMidPos().zd();
                     if (floorMap.containsKey(zd)) {
@@ -628,10 +627,16 @@ public class Building {
         initFloorBase();
     }
 
+
     private void initFloorBase() {
         floorBaseList = new LinkedList<>();
 
+        /**
+         * 出图修改
+         */
         Arrays.stream(floorMap.values().toArray()).forEach(e -> floorBaseList.add(new MergedPanelBase((List<Face>) e)));
+
+//        floorMap.values().forEach(e -> e.forEach(f -> floorBaseList.add(new SimplePanelBase(f))));
     }
 
     /**

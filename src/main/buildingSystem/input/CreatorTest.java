@@ -24,10 +24,10 @@ import java.util.Set;
  **/
 public class CreatorTest extends PApplet {
 
-        private String file = "src\\main\\resources\\dxf\\school01.dxf";
+//        private String file = "src\\main\\resources\\dxf\\school01.dxf";
 //    private String file = "src\\main\\resources\\dxf\\schoolsmall.dxf";
 //    private String file = "src\\main\\resources\\dxf\\schoolBig.dxf";
-//    private String file = "src\\main\\resources\\dxf\\schoolBigWithRail.dxf";
+    private String file = "src\\main\\resources\\dxf\\schoolBigWithRail.dxf";
 
     BuildingCreator bc;
 
