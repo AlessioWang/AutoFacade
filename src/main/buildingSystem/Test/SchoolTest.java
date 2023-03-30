@@ -97,7 +97,7 @@ public class SchoolTest extends PApplet {
 //        System.out.println("building01 h : " + building01.getHeight());
 //        System.out.println("building02 h : " + building02.getHeight());
 
-        HashMap<WB_Vector, List<Unit>> map = unit.getUnitMap();
+        HashMap<WB_Vector, List<Unit>> map = unit.getUnitNeiMap();
 
         System.out.println("-----------------------------");
         System.out.println("target unit: " + unitNum);

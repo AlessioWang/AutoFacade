@@ -24,10 +24,11 @@ import java.util.Set;
  **/
 public class CreatorTest extends PApplet {
 
-//        private String file = "src\\main\\resources\\dxf\\school01.dxf";
+    //        private String file = "src\\main\\resources\\dxf\\school01.dxf";
 //    private String file = "src\\main\\resources\\dxf\\schoolsmall.dxf";
 //    private String file = "src\\main\\resources\\dxf\\schoolBig.dxf";
-    private String file = "src\\main\\resources\\dxf\\schoolBigWithRail.dxf";
+//    private String file = "src\\main\\resources\\dxf\\schoolBigWithRail.dxf";
+    private String file = "src\\main\\resources\\dxf\\schoolRound.dxf";
 
     BuildingCreator bc;
 
@@ -51,6 +52,7 @@ public class CreatorTest extends PApplet {
 
     public void settings() {
         size(1500, 800, P3D);
+        smooth(5);
     }
 
     public void setup() {
@@ -60,7 +62,7 @@ public class CreatorTest extends PApplet {
 
         facadeMatcher = new FacadeMatcher(bc);
 
-        cameraController = new CameraController(this, 5000);
+        cameraController = new CameraController(this, 15000);
 
 //        cameraController.getCamera().setFovy(0.1);
 
@@ -79,7 +81,7 @@ public class CreatorTest extends PApplet {
         List<Unit> unitList = building.getUnitList();
 
         for (Unit u : unitList) {
-            HashMap<WB_Vector, List<Unit>> unitMap = u.getUnitMap();
+            HashMap<WB_Vector, List<Unit>> unitMap = u.getUnitNeiMap();
 
             int id = u.getId();
             Set<Map.Entry<WB_Vector, List<Unit>>> entries = unitMap.entrySet();
@@ -134,6 +136,13 @@ public class CreatorTest extends PApplet {
 
     boolean isPerspective = false;
 
+    private void renderGround() {
+        pushStyle();
+        fill(71, 158, 128);
+        render.drawPolygonEdges(ground);
+        popStyle();
+    }
+
     public void draw() {
         background(255);
 //        cameraController.drawSystem(10000);
@@ -143,10 +152,7 @@ public class CreatorTest extends PApplet {
             panel.draw(render);
         }
 
-        pushStyle();
-        fill(71, 158, 128);
-        render.drawPolygonEdges(ground);
-        popStyle();
+        renderGround();
 
 //        br.renderAll();
 

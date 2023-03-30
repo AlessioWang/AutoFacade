@@ -362,8 +362,8 @@ public class Building {
      * @return
      */
     private List<Unit> getNeighborUnits(Unit target, List<Unit> unitList) {
-        List<Unit> neighbors = new LinkedList<>();
-        double threshold = calculateDisThreshold(target, 10);
+        Set<Unit> neighbors = new HashSet<>();
+        double threshold = calculateDisThreshold(target, 50);
         for (Unit other : unitList) {
             if (other.getId() != target.getId()) {
                 double dis = GeoTools.getDistance3D(target.getMidPt(), other.getMidPt());
@@ -379,9 +379,13 @@ public class Building {
                     }
                 }
             }
-        }
 
-        return neighbors;
+
+        }
+        List<Unit> result = new LinkedList<>();
+        result.addAll(neighbors);
+
+        return result;
     }
 
     /**
@@ -389,7 +393,7 @@ public class Building {
      */
     private void setNeiUnitMap() {
         for (Unit target : unitList) {
-            HashMap map = target.getUnitMap();
+            HashMap map = target.getUnitNeiMap();
             List<Unit> neighbors = getNeighborUnits(target, unitList);
 
             List<WB_Vector> vectors = new LinkedList<>();
@@ -415,7 +419,7 @@ public class Building {
         Face face = target.getFaceDirMap().get(vector);
 
         for (Unit unit : neighbors) {
-            HashMap<WB_Vector, List<Unit>> rndUnitMap = unit.getUnitMap();
+            HashMap<WB_Vector, List<Unit>> rndUnitMap = unit.getUnitNeiMap();
             HashMap<WB_Vector, Face> dirFaceMap = unit.getFaceDirMap();
             Set<WB_Vector> vectors = rndUnitMap.keySet();
             for (WB_Vector v : vectors) {

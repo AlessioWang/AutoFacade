@@ -48,7 +48,7 @@ public class Unit {
     private Unit right;
 
     //this unit周边的unit信息
-    private HashMap<WB_Vector, List<Unit>> unitMap;
+    private HashMap<WB_Vector, List<Unit>> unitNeiMap;
 
     //this unit的方向与face的映射关系
     private HashMap<WB_Vector, Face> faceDirMap;
@@ -116,18 +116,18 @@ public class Unit {
      * 将周边的每个面的vector作为key，value为一个空List
      */
     private void initRndUnitMap() {
-        unitMap = new HashMap<>();
+        unitNeiMap = new HashMap<>();
         faceDirMap = new HashMap<>();
 
-        unitMap.put(new WB_Vector(0, 0, 1), new LinkedList<>());
+        unitNeiMap.put(new WB_Vector(0, 0, 1), new LinkedList<>());
         faceDirMap.put(new WB_Vector(0, 0, 1), topFace);
 
-        unitMap.put(new WB_Vector(0, 0, -1), new LinkedList<>());
+        unitNeiMap.put(new WB_Vector(0, 0, -1), new LinkedList<>());
         faceDirMap.put(new WB_Vector(0, 0, -1), bottomFace);
 
         for (Face face : allFaces) {
             WB_Vector dir = face.getDir();
-            unitMap.put(dir, new LinkedList<>());
+            unitNeiMap.put(dir, new LinkedList<>());
             faceDirMap.put(dir, face);
         }
     }
@@ -148,7 +148,7 @@ public class Unit {
         for (Face face : allFaces) {
             WB_Vector dir = face.getDir();
             //对应的list长度为0，证明无相邻的unit
-            if (unitMap.get(dir).size() == 0) {
+            if (unitNeiMap.get(dir).size() == 0) {
                 face.setIfPanel(true);
             }
         }
@@ -221,7 +221,7 @@ public class Unit {
     private List<Face> getNeighborFaces(Face face) {
         WB_Vector faceDir = face.getDir();
         //获取相邻方向的unit列表
-        List<Unit> units = unitMap.get(faceDir);
+        List<Unit> units = unitNeiMap.get(faceDir);
 
         List<Face> neiFaces = new LinkedList<>();
         for (var unit : units) {
@@ -369,8 +369,8 @@ public class Unit {
         this.building = building;
     }
 
-    public HashMap<WB_Vector, List<Unit>> getUnitMap() {
-        return unitMap;
+    public HashMap<WB_Vector, List<Unit>> getUnitNeiMap() {
+        return unitNeiMap;
     }
 
     public HashMap<WB_Vector, Face> getFaceDirMap() {

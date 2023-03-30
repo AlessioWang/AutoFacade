@@ -3,6 +3,7 @@ package buildingControl;
 import function.Function;
 import input.BuildingInputer;
 import unit2Vol.Building;
+import unit2Vol.Unit;
 import unit2Vol.face.Face;
 import unit2Vol.panelBase.MergedPanelBase;
 import unit2Vol.panelBase.PanelBase;
@@ -109,16 +110,19 @@ public class BuildingCreator {
 
     private void mergeByFuc(Function func) {
         List<PanelBase> baseList = funcBaseMap.get(func);
-        List<PanelBase> stairsMerge = getMergeFacesByFunc(baseList);
+//        List<PanelBase> stairsMerge = getMergeFacesByFunc(baseList);
+        List<PanelBase> stairsMerge = getMergeByNei(baseList);
         funcBaseMap.replace(func, stairsMerge);
     }
 
     /**
      * 合并同向的指定功能的PanelBase
+     * 问题：同方向上只能有一个合并的样式
      *
      * @param bases
      * @return
      */
+    @Deprecated
     private List<PanelBase> getMergeFacesByFunc(List<PanelBase> bases) {
         List<PanelBase> result = new LinkedList<>();
 
@@ -139,10 +143,70 @@ public class BuildingCreator {
         Set<Map.Entry<WB_Vector, List<PanelBase>>> entries = map.entrySet();
         for (var entry : entries) {
             List<PanelBase> value = entry.getValue();
-            System.out.println(entry.getKey());
-            System.out.println(value.size());
             result.add(new MergedPanelBase((LinkedList<PanelBase>) value));
         }
+
+        return result;
+    }
+
+    /**
+     * 从相邻关系来合并
+     *
+     * @return
+     */
+    private List<PanelBase> getMergeByNei(List<PanelBase> bases) {
+        List<PanelBase> result = new LinkedList<>();
+
+        //记录所有面的方向，便于分类
+        Map<WB_Vector, List<PanelBase>> dirMap = new HashMap();
+        for (var panelBase : bases) {
+            WB_Vector dir = panelBase.getDir();
+            if (dirMap.containsKey(dir)) {
+                dirMap.get(dir).add(panelBase);
+            } else {
+                List<PanelBase> list = new LinkedList<>();
+                list.add(panelBase);
+                dirMap.put(dir, list);
+            }
+        }
+
+        Set<Map.Entry<WB_Vector, List<PanelBase>>> entries = dirMap.entrySet();
+        for (var en : entries) {
+            List<PanelBase> panels = en.getValue();
+
+            HashMap<PanelBase, Integer> map = new HashMap<>();
+            //value -> 1 未被添加
+            //value -> 0 已被添加
+            panels.forEach(e -> map.put(e, 1));
+
+            for (var base : map.keySet()) {
+                if (map.get(base) == 1) {
+                    Set<PanelBase> merge = new HashSet<>();
+                    Unit unit = base.getUnit();
+                    merge.add(base);
+
+                    HashMap<WB_Vector, List<Unit>> unitNeiMap = unit.getUnitNeiMap();
+                    //所有相邻的unit
+                    Set<Unit> neighborSet = new HashSet<>();
+                    unitNeiMap.values().forEach(e -> neighborSet.addAll(e));
+
+                    for (var b : panels) {
+                        if (neighborSet.contains(b.getUnit())) {
+                            merge.add(b);
+                            map.replace(b, 0);
+//                        //添加到相邻单元
+//                        Unit u = b.getUnit();
+//                        u.getUnitNeiMap().values().forEach(e->neighborSet.addAll(e));
+                        }
+                    }
+                    System.out.println("ssss " + merge.size());
+                    LinkedList<PanelBase> panelBases = new LinkedList<>(merge);
+
+                    result.add(new MergedPanelBase(panelBases));
+                }
+            }
+        }
+
 
         return result;
     }
@@ -180,10 +244,11 @@ public class BuildingCreator {
         List<PanelBase> panelBases = map.get(function);
         switch (function) {
             case ClassRoom:
-                panelBases.addAll(getPanelBaseByLength(face, 5000));
+                panelBases.addAll(getPanelBaseByLength(face, 7000));
                 break;
             case Transport:
-                panelBases.addAll(getPanelBaseByLength(face, 5000));
+                panelBases.addAll(getPanelBaseByLength(face, 10000));
+                panelBases.add(new SimplePanelBase(face));
                 break;
             case Stair:
                 panelBases.add(new SimplePanelBase(face));

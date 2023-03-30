@@ -16,6 +16,7 @@ public class SimplePanelBase extends PanelBase {
         init();
 
         initWidth();
+        initUnit();
     }
 
     public SimplePanelBase(Face face, WB_Polygon polygon) {
@@ -26,6 +27,7 @@ public class SimplePanelBase extends PanelBase {
         initDir();
 
         initWidth();
+        initUnit();
     }
 
 
@@ -69,5 +71,9 @@ public class SimplePanelBase extends PanelBase {
 
     public Face getFace() {
         return face;
+    }
+
+    public void initUnit(){
+        this.unit = face.getUnit();
     }
 }

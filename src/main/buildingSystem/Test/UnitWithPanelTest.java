@@ -73,7 +73,7 @@ public class UnitWithPanelTest extends PApplet {
     private void checkInfo() {
         Unit unit = building01.getUnitList().get(4);
 
-        HashMap<WB_Vector, List<Unit>> map = unit.getUnitMap();
+        HashMap<WB_Vector, List<Unit>> map = unit.getUnitNeiMap();
 
         for (Map.Entry<WB_Vector, List<Unit>> entry : map.entrySet()) {
             System.out.println(entry.getKey());

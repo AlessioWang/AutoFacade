@@ -87,4 +87,10 @@ public class BuildingRender {
             ur.renderBaseBoundary();
         }
     }
+
+    public void renderBottom() {
+        for (UnitRender ur : unitRenders) {
+            ur.renderBottomShape();
+        }
+    }
 }

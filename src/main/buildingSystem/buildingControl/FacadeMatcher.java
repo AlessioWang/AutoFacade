@@ -13,7 +13,10 @@ import unit2Vol.panelBase.PanelBase;
 import unit2Vol.panelBase.SimplePanelBase;
 import wblut.geom.WB_Point;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * 根据BuildingCreator的信息，与面板样式匹配
@@ -91,26 +94,28 @@ public class FacadeMatcher {
             case ClassRoom:
                 replaceSimpleByWidth(bases, 4200);
                 try {
-//                    bases.forEach(e -> panels.add(new F_TwoWindow(e.getShape())));
-                    bases.forEach(e -> panels.add(new S_ExtrudeIn(e.getShape())));
+                    bases.forEach(e -> panels.add(new F_TwoWindow(e.getShape())));
+//                    bases.forEach(e -> panels.add(new S_ExtrudeIn(e.getShape())));
                 } catch (Exception ignored) {
                     System.out.println("Classroom wrong");
                 }
                 break;
             case Transport:
 //                replaceSimpleByWidth(bases, 3000);
-                replaceHandRailByWidth(bases, 3000);
+//                replaceHandRailByWidth(bases, 3000);
                 try {
 //                    bases.forEach(e -> panels.add(new S_Corner_Component_Lib(e.getShape())));
-                    bases.forEach(e -> panels.add(new Handrail(e.getShape())));
+                    F_OneWindow.extended_distance = 300;
+                    bases.forEach(e -> panels.add(new F_OneWindow(e.getShape())));
+//                    bases.forEach(e -> panels.add(new Handrail(e.getShape())));
                 } catch (Exception ignored) {
                     System.out.println("Transport wrong");
                 }
                 break;
             case Stair:
                 try {
-//                    bases.forEach(e -> panels.add(new F_Example(e.getShape())));
-                    bases.forEach(e -> panels.add(new F_WindowArray(e.getShape())));
+                    bases.forEach(e -> panels.add(new F_Example(e.getShape())));
+//                    bases.forEach(e -> panels.add(new F_WindowArray(e.getShape())));
                 } catch (Exception ignored) {
                     System.out.println("Stair wrong");
                 }

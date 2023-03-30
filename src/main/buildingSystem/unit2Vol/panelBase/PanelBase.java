@@ -3,6 +3,7 @@ package unit2Vol.panelBase;
 import Tools.GeoTools;
 import function.Function;
 import unit2Vol.Building;
+import unit2Vol.Unit;
 import unit2Vol.face.Face;
 import wblut.geom.*;
 
@@ -29,6 +30,8 @@ public abstract class PanelBase {
     protected Function function;
 
     protected double widthLength;
+
+    protected Unit unit;
 
     public PanelBase() {
 
@@ -77,6 +80,13 @@ public abstract class PanelBase {
         }
     }
 
+    public Unit getUnit() {
+        return unit;
+    }
+
+    public void initUnit() {
+    }
+
     public WB_Polygon getShape() {
         return shape;
     }
@@ -104,4 +114,6 @@ public abstract class PanelBase {
     public double getWidthLength() {
         return widthLength;
     }
+
+
 }

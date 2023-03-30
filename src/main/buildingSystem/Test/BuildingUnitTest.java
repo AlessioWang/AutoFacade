@@ -63,7 +63,7 @@ public class BuildingUnitTest extends PApplet {
 
         Unit unit = build.getUnitList().get(0);
 
-        HashMap<WB_Vector, List<Unit>> map = unit.getUnitMap();
+        HashMap<WB_Vector, List<Unit>> map = unit.getUnitNeiMap();
 
         for (Map.Entry<WB_Vector, List<Unit>> entry : map.entrySet()) {
             System.out.println("face vec : " + entry.getKey());

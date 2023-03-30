@@ -1,11 +1,11 @@
 package unit2Vol.panelBase;
 
 import Tools.GeoTools;
-import org.eclipse.collections.impl.bimap.mutable.HashBiMap;
 import unit2Vol.Unit;
 import unit2Vol.face.Face;
 import wblut.geom.WB_Polygon;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -90,10 +90,10 @@ public class MergedPanelBase extends PanelBase {
      */
     @Override
     public void initInfo() {
-        faceUnitMap = new HashBiMap<>();
+        faceUnitMap = new HashMap<>();
 
         for (Face face : faceList) {
-            faceUnitMap.put(face, face.getUnit());
+                faceUnitMap.put(face, face.getUnit());
         }
 
         building = faceList.get(0).getUnit().getBuilding();
