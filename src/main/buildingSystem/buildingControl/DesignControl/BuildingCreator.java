@@ -1,4 +1,4 @@
-package buildingControl;
+package buildingControl.DesignControl;
 
 import function.Function;
 import input.BuildingInputer;

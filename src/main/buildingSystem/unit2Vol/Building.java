@@ -588,6 +588,8 @@ public class Building {
         List<Face> innerFaces = new LinkedList<>();
 
         List<Face> allFaces = unPanelAbleRndFaces;
+
+        allFaces = removeSamePos(allFaces);
         Set<Face> faces = trimmedFaceMap.keySet();
 
         allFaces.stream().filter(e -> !faces.contains(e)).forEach(innerFaces::add);
@@ -597,6 +599,41 @@ public class Building {
                 innerWallBaseList.add(new SimplePanelBase(face));
             }
         }
+    }
+
+    /**
+     * 去除重复位置的face
+     *
+     * @param faces
+     * @return
+     */
+    private List<Face> removeSamePos(List<Face> faces) {
+        Map<Face, Integer> map = new HashMap<>();
+        faces.forEach(e -> map.put(e, 1));
+
+        for (Face f : faces) {
+            if (map.get(f) == 1) {
+                WB_Point mid = f.getMidPos();
+                for (Face other : faces) {
+                    if (other != f) {
+                        WB_Point otherMid = other.getMidPos();
+                        if (GeoTools.getDistance3D(otherMid, mid) < 1) {
+                            map.replace(other, 0);
+                        }
+                    }
+                }
+            }
+        }
+
+        List<Face> result = new LinkedList<>();
+        Set<Map.Entry<Face, Integer>> entries = map.entrySet();
+        for (var en : entries) {
+            if (en.getValue() == 1) {
+                result.add(en.getKey());
+            }
+        }
+
+        return result;
     }
 
 

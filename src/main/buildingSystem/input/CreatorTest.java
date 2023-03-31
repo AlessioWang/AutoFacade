@@ -1,7 +1,9 @@
 package input;
 
-import buildingControl.BuildingCreator;
-import buildingControl.FacadeMatcher;
+import buildingControl.DataControl.CarbonCalculator;
+import buildingControl.DataControl.Statistics;
+import buildingControl.DesignControl.BuildingCreator;
+import buildingControl.DesignControl.FacadeMatcher;
 import facade.basic.BasicObject;
 import guo_cam.CameraController;
 import processing.core.PApplet;
@@ -25,10 +27,11 @@ import java.util.Set;
 public class CreatorTest extends PApplet {
 
     //        private String file = "src\\main\\resources\\dxf\\school01.dxf";
-//    private String file = "src\\main\\resources\\dxf\\schoolsmall.dxf";
+    private String file = "src\\main\\resources\\dxf\\schoolsmall.dxf";
+//    private String file = "src\\main\\resources\\dxf\\one.dxf";
 //    private String file = "src\\main\\resources\\dxf\\schoolBig.dxf";
 //    private String file = "src\\main\\resources\\dxf\\schoolBigWithRail.dxf";
-    private String file = "src\\main\\resources\\dxf\\schoolRound.dxf";
+//    private String file = "src\\main\\resources\\dxf\\schoolRound.dxf";
 
     BuildingCreator bc;
 
@@ -46,13 +49,17 @@ public class CreatorTest extends PApplet {
 
     private Building building;
 
+    private Statistics statistics;
+
+    private CarbonCalculator carbonCalculator;
+
     public static void main(String[] args) {
         PApplet.main(CreatorTest.class.getName());
     }
 
     public void settings() {
         size(1500, 800, P3D);
-        smooth(5);
+        smooth(0);
     }
 
     public void setup() {
@@ -62,21 +69,28 @@ public class CreatorTest extends PApplet {
 
         facadeMatcher = new FacadeMatcher(bc);
 
-        cameraController = new CameraController(this, 15000);
+        statistics = new Statistics(facadeMatcher);
+        System.out.println(statistics);
 
-//        cameraController.getCamera().setFovy(0.1);
+        carbonCalculator = new CarbonCalculator(statistics);
+        System.out.println(carbonCalculator);
+
+        cameraController = new CameraController(this, 15000);
 
         render = new WB_Render3D(this);
 
         br = new BuildingRender(this, building);
 
-        init();
+        panels = facadeMatcher.getPanels();
 
         initGround();
 
 //        getNeiUnits();
     }
 
+    /**
+     * 出数据用
+     */
     private void getNeiUnits() {
         List<Unit> unitList = building.getUnitList();
 
@@ -130,10 +144,6 @@ public class CreatorTest extends PApplet {
         ground = new WB_Polygon(pts);
     }
 
-    private void init() {
-        panels = facadeMatcher.getPanels();
-    }
-
     boolean isPerspective = false;
 
     private void renderGround() {
@@ -152,7 +162,7 @@ public class CreatorTest extends PApplet {
             panel.draw(render);
         }
 
-        renderGround();
+//        renderGround();
 
 //        br.renderAll();
 

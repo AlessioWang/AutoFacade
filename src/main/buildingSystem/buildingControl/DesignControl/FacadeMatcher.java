@@ -1,7 +1,8 @@
-package buildingControl;
+package buildingControl.DesignControl;
 
 import facade.basic.BasicObject;
 import facade.basic.Material;
+import facade.unit.sjStyles.S_Corner_Component_Lib;
 import facade.unit.styles.*;
 import function.Function;
 import function.PosType;
@@ -56,8 +57,12 @@ public class FacadeMatcher {
 
             initPanelByBaseFunc(bases, func);
 //            initOutSimple(bases, func);
+//            initTest(bases, func);
 
-            addBottom();
+            /**
+             * 加底 有bug
+             */
+//            addBottom();
         }
     }
 
@@ -189,6 +194,16 @@ public class FacadeMatcher {
         }
     }
 
+    private void initTest(List<PanelBase> bases, Function function) {
+        switch (function) {
+            case Stair:
+                PanelBase panelBase = bases.get(0);
+                panels.add(new S_Corner_Component_Lib(panelBase.getShape()));
+                break;
+        }
+    }
+
+
     private void replaceSimpleByWidth(List<PanelBase> bases, double widthThreshold) {
         List<PanelBase> recorder = new LinkedList<>();
 
@@ -230,7 +245,7 @@ public class FacadeMatcher {
         Map<Double, List<Unit>> eachFloorUnits = building.getEachFloorUnits();
         Set<Map.Entry<Double, List<Unit>>> entries = eachFloorUnits.entrySet();
 
-        for (var en :entries ) {
+        for (var en : entries) {
             List<Unit> units = en.getValue();
 
             List<Face> bottoms = new LinkedList<>();
@@ -241,6 +256,9 @@ public class FacadeMatcher {
 
             bases.forEach(e -> panels.add(new SimplePanel(e.getShape(), 200)));
         }
+    }
 
+    public BuildingCreator getBc() {
+        return bc;
     }
 }
