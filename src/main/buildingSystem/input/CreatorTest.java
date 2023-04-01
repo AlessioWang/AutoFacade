@@ -1,9 +1,10 @@
 package input;
 
-import buildingControl.DataControl.CarbonCalculator;
-import buildingControl.DataControl.Statistics;
-import buildingControl.DesignControl.BuildingCreator;
-import buildingControl.DesignControl.FacadeMatcher;
+import buildingControl.dataControl.calculator.CarbonCalculator;
+import buildingControl.dataControl.Statistics;
+import buildingControl.dataControl.calculator.PriceCalculator;
+import buildingControl.designControl.BuildingCreator;
+import buildingControl.designControl.FacadeMatcher;
 import facade.basic.BasicObject;
 import guo_cam.CameraController;
 import processing.core.PApplet;
@@ -53,6 +54,8 @@ public class CreatorTest extends PApplet {
 
     private CarbonCalculator carbonCalculator;
 
+    private PriceCalculator priceCalculator;
+
     public static void main(String[] args) {
         PApplet.main(CreatorTest.class.getName());
     }
@@ -74,6 +77,9 @@ public class CreatorTest extends PApplet {
 
         carbonCalculator = new CarbonCalculator(statistics);
         System.out.println(carbonCalculator);
+
+        priceCalculator = new PriceCalculator(statistics);
+        System.out.println(priceCalculator);
 
         cameraController = new CameraController(this, 15000);
 

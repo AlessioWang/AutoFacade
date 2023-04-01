@@ -1,4 +1,4 @@
-package buildingControl.DesignControl;
+package buildingControl.designControl;
 
 import facade.basic.BasicObject;
 import facade.basic.Material;
@@ -29,6 +29,14 @@ public class FacadeMatcher {
 
     private List<BasicObject> panels;
 
+    private List<BasicObject> outPanels;
+
+    private List<BasicObject> innerPanels;
+
+    private List<BasicObject> roofPanels;
+
+    private List<BasicObject> floorPanels;
+
     private BuildingCreator bc;
 
     public FacadeMatcher(BuildingCreator bc) {
@@ -38,12 +46,29 @@ public class FacadeMatcher {
     }
 
     private void init() {
-        panels = new LinkedList<>();
 
+        initList();
         initPanels();
 
 //        initBeams();
 //        initColumn();
+
+        addAllPanels();
+    }
+
+    private void initList() {
+        panels = new LinkedList<>();
+        outPanels = new LinkedList<>();
+        innerPanels = new LinkedList<>();
+        roofPanels = new LinkedList<>();
+        floorPanels = new LinkedList<>();
+    }
+
+    private void addAllPanels() {
+        panels.addAll(outPanels);
+        panels.addAll(innerPanels);
+        panels.addAll(roofPanels);
+        panels.addAll(floorPanels);
     }
 
     private void initPanels() {
@@ -66,40 +91,12 @@ public class FacadeMatcher {
         }
     }
 
-    private void initBeams() {
-        Building building = bc.getBuilding();
-        Map<Double, List<Beam>> beamMap = building.getBeamMap();
-
-        Set<Map.Entry<Double, List<Beam>>> entries = beamMap.entrySet();
-        for (var entry : entries) {
-            List<Beam> beams = entry.getValue();
-            for (Beam b : beams) {
-                if (b.getPosType() == PosType.Center) {
-                    panels.add(new RecBeam(b.getSegment(), RecBeam.BeamType.Center));
-                } else
-                    panels.add(new RecBeam(b.getSegment(), RecBeam.BeamType.Side));
-            }
-        }
-    }
-
-    private void initColumn() {
-        Building building = bc.getBuilding();
-        Map<Double, List<WB_Point>> columnBaseMap = building.getColumnBaseMap();
-
-        Set<Map.Entry<Double, List<WB_Point>>> entries = columnBaseMap.entrySet();
-        for (var entry : entries) {
-            List<WB_Point> pts = entry.getValue();
-
-            pts.forEach(e -> panels.add(new ColumnSimple(e, 4000, 400)));
-        }
-    }
-
     private void initPanelByBaseFunc(List<PanelBase> bases, Function function) {
         switch (function) {
             case ClassRoom:
                 replaceSimpleByWidth(bases, 4200);
                 try {
-                    bases.forEach(e -> panels.add(new F_TwoWindow(e.getShape())));
+                    bases.forEach(e -> outPanels.add(new F_TwoWindow(e.getShape())));
 //                    bases.forEach(e -> panels.add(new S_ExtrudeIn(e.getShape())));
                 } catch (Exception ignored) {
                     System.out.println("Classroom wrong");
@@ -111,7 +108,7 @@ public class FacadeMatcher {
                 try {
 //                    bases.forEach(e -> panels.add(new S_Corner_Component_Lib(e.getShape())));
                     F_OneWindow.extended_distance = 300;
-                    bases.forEach(e -> panels.add(new F_OneWindow(e.getShape())));
+                    bases.forEach(e -> outPanels.add(new F_OneWindow(e.getShape())));
 //                    bases.forEach(e -> panels.add(new Handrail(e.getShape())));
                 } catch (Exception ignored) {
                     System.out.println("Transport wrong");
@@ -119,7 +116,7 @@ public class FacadeMatcher {
                 break;
             case Stair:
                 try {
-                    bases.forEach(e -> panels.add(new F_Example(e.getShape())));
+                    bases.forEach(e -> outPanels.add(new F_Example(e.getShape())));
 //                    bases.forEach(e -> panels.add(new F_WindowArray(e.getShape())));
                 } catch (Exception ignored) {
                     System.out.println("Stair wrong");
@@ -129,37 +126,37 @@ public class FacadeMatcher {
                 replaceSimpleByWidth(bases, 8500);
                 try {
                     F_OneHole.material = Material.DarkGray;
-                    bases.forEach(e -> panels.add(new F_OneHole(e.getShape())));
+                    bases.forEach(e -> outPanels.add(new F_OneHole(e.getShape())));
                 } catch (Exception ignored) {
                     System.out.println("Open wrong");
                 }
                 break;
+            case Handrail:
+                try {
+                    bases.forEach(e -> outPanels.add(new Handrail(e.getShape())));
+                } catch (Exception ignored) {
+                    System.out.println("Handrail wrong");
+                }
+                break;
             case Roof:
                 try {
-                    bases.forEach(e -> panels.add(new RoofSimple(e.getShape())));
+                    bases.forEach(e -> roofPanels.add(new RoofSimple(e.getShape())));
                 } catch (Exception ignored) {
                     System.out.println("Roof wrong");
                 }
                 break;
             case InnerWall:
                 try {
-                    bases.forEach(e -> panels.add(new SimplePanel(e.getShape(), 50)));
+                    bases.forEach(e -> innerPanels.add(new SimplePanel(e.getShape(), 50)));
                 } catch (Exception ignored) {
                     System.out.println("InnerWall wrong");
                 }
                 break;
             case Floor:
                 try {
-                    bases.forEach(e -> panels.add(new SimplePanel(e.getShape(), 100)));
+                    bases.forEach(e -> floorPanels.add(new SimplePanel(e.getShape(), 100)));
                 } catch (Exception ignored) {
                     System.out.println("Floor wrong");
-                }
-                break;
-            case Handrail:
-                try {
-                    bases.forEach(e -> panels.add(new Handrail(e.getShape())));
-                } catch (Exception ignored) {
-                    System.out.println("Handrail wrong");
                 }
                 break;
         }
@@ -258,7 +255,51 @@ public class FacadeMatcher {
         }
     }
 
+    private void initBeams() {
+        Building building = bc.getBuilding();
+        Map<Double, List<Beam>> beamMap = building.getBeamMap();
+
+        Set<Map.Entry<Double, List<Beam>>> entries = beamMap.entrySet();
+        for (var entry : entries) {
+            List<Beam> beams = entry.getValue();
+            for (Beam b : beams) {
+                if (b.getPosType() == PosType.Center) {
+                    panels.add(new RecBeam(b.getSegment(), RecBeam.BeamType.Center));
+                } else
+                    panels.add(new RecBeam(b.getSegment(), RecBeam.BeamType.Side));
+            }
+        }
+    }
+
+    private void initColumn() {
+        Building building = bc.getBuilding();
+        Map<Double, List<WB_Point>> columnBaseMap = building.getColumnBaseMap();
+
+        Set<Map.Entry<Double, List<WB_Point>>> entries = columnBaseMap.entrySet();
+        for (var entry : entries) {
+            List<WB_Point> pts = entry.getValue();
+
+            pts.forEach(e -> panels.add(new ColumnSimple(e, 4000, 400)));
+        }
+    }
+
     public BuildingCreator getBc() {
         return bc;
+    }
+
+    public List<BasicObject> getOutPanels() {
+        return outPanels;
+    }
+
+    public List<BasicObject> getInnerPanels() {
+        return innerPanels;
+    }
+
+    public List<BasicObject> getRoofPanels() {
+        return roofPanels;
+    }
+
+    public List<BasicObject> getFloorPanels() {
+        return floorPanels;
     }
 }

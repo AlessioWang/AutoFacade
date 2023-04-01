@@ -1,4 +1,4 @@
-package buildingControl.DesignControl;
+package buildingControl.designControl;
 
 import function.Function;
 import input.BuildingInputer;
@@ -199,7 +199,6 @@ public class BuildingCreator {
 //                        u.getUnitNeiMap().values().forEach(e->neighborSet.addAll(e));
                         }
                     }
-                    System.out.println("ssss " + merge.size());
                     LinkedList<PanelBase> panelBases = new LinkedList<>(merge);
 
                     result.add(new MergedPanelBase(panelBases));
@@ -248,7 +247,6 @@ public class BuildingCreator {
                 break;
             case Transport:
                 panelBases.addAll(getPanelBaseByLength(face, 10000));
-                panelBases.add(new SimplePanelBase(face));
                 break;
             case Stair:
                 panelBases.add(new SimplePanelBase(face));
@@ -269,7 +267,6 @@ public class BuildingCreator {
      * @return
      */
     private List<PanelBase> getPanelBaseByLength(Face face, double length) {
-        List<PanelBase> result = new LinkedList<>();
 
         WB_Polygon shape = face.getShape();
         List<WB_Segment> segments = shape.toSegments();
@@ -282,9 +279,7 @@ public class BuildingCreator {
         double[] pattern = splitPatternByLength(maxL, length);
         List<SimplePanelBase> bases = new SplitPanelBase(face, pattern).getPanelBases();
 
-        result.addAll(bases);
-
-        return result;
+        return new LinkedList<>(bases);
     }
 
     /**

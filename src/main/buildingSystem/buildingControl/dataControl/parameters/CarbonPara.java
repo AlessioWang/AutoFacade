@@ -1,4 +1,4 @@
-package buildingControl.DataControl;
+package buildingControl.dataControl.parameters;
 
 /**
  * 与碳排放相关的参数
@@ -20,5 +20,7 @@ public class CarbonPara {
     public final static double NORMALSICONCRETE = 735;
 
     public final static double FLATBGLASS = 1130;
+
+    public final static double STEEL = 2340;
 
 }

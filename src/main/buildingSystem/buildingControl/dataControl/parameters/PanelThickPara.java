@@ -1,4 +1,4 @@
-package buildingControl.DataControl;
+package buildingControl.dataControl.parameters;
 
 /**
  * 构件尺寸相关参数
@@ -7,7 +7,7 @@ package buildingControl.DataControl;
  * @auther Alessio
  * @date 2023/3/31
  **/
-public class PanelPara {
+public class PanelThickPara {
     public final static double FLOORTHICK = 0.15;
 
     public final static double ROOFTHICK = 0.15;

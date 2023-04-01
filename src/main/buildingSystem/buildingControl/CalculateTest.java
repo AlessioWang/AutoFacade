@@ -1,9 +1,9 @@
 package buildingControl;
 
-import buildingControl.DataControl.CarbonCalculator;
-import buildingControl.DataControl.Statistics;
-import buildingControl.DesignControl.BuildingCreator;
-import buildingControl.DesignControl.FacadeMatcher;
+import buildingControl.dataControl.calculator.CarbonCalculator;
+import buildingControl.dataControl.Statistics;
+import buildingControl.designControl.BuildingCreator;
+import buildingControl.designControl.FacadeMatcher;
 import facade.basic.BasicObject;
 import guo_cam.CameraController;
 import processing.core.PApplet;
