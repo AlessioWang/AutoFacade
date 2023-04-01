@@ -34,7 +34,11 @@ public class CarbonCalculator {
 
         double steelCarbon = statistics.getAllSteelWeight() * CarbonPara.STEEL;
 
-        carbon = outCarbon + roofCarbon + innerCarbon + floorCarbon + glassCarbon + alCarbon + steelCarbon ;
+        double beamCarbon = statistics.getBeamConVol() * CarbonPara.C50;
+
+        double columnCarbon = statistics.getColumnConVol() * CarbonPara.C50;
+
+        carbon = beamCarbon + columnCarbon + outCarbon + roofCarbon + innerCarbon + floorCarbon + glassCarbon + alCarbon + steelCarbon;
     }
 
 

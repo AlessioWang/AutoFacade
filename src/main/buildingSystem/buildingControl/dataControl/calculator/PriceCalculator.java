@@ -29,9 +29,13 @@ public class PriceCalculator {
 
         double roofPrice = statistics.getRoofConVol() * PricePara.ROOFPANEL;
 
+        double beamPrice = statistics.getBeamConVol() * PricePara.BEAMPANEL;
+
+        double columnPrice = statistics.getColumnConVol() * PricePara.COLUMNPANEL;
+
         double windowPrice = statistics.getGlassArea() * PricePara.WINDOW;
 
-        priceNoTax = outPrice + innerPrice + floorPrice + roofPrice + windowPrice;
+        priceNoTax = outPrice + innerPrice + floorPrice + roofPrice + windowPrice+beamPrice+columnPrice;
 
         priceInTax = priceNoTax * (1 + PricePara.TAXRATE);
     }

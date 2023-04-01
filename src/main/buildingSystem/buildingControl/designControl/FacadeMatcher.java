@@ -37,6 +37,10 @@ public class FacadeMatcher {
 
     private List<BasicObject> floorPanels;
 
+    private List<BasicObject> beams;
+
+    private List<BasicObject> columns;
+
     private BuildingCreator bc;
 
     public FacadeMatcher(BuildingCreator bc) {
@@ -50,8 +54,8 @@ public class FacadeMatcher {
         initList();
         initPanels();
 
-//        initBeams();
-//        initColumn();
+        initBeams();
+        initColumn();
 
         addAllPanels();
     }
@@ -62,6 +66,8 @@ public class FacadeMatcher {
         innerPanels = new LinkedList<>();
         roofPanels = new LinkedList<>();
         floorPanels = new LinkedList<>();
+        beams = new LinkedList<>();
+        columns = new LinkedList<>();
     }
 
     private void addAllPanels() {
@@ -261,12 +267,12 @@ public class FacadeMatcher {
 
         Set<Map.Entry<Double, List<Beam>>> entries = beamMap.entrySet();
         for (var entry : entries) {
-            List<Beam> beams = entry.getValue();
-            for (Beam b : beams) {
+            List<Beam> bs = entry.getValue();
+            for (Beam b : bs) {
                 if (b.getPosType() == PosType.Center) {
-                    panels.add(new RecBeam(b.getSegment(), RecBeam.BeamType.Center));
+                    beams.add(new RecBeam(b.getSegment(), RecBeam.BeamType.Center));
                 } else
-                    panels.add(new RecBeam(b.getSegment(), RecBeam.BeamType.Side));
+                    beams.add(new RecBeam(b.getSegment(), RecBeam.BeamType.Side));
             }
         }
     }
@@ -279,7 +285,7 @@ public class FacadeMatcher {
         for (var entry : entries) {
             List<WB_Point> pts = entry.getValue();
 
-            pts.forEach(e -> panels.add(new ColumnSimple(e, 4000, 400)));
+            pts.forEach(e -> columns.add(new ColumnSimple(e, 4000, 400)));
         }
     }
 
@@ -301,5 +307,13 @@ public class FacadeMatcher {
 
     public List<BasicObject> getFloorPanels() {
         return floorPanels;
+    }
+
+    public List<BasicObject> getBeams() {
+        return beams;
+    }
+
+    public List<BasicObject> getColumns() {
+        return columns;
     }
 }

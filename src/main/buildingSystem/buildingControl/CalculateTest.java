@@ -2,6 +2,7 @@ package buildingControl;
 
 import buildingControl.dataControl.calculator.CarbonCalculator;
 import buildingControl.dataControl.Statistics;
+import buildingControl.dataControl.calculator.PriceCalculator;
 import buildingControl.designControl.BuildingCreator;
 import buildingControl.designControl.FacadeMatcher;
 import facade.basic.BasicObject;
@@ -37,6 +38,8 @@ public class CalculateTest extends PApplet {
 
     private CarbonCalculator carbonCalculator;
 
+    private PriceCalculator priceCalculator;
+
     private BuildingRender br;
 
     public static void main(String[] args) {
@@ -62,6 +65,9 @@ public class CalculateTest extends PApplet {
 
         carbonCalculator = new CarbonCalculator(statistics);
         System.out.println(carbonCalculator);
+
+        priceCalculator = new PriceCalculator(statistics);
+        System.out.println(priceCalculator);
 
         cameraController = new CameraController(this, 15000);
 

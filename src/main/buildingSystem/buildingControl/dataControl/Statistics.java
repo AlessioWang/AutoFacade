@@ -4,6 +4,8 @@ import buildingControl.dataControl.parameters.PanelThickPara;
 import buildingControl.dataControl.parameters.SteelPara;
 import buildingControl.designControl.FacadeMatcher;
 import facade.basic.BasicObject;
+import facade.unit.styles.ColumnSimple;
+import facade.unit.styles.RecBeam;
 
 import java.util.List;
 
@@ -63,9 +65,9 @@ public class Statistics {
 
     private double alVol;
 
-    private double columnVol;
+    private double columnConVol;
 
-    private double beamVol;
+    private double beamConVol;
 
     /**
      * 钢筋重量
@@ -81,6 +83,10 @@ public class Statistics {
 
     private double roofSteelWeight;
 
+    private double columnSteelWeight;
+
+    private double beamSteelWeight;
+
     public Statistics(FacadeMatcher facadeMatcher) {
         this.fm = facadeMatcher;
 
@@ -89,6 +95,7 @@ public class Statistics {
 
     private void initMaterialArea() {
         List<BasicObject> inner = fm.getInnerPanels();
+
         for (BasicObject p : inner) {
             innerConArea += p.concreteArea;
             glassArea += p.glassArea;
@@ -120,6 +127,22 @@ public class Statistics {
     }
 
 
+    private void initBeamVol() {
+        List<BasicObject> beams = fm.getBeams();
+        for (BasicObject b : beams) {
+            beamConVol += volUnitConvert(((RecBeam) b).concreteVol);
+        }
+
+    }
+
+    private void initColumnVol() {
+        List<BasicObject> columns = fm.getColumns();
+        for (BasicObject b : columns) {
+            columnConVol += volUnitConvert(((ColumnSimple) b).concreteVol);
+        }
+
+    }
+
     private void initData() {
         initNumber();
         initMaterialArea();
@@ -148,6 +171,10 @@ public class Statistics {
 
 
     private void initVol() {
+        initColumnVol();
+
+        initBeamVol();
+
         outConVol = outConArea * PanelThickPara.WALLTHICK;
 
         innerConVol = innerConArea * PanelThickPara.WALLTHICK;
@@ -160,10 +187,11 @@ public class Statistics {
 
         alVol = alArea * PanelThickPara.ALTHICK;
 
-        allConcreteVol = outConVol + innerConVol + roofConVol + floorConVol;
+        allConcreteVol = outConVol + innerConVol + roofConVol + floorConVol + columnConVol + beamConVol;
 
         initSteelVol();
     }
+
 
     /**
      * 由混凝土体积算用钢量
@@ -177,7 +205,11 @@ public class Statistics {
 
         roofSteelWeight = roofConVol * SteelPara.FLOOR;
 
-        allSteelWeight = innerSteelWeight + outSteelWeight + floorSteelWeight + roofSteelWeight;
+        beamSteelWeight = beamConVol * SteelPara.BEAM;
+
+        columnSteelWeight = columnConVol * SteelPara.COLUMN;
+
+        allSteelWeight = innerSteelWeight + outSteelWeight + floorSteelWeight + roofSteelWeight + beamSteelWeight + columnSteelWeight;
     }
 
     /**
@@ -189,6 +221,10 @@ public class Statistics {
      */
     private double areaUnitConvert(double origin) {
         return origin / 1000000;
+    }
+
+    private double volUnitConvert(double origin) {
+        return origin / 1000000000;
     }
 
     public double getAllConcreteVol() {
@@ -227,14 +263,36 @@ public class Statistics {
         return glassArea;
     }
 
+    public double getColumnConVol() {
+        return columnConVol;
+    }
+
+    public double getBeamConVol() {
+        return beamConVol;
+    }
+
+    public int getAllPanelNumber() {
+        return allPanelNumber;
+    }
+
+    public int getOutPanelNumber() {
+        return outPanelNumber;
+    }
+
+    public int getInnerPanelNumber() {
+        return innerPanelNumber;
+    }
+
+    public int getFloorPanelNumber() {
+        return floorPanelNumber;
+    }
+
+    public int getRoofPanelNumber() {
+        return roofPanelNumber;
+    }
+
     @Override
     public String toString() {
-        return "Statistics{" +
-                "allPanelNumber=" + allPanelNumber +
-                ", allConcreteVol=" + allConcreteVol +
-                ", glassVol=" + glassVol +
-                ", alVol=" + alVol +
-                ", allSteelWeight=" + allSteelWeight +
-                '}';
+        return "Statistics{" + "allPanelNumber=" + allPanelNumber + ", allConcreteVol=" + allConcreteVol + ", glassVol=" + glassVol + ", alVol=" + alVol + ", allSteelWeight=" + allSteelWeight + '}';
     }
 }
