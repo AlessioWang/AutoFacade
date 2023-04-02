@@ -29,6 +29,7 @@ public class PricePara {
     public static double COLUMNPANEL = 3828;
 
     //单位：元/平方米
-    public static double WINDOW = 550;
+    public static double WINDOW = 650;
+
 
 }

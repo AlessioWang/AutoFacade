@@ -31,6 +31,10 @@ public class Statistics {
 
     private int roofPanelNumber;
 
+    private int columnNumber;
+
+    private int beamNumber;
+
     /**
      * 面积相关参数
      */
@@ -138,7 +142,8 @@ public class Statistics {
     private void initColumnVol() {
         List<BasicObject> columns = fm.getColumns();
         for (BasicObject b : columns) {
-            columnConVol += volUnitConvert(((ColumnSimple) b).concreteVol);
+            //去掉位置重复
+            columnConVol += volUnitConvert(((ColumnSimple) b).concreteVol)*0.25;
         }
 
     }
@@ -155,6 +160,8 @@ public class Statistics {
         innerPanelNumber = fm.getInnerPanels().size();
         floorPanelNumber = fm.getFloorPanels().size();
         roofPanelNumber = fm.getRoofPanels().size();
+        columnNumber = fm.getColumns().size();
+        beamNumber = fm.getBeams().size();
     }
 
     /**
@@ -291,8 +298,58 @@ public class Statistics {
         return roofPanelNumber;
     }
 
+//    @Override
+//    public String toString() {
+//        return "Statistics{" + "allPanelNumber=" + allPanelNumber + ", allConcreteVol=" + allConcreteVol + ", glassVol=" + glassVol + ", alVol=" + alVol + ", allSteelWeight=" + allSteelWeight + '}';
+//    }
+
+
+//    @Override
+//    public String toString() {
+//        return "Statistics{" +
+//                "outSteelWeight=" + outSteelWeight +
+//                ", innerSteelWeight=" + innerSteelWeight +
+//                ", floorSteelWeight=" + floorSteelWeight +
+//                ", roofSteelWeight=" + roofSteelWeight +
+//                ", columnSteelWeight=" + columnSteelWeight +
+//                ", beamSteelWeight=" + beamSteelWeight +
+//                '}';
+//    }
+
+
     @Override
     public String toString() {
-        return "Statistics{" + "allPanelNumber=" + allPanelNumber + ", allConcreteVol=" + allConcreteVol + ", glassVol=" + glassVol + ", alVol=" + alVol + ", allSteelWeight=" + allSteelWeight + '}';
+        return "Statistics{" +
+                "fm=" + fm +
+                ", allPanelNumber=" + allPanelNumber +
+                ", outPanelNumber=" + outPanelNumber +
+                ", innerPanelNumber=" + innerPanelNumber +
+                ", floorPanelNumber=" + floorPanelNumber +
+                ", roofPanelNumber=" + roofPanelNumber +
+                ", columnNumber=" + columnNumber +
+                ", beamNumber=" + beamNumber +
+                ", outConArea=" + outConArea +
+                ", glassArea=" + glassArea +
+                ", alArea=" + alArea +
+                ", innerConArea=" + innerConArea +
+                ", floorConArea=" + floorConArea +
+                ", roofConArea=" + roofConArea +
+                ", allConcreteVol=" + allConcreteVol +
+                ", outConVol=" + outConVol +
+                ", innerConVol=" + innerConVol +
+                ", floorConVol=" + floorConVol +
+                ", roofConVol=" + roofConVol +
+                ", glassVol=" + glassVol +
+                ", alVol=" + alVol +
+                ", columnConVol=" + columnConVol +
+                ", beamConVol=" + beamConVol +
+                ", allSteelWeight=" + allSteelWeight +
+                ", outSteelWeight=" + outSteelWeight +
+                ", innerSteelWeight=" + innerSteelWeight +
+                ", floorSteelWeight=" + floorSteelWeight +
+                ", roofSteelWeight=" + roofSteelWeight +
+                ", columnSteelWeight=" + columnSteelWeight +
+                ", beamSteelWeight=" + beamSteelWeight +
+                '}';
     }
 }

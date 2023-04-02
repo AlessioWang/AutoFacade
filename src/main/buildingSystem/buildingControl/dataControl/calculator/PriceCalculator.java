@@ -21,23 +21,34 @@ public class PriceCalculator {
     }
 
     private void calculator() {
+        System.out.println("--------------------");
+
         double outPrice = statistics.getOutConVol() * PricePara.OUTPANEL;
+        System.out.println("out " + statistics.getOutConVol() + "-->" + outPrice);
 
         double innerPrice = statistics.getInnerConVol() * PricePara.INNERPANEL;
+        System.out.println("inner " + statistics.getInnerConVol() + "-->" + innerPrice);
 
         double floorPrice = statistics.getFloorConVol() * PricePara.FLOORPANEL;
+        System.out.println("floor " + statistics.getFloorConVol() + "-->" + floorPrice);
 
         double roofPrice = statistics.getRoofConVol() * PricePara.ROOFPANEL;
+        System.out.println("roof " + statistics.getRoofConVol() + "-->" + roofPrice);
 
         double beamPrice = statistics.getBeamConVol() * PricePara.BEAMPANEL;
+        System.out.println("beam " + statistics.getBeamConVol() + "-->" + beamPrice);
 
         double columnPrice = statistics.getColumnConVol() * PricePara.COLUMNPANEL;
+        System.out.println("column " + statistics.getColumnConVol() + "-->" + columnPrice);
 
         double windowPrice = statistics.getGlassArea() * PricePara.WINDOW;
+        System.out.println("windows " + statistics.getGlassArea() + "-->" + windowPrice);
 
-        priceNoTax = outPrice + innerPrice + floorPrice + roofPrice + windowPrice+beamPrice+columnPrice;
+        priceNoTax = outPrice + innerPrice + floorPrice + roofPrice + windowPrice + beamPrice + columnPrice;
 
         priceInTax = priceNoTax * (1 + PricePara.TAXRATE);
+
+        System.out.println("--------------------");
     }
 
     public double getPriceNoTax() {

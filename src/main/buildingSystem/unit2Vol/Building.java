@@ -205,11 +205,11 @@ public class Building {
             List<Unit> units = set.getValue();
 
             List<WB_Coord> coords = new LinkedList<>();
-//            units.forEach(e -> coords.addAll(e.getRealBase().getPoints().toList()));
+            units.forEach(e -> coords.addAll(e.getRealBase().getPoints().toList()));
             /**
              * 临时出图
              */
-            units.stream().filter(e -> e.getFunction() == Function.Transport).forEach(e -> coords.addAll(e.getRealBase().getPoints().toList()));
+//            units.stream().filter(e -> e.getFunction() == Function.Transport).forEach(e -> coords.addAll(e.getRealBase().getPoints().toList()));
 
             List<WB_Point> pts = new LinkedList<>();
             coords.forEach(e -> pts.add(new WB_Point(e.xd(), e.yd(), e.zd())));

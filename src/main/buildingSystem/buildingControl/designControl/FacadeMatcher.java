@@ -75,6 +75,8 @@ public class FacadeMatcher {
         panels.addAll(innerPanels);
         panels.addAll(roofPanels);
         panels.addAll(floorPanels);
+        panels.addAll(beams);
+        panels.addAll(columns);
     }
 
     private void initPanels() {
@@ -101,6 +103,7 @@ public class FacadeMatcher {
         switch (function) {
             case ClassRoom:
                 replaceSimpleByWidth(bases, 4200);
+                System.out.println("class : " + bases.size());
                 try {
                     bases.forEach(e -> outPanels.add(new F_TwoWindow(e.getShape())));
 //                    bases.forEach(e -> panels.add(new S_ExtrudeIn(e.getShape())));
@@ -111,6 +114,7 @@ public class FacadeMatcher {
             case Transport:
 //                replaceSimpleByWidth(bases, 3000);
 //                replaceHandRailByWidth(bases, 3000);
+                System.out.println("Transport : " + bases.size());
                 try {
 //                    bases.forEach(e -> panels.add(new S_Corner_Component_Lib(e.getShape())));
                     F_OneWindow.extended_distance = 300;
@@ -121,6 +125,7 @@ public class FacadeMatcher {
                 }
                 break;
             case Stair:
+                System.out.println("Stair : " + bases.size());
                 try {
                     bases.forEach(e -> outPanels.add(new F_Example(e.getShape())));
 //                    bases.forEach(e -> panels.add(new F_WindowArray(e.getShape())));
@@ -130,6 +135,7 @@ public class FacadeMatcher {
                 break;
             case Open:
                 replaceSimpleByWidth(bases, 8500);
+                System.out.println("Open : " + bases.size());
                 try {
                     F_OneHole.material = Material.DarkGray;
                     bases.forEach(e -> outPanels.add(new F_OneHole(e.getShape())));
@@ -145,6 +151,7 @@ public class FacadeMatcher {
                 }
                 break;
             case Roof:
+                System.out.println("Roof : " + bases.size());
                 try {
                     bases.forEach(e -> roofPanels.add(new RoofSimple(e.getShape())));
                 } catch (Exception ignored) {
@@ -152,6 +159,7 @@ public class FacadeMatcher {
                 }
                 break;
             case InnerWall:
+                System.out.println("innerwall : " + bases.size());
                 try {
                     bases.forEach(e -> innerPanels.add(new SimplePanel(e.getShape(), 50)));
                 } catch (Exception ignored) {
@@ -159,6 +167,7 @@ public class FacadeMatcher {
                 }
                 break;
             case Floor:
+                System.out.println("floor : " + bases.size());
                 try {
                     bases.forEach(e -> floorPanels.add(new SimplePanel(e.getShape(), 100)));
                 } catch (Exception ignored) {
@@ -182,7 +191,7 @@ public class FacadeMatcher {
                 bases.forEach(e -> panels.add(new SimplePanel(e.getShape())));
                 break;
             case Open:
-                replaceSimpleByWidth(bases, 8500);
+                replaceSimpleByWidth(bases, 5000);
                 bases.forEach(e -> panels.add(new SimplePanel(e.getShape())));
                 break;
             case Roof:
@@ -284,8 +293,7 @@ public class FacadeMatcher {
         Set<Map.Entry<Double, List<WB_Point>>> entries = columnBaseMap.entrySet();
         for (var entry : entries) {
             List<WB_Point> pts = entry.getValue();
-
-            pts.forEach(e -> columns.add(new ColumnSimple(e, 4000, 400)));
+            pts.forEach(e -> columns.add(new ColumnSimple(e, 4000, 500)));
         }
     }
 
