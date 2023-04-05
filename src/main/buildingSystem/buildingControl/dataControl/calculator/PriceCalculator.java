@@ -3,6 +3,8 @@ package buildingControl.dataControl.calculator;
 import buildingControl.dataControl.Statistics;
 import buildingControl.dataControl.parameters.PricePara;
 
+import java.math.BigDecimal;
+
 /**
  * @auther Alessio
  * @date 2023/4/1
@@ -14,6 +16,21 @@ public class PriceCalculator {
 
     private Statistics statistics;
 
+    private double outPrice;
+
+    private double innerPrice;
+
+    private double floorPrice;
+
+    private double roofPrice;
+
+    private double beamPrice;
+
+    private double columnPrice;
+
+    private double glassPrice;
+
+
     public PriceCalculator(Statistics statistics) {
         this.statistics = statistics;
 
@@ -21,34 +38,48 @@ public class PriceCalculator {
     }
 
     private void calculator() {
-        System.out.println("--------------------");
 
-        double outPrice = statistics.getOutConVol() * PricePara.OUTPANEL;
-        System.out.println("out " + statistics.getOutConVol() + "-->" + outPrice);
+        outPrice = statistics.getOutConVol() * PricePara.OUTPANEL;
 
-        double innerPrice = statistics.getInnerConVol() * PricePara.INNERPANEL;
-        System.out.println("inner " + statistics.getInnerConVol() + "-->" + innerPrice);
+        innerPrice = statistics.getInnerConVol() * PricePara.INNERPANEL;
 
-        double floorPrice = statistics.getFloorConVol() * PricePara.FLOORPANEL;
-        System.out.println("floor " + statistics.getFloorConVol() + "-->" + floorPrice);
+        floorPrice = statistics.getFloorConVol() * PricePara.FLOORPANEL;
 
-        double roofPrice = statistics.getRoofConVol() * PricePara.ROOFPANEL;
-        System.out.println("roof " + statistics.getRoofConVol() + "-->" + roofPrice);
+        roofPrice = statistics.getRoofConVol() * PricePara.ROOFPANEL;
 
-        double beamPrice = statistics.getBeamConVol() * PricePara.BEAMPANEL;
-        System.out.println("beam " + statistics.getBeamConVol() + "-->" + beamPrice);
+        beamPrice = statistics.getBeamConVol() * PricePara.BEAMPANEL;
 
-        double columnPrice = statistics.getColumnConVol() * PricePara.COLUMNPANEL;
-        System.out.println("column " + statistics.getColumnConVol() + "-->" + columnPrice);
+        columnPrice = statistics.getColumnConVol() * PricePara.COLUMNPANEL;
 
-        double windowPrice = statistics.getGlassArea() * PricePara.WINDOW;
-        System.out.println("windows " + statistics.getGlassArea() + "-->" + windowPrice);
+        glassPrice = statistics.getGlassArea() * PricePara.WINDOW;
 
-        priceNoTax = outPrice + innerPrice + floorPrice + roofPrice + windowPrice + beamPrice + columnPrice;
+        priceNoTax = outPrice + innerPrice + floorPrice + roofPrice + glassPrice + beamPrice + columnPrice;
 
         priceInTax = priceNoTax * (1 + PricePara.TAXRATE);
 
-        System.out.println("--------------------");
+    }
+
+    public void showPrice() {
+        System.out.println("\033[33m");
+        System.out.println("=====================PRICE CALCULATION=======================");
+        System.out.println("ITEM           VOL             PRICE          SUM ");
+
+        //数据部分
+        System.out.println(String.format("%s | %s --> %s | %s", "OUT   ", statistics.getOutConVol(), PricePara.OUTPANEL, outPrice));
+        System.out.println(String.format("%s | %s --> %s | %s", "INNER ", statistics.getInnerConVol(), PricePara.INNERPANEL, innerPrice));
+        System.out.println(String.format("%s | %s --> %s | %s", "FLOOR ", statistics.getFloorConVol(), PricePara.FLOORPANEL, floorPrice));
+        System.out.println(String.format("%s | %s --> %s | %s", "ROOF  ", statistics.getRoofConVol(), PricePara.ROOFPANEL, roofPrice));
+        System.out.println(String.format("%s | %s --> %s | %s", "BEAM  ", statistics.getBeamConVol(), PricePara.BEAMPANEL, beamPrice));
+        System.out.println(String.format("%s | %s --> %s | %s", "COLUMN", statistics.getColumnConVol(), PricePara.COLUMNPANEL, columnPrice));
+        System.out.println(String.format("%s | %s --> %s | %s", "GLASS ", statistics.getGlassArea(), PricePara.WINDOW, glassPrice));
+        System.out.println("----------------------------------------------------------");
+
+        System.out.println(String.format("%s | %s", "SUM(NO TEX) ", new BigDecimal(priceNoTax).toPlainString()));
+        System.out.println(String.format("%s | %s", "SUM(IN TEX) ",new BigDecimal(priceInTax).toPlainString()));
+        System.out.println(String.format("%s | %s", "TEX RATE    ", PricePara.TAXRATE * 100 + "%"));
+
+        System.out.println("=============================================================");
+        System.out.println("\033[0m");
     }
 
     public double getPriceNoTax() {
@@ -58,6 +89,7 @@ public class PriceCalculator {
     public double getPriceInTax() {
         return priceInTax;
     }
+
 
     @Override
     public String toString() {

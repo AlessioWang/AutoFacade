@@ -12,7 +12,7 @@ public class CarbonPara {
 
     public final static double C50 = 385;
 
-    public final static double ALWINDOW = 20300;
+    public final static double AL = 20300;
 
     public final static double STEELWINDOW = 121;
 

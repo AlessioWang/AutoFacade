@@ -248,6 +248,12 @@ public class BuildingCreator {
             case Transport:
                 panelBases.addAll(getPanelBaseByLength(face, 10000));
                 break;
+            case Office:
+                panelBases.add(new SimplePanelBase(face));
+                break;
+            case Toilet:
+                panelBases.add(new SimplePanelBase(face));
+                break;
             case Stair:
                 panelBases.add(new SimplePanelBase(face));
                 break;

@@ -1,8 +1,8 @@
 package buildingControl.dataControl.calculator;
 
+import buildingControl.dataControl.Statistics;
 import buildingControl.dataControl.parameters.CarbonPara;
 import buildingControl.dataControl.parameters.DensityPara;
-import buildingControl.dataControl.Statistics;
 
 /**
  * @auther Alessio
@@ -13,6 +13,29 @@ public class CarbonCalculator {
 
     private Statistics statistics;
 
+    //vol or weight paras
+    private double c30Vol;
+
+    private double c50Vol;
+
+    private double steelWeight;
+
+    private double alWeight;
+
+    private double glassWeight;
+
+    //carbon paras
+
+    private double c30Carbon;
+
+    private double c50Carbon;
+
+    private double glassCarbon;
+
+    private double alCarbon;
+
+    private double steelCarbon;
+
     public CarbonCalculator(Statistics statistics) {
         this.statistics = statistics;
 
@@ -20,31 +43,40 @@ public class CarbonCalculator {
     }
 
     private void calculate() {
-        double outCarbon = statistics.getOutConVol() * CarbonPara.C30;
+        c30Vol = statistics.getOutConVol() + statistics.getInnerConVol();
+        c30Carbon = c30Vol * CarbonPara.C30;
 
-        double innerCarbon = statistics.getInnerConVol() * CarbonPara.C30;
-        System.out.println("c30 " + (outCarbon + innerCarbon));
+        c50Vol = statistics.getRoofConVol() + statistics.getFloorConVol() + statistics.getBeamConVol() + statistics.getColumnConVol();
+        c50Carbon = c50Vol * CarbonPara.C50;
 
-        double roofCarbon = statistics.getRoofConVol() * CarbonPara.C50;
+        steelWeight = statistics.getAllSteelWeight();
+        steelCarbon = steelWeight * CarbonPara.STEEL;
 
-        double floorCarbon = statistics.getFloorConVol() * CarbonPara.C50;
+        glassWeight = statistics.getGlassVol() * DensityPara.GLASS;
+        glassCarbon = glassWeight * CarbonPara.FLATBGLASS;
 
-        double beamCarbon = statistics.getBeamConVol() * CarbonPara.C50;
+        alWeight = statistics.getAlVol() * DensityPara.ALUMINUM;
+        alCarbon = alWeight * CarbonPara.AL;
 
-        double columnCarbon = statistics.getColumnConVol() * CarbonPara.C50;
-        System.out.println("c50 " + (roofCarbon + floorCarbon + beamCarbon + columnCarbon));
+        carbon = c30Carbon + c50Carbon + glassCarbon + alCarbon + steelCarbon;
+    }
 
-        double glassCarbon = statistics.getGlassVol() * DensityPara.GLASS * CarbonPara.FLATBGLASS;
+    public void showCarbon() {
+        System.out.println("\033[33m");
+        System.out.println("=====================CARBON CALCULATION=======================");
+        System.out.println("ITEM           NUM            CARBON          SUM ");
 
-        System.out.println("glass " + glassCarbon);
+        System.out.println(String.format("%s | %s --> %s | %s", "C30   ", c30Vol, CarbonPara.C30, c30Carbon));
+        System.out.println(String.format("%s | %s --> %s | %s", "C50   ", c50Vol, CarbonPara.C50, c50Carbon));
+        System.out.println(String.format("%s | %s --> %s | %s", "STEEL ", steelWeight, CarbonPara.STEEL, steelCarbon));
+        System.out.println(String.format("%s | %s --> %s | %s", "AL    ", alWeight, CarbonPara.AL, alCarbon));
+        System.out.println(String.format("%s | %s --> %s | %s", "GLASS ", glassWeight, CarbonPara.FLATBGLASS, glassCarbon));
+        System.out.println("----------------------------------------------------------");
 
-        double alCarbon = statistics.getAlVol() * DensityPara.ALUMINUM + CarbonPara.ALWINDOW;
-        System.out.println("al " + alCarbon);
+        System.out.println(String.format("%s | %s", "All CARBON ", carbon));
 
-        double steelCarbon = statistics.getAllSteelWeight() * CarbonPara.STEEL;
-        System.out.println("steel " +steelCarbon );
-
-        carbon = beamCarbon + columnCarbon + outCarbon + roofCarbon + innerCarbon + floorCarbon + glassCarbon + alCarbon + steelCarbon;
+        System.out.println("=============================================================");
+        System.out.println("\033[0m");
     }
 
 

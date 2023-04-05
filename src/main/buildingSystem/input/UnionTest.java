@@ -1,7 +1,8 @@
 package input;
 
 import facade.basic.BasicObject;
-import facade.unit.styles.F_OneWindow;
+import facade.basic.Material;
+import facade.unit.styles.F_OneHole;
 import guo_cam.CameraController;
 import processing.core.PApplet;
 import renders.BuildingRender;
@@ -74,9 +75,10 @@ public class UnionTest extends PApplet {
 
         List<PanelBase> roofBaseList = building.getFloorBaseList();
 //        panels.add(new S_Corner_Frame_Component_Lib_(mergedPanelBase.getShape()));
-        F_OneWindow.bottom_height = 2000;
-        F_OneWindow.extended_distance =300;
-        panels.add(new F_OneWindow(mergedPanelBase.getShape()));
+
+        F_OneHole.material = Material.DarkGray;
+        panels.add(new F_OneHole(mergedPanelBase.getShape()));
+
     }
 
     public void draw() {
@@ -88,7 +90,7 @@ public class UnionTest extends PApplet {
         }
 
 //        buildingRender.renderAll();
-        buildingRender.renderBottom();
+//        buildingRender.renderBottom();
     }
 
 

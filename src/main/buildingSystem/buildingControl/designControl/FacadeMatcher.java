@@ -75,8 +75,8 @@ public class FacadeMatcher {
         panels.addAll(innerPanels);
         panels.addAll(roofPanels);
         panels.addAll(floorPanels);
-        panels.addAll(beams);
-        panels.addAll(columns);
+//        panels.addAll(beams);
+//        panels.addAll(columns);
     }
 
     private void initPanels() {
@@ -88,7 +88,11 @@ public class FacadeMatcher {
             Function func = en.getKey();
             List<PanelBase> bases = en.getValue();
 
-            initPanelByBaseFunc(bases, func);
+            initInnerStyle(bases, func);
+
+//            initColorStyle(bases, func);
+            initGrayStyle(bases, func);
+
 //            initOutSimple(bases, func);
 //            initTest(bases, func);
 
@@ -99,50 +103,8 @@ public class FacadeMatcher {
         }
     }
 
-    private void initPanelByBaseFunc(List<PanelBase> bases, Function function) {
+    private void initInnerStyle(List<PanelBase> bases, Function function) {
         switch (function) {
-            case ClassRoom:
-                replaceSimpleByWidth(bases, 4200);
-                System.out.println("class : " + bases.size());
-                try {
-                    bases.forEach(e -> outPanels.add(new F_TwoWindow(e.getShape())));
-//                    bases.forEach(e -> panels.add(new S_ExtrudeIn(e.getShape())));
-                } catch (Exception ignored) {
-                    System.out.println("Classroom wrong");
-                }
-                break;
-            case Transport:
-//                replaceSimpleByWidth(bases, 3000);
-//                replaceHandRailByWidth(bases, 3000);
-                System.out.println("Transport : " + bases.size());
-                try {
-//                    bases.forEach(e -> panels.add(new S_Corner_Component_Lib(e.getShape())));
-                    F_OneWindow.extended_distance = 300;
-                    bases.forEach(e -> outPanels.add(new F_OneWindow(e.getShape())));
-//                    bases.forEach(e -> panels.add(new Handrail(e.getShape())));
-                } catch (Exception ignored) {
-                    System.out.println("Transport wrong");
-                }
-                break;
-            case Stair:
-                System.out.println("Stair : " + bases.size());
-                try {
-                    bases.forEach(e -> outPanels.add(new F_Example(e.getShape())));
-//                    bases.forEach(e -> panels.add(new F_WindowArray(e.getShape())));
-                } catch (Exception ignored) {
-                    System.out.println("Stair wrong");
-                }
-                break;
-            case Open:
-                replaceSimpleByWidth(bases, 8500);
-                System.out.println("Open : " + bases.size());
-                try {
-                    F_OneHole.material = Material.DarkGray;
-                    bases.forEach(e -> outPanels.add(new F_OneHole(e.getShape())));
-                } catch (Exception ignored) {
-                    System.out.println("Open wrong");
-                }
-                break;
             case Handrail:
                 try {
                     bases.forEach(e -> outPanels.add(new Handrail(e.getShape())));
@@ -172,6 +134,131 @@ public class FacadeMatcher {
                     bases.forEach(e -> floorPanels.add(new SimplePanel(e.getShape(), 100)));
                 } catch (Exception ignored) {
                     System.out.println("Floor wrong");
+                }
+                break;
+        }
+    }
+
+    private void initColorStyle(List<PanelBase> bases, Function function) {
+        switch (function) {
+            case ClassRoom:
+                replaceSimpleByWidth(bases, 4200);
+                System.out.println("class : " + bases.size());
+                try {
+                    bases.forEach(e -> outPanels.add(new F_TwoWindow(e.getShape())));
+                } catch (Exception ignored) {
+                    System.out.println("Classroom wrong");
+                }
+                break;
+            case Transport:
+                replaceSimpleByWidth(bases, 4000);
+//                replaceHandRailByWidth(bases, 3000);
+                System.out.println("Transport : " + bases.size());
+                try {
+                    F_OneWindow.frameMaterial = Material.DarkGray;
+                    bases.forEach(e -> outPanels.add(new F_OneWindow(e.getShape())));
+                } catch (Exception ignored) {
+                    System.out.println("Transport wrong");
+                }
+                break;
+            case Stair:
+                System.out.println("Stair : " + bases.size());
+                try {
+                    bases.forEach(e -> outPanels.add(new F_Example(e.getShape())));
+                } catch (Exception ignored) {
+                    System.out.println("Stair wrong");
+                }
+                break;
+            case Open:
+                replaceSimpleByWidth(bases, 8500);
+                System.out.println("Open : " + bases.size());
+                try {
+                    F_OneHole.material = Material.Red;
+                    bases.forEach(e -> outPanels.add(new F_OneHole(e.getShape())));
+                } catch (Exception ignored) {
+                    System.out.println("Open wrong");
+                }
+                break;
+            case Office:
+                try {
+                    bases.forEach(e -> outPanels.add(new F_TwoWindow(e.getShape())));
+                } catch (Exception ignored) {
+                    System.out.println("Office wrong");
+                }
+                break;
+            case Toilet:
+                try {
+                    F_OneWindow.bottom_height = 1800;
+                    F_OneWindow.extended_distance = 300;
+                    F_OneWindow.frameMaterial = Material.Blue;
+                    bases.forEach(e -> outPanels.add(new F_OneWindow(e.getShape())));
+                } catch (Exception ignored) {
+                    System.out.println("Toilet wrong");
+                }
+                break;
+        }
+    }
+
+    private void initGrayStyle(List<PanelBase> bases, Function function) {
+        switch (function) {
+            case ClassRoom:
+                replaceSimpleByWidth(bases, 4200);
+                try {
+                    S_ExtrudeIn.divideNum = 2;
+                    S_ExtrudeIn.top_height = 300;
+                    S_ExtrudeIn.bottom_height = 600;
+                    S_ExtrudeIn.seed = 4;
+                    bases.forEach(e -> outPanels.add(new S_ExtrudeIn(e.getShape())));
+                } catch (Exception ignored) {
+                    System.out.println("Classroom wrong");
+                }
+                break;
+            case Transport:
+                replaceHandRailByWidth(bases, 3000);
+                try {
+                    bases.forEach(e -> outPanels.add(new Handrail(e.getShape())));
+                } catch (Exception ignored) {
+                    System.out.println("Transport wrong");
+                }
+                break;
+            case Stair:
+                System.out.println("Stair : " + bases.size());
+                try {
+                    bases.forEach(e -> outPanels.add(new F_WindowArray(e.getShape())));
+                } catch (Exception ignored) {
+                    System.out.println("Stair wrong");
+                }
+                break;
+            case Open:
+                replaceSimpleByWidth(bases, 8500);
+                System.out.println("Open : " + bases.size());
+                try {
+                    F_OneHole.material = Material.DarkGray;
+                    bases.forEach(e -> outPanels.add(new F_OneHole(e.getShape())));
+                } catch (Exception ignored) {
+                    System.out.println("Open wrong");
+                }
+                break;
+            case Office:
+                try {
+                    S_ExtrudeIn.top_height = 300;
+                    S_ExtrudeIn.bottom_height = 600;
+                    S_ExtrudeIn.divideNum = 2;
+                    S_ExtrudeIn.seed = 2;
+                    bases.forEach(e -> outPanels.add(new S_ExtrudeIn(e.getShape())));
+                } catch (Exception ignored) {
+                    System.out.println("Office wrong");
+                }
+                break;
+            case Toilet:
+                try {
+                    S_ExtrudeIn.top_height = 300;
+                    S_ExtrudeIn.bottom_height = 1500;
+                    S_ExtrudeIn.divideNum = 0;
+                    S_ExtrudeIn.seed = 0;
+                    bases.forEach(e -> outPanels.add(new S_ExtrudeIn(e.getShape())));
+                } catch (Exception ignored) {
+                    System.out.println("Toilet wrong");
                 }
                 break;
         }
@@ -261,12 +348,13 @@ public class FacadeMatcher {
             List<Unit> units = en.getValue();
 
             List<Face> bottoms = new LinkedList<>();
-            units.forEach(e -> bottoms.add(e.getBottomFace()));
+            units.stream().filter(e -> e.getFunction().equals(Function.Transport)).forEach(e -> bottoms.add(e.getBottomFace()));
 
             List<PanelBase> bases = new LinkedList<>();
             bottoms.forEach(e -> bases.add(new SimplePanelBase(e)));
 
-            bases.forEach(e -> panels.add(new SimplePanel(e.getShape(), 200)));
+            bases.forEach(e -> floorPanels.add(new SimplePanel(e.getShape(), 200)));
+//            bases.forEach(e -> panels.add(new SimplePanel(e.getShape(), 200)));
         }
     }
 

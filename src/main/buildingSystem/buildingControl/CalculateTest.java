@@ -67,7 +67,6 @@ public class CalculateTest extends PApplet {
         System.out.println(carbonCalculator);
 
         priceCalculator = new PriceCalculator(statistics);
-        System.out.println(priceCalculator);
 
         cameraController = new CameraController(this, 15000);
 

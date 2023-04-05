@@ -143,7 +143,7 @@ public class Statistics {
         List<BasicObject> columns = fm.getColumns();
         for (BasicObject b : columns) {
             //去掉位置重复
-            columnConVol += volUnitConvert(((ColumnSimple) b).concreteVol)*0.25;
+            columnConVol += volUnitConvert(((ColumnSimple) b).concreteVol) * 0.25;
         }
 
     }
@@ -217,6 +217,24 @@ public class Statistics {
         columnSteelWeight = columnConVol * SteelPara.COLUMN;
 
         allSteelWeight = innerSteelWeight + outSteelWeight + floorSteelWeight + roofSteelWeight + beamSteelWeight + columnSteelWeight;
+    }
+
+    public void showPanelNum() {
+        System.out.println("\033[33m");
+        System.out.println("=======STATISTICS INFORMATION=======");
+        System.out.println("ITEM               NUM");
+
+        System.out.println(String.format("%s  -->  %s", "OUT-PANEL  ", outPanelNumber));
+        System.out.println(String.format("%s  -->  %s", "INNER-PANEL", innerPanelNumber));
+//        System.out.println(String.format("%s --> %s", "FLOOR-PANEL ", floorPanelNumber));
+        System.out.println(String.format("%s  -->  %s", "FLOOR-PANEL", fm.getBc().getBuilding().getUnitList().size()));
+        System.out.println(String.format("%s  -->  %s", "ROOF-PANEL ", roofPanelNumber));
+        System.out.println(String.format("%s  -->  %s", "COLUMN-NUM ", columnNumber / 2));
+        System.out.println(String.format("%s  -->  %s", "BEAM-NUM   ", beamNumber / 2));
+
+
+        System.out.println("===================================");
+        System.out.println("\033[0m");
     }
 
     /**

@@ -24,7 +24,11 @@ public enum Function {
 
     Open("open"),
 
-    Handrail("handrail");
+    Handrail("handrail"),
+
+    Office("office"),
+
+    Toilet("toilet");
 
     private String function;
 
