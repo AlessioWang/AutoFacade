@@ -2,7 +2,7 @@ package input;
 
 import facade.basic.BasicObject;
 import facade.basic.Material;
-import facade.unit.styles.F_OneHole;
+import facade.unit.styles.F_OneWindow;
 import guo_cam.CameraController;
 import processing.core.PApplet;
 import renders.BuildingRender;
@@ -66,7 +66,6 @@ public class UnionTest extends PApplet {
     public void init() {
         List<Face> wallAbleFaces = building.getAllPanelableFaces();
 
-
         List<Face> unionFaces = new LinkedList<>();
 
         wallAbleFaces.stream().filter(e -> Objects.equals(e.getDir(), new WB_Vector(0, -1, 0))).forEach(unionFaces::add);
@@ -74,10 +73,11 @@ public class UnionTest extends PApplet {
         MergedPanelBase mergedPanelBase = new MergedPanelBase(unionFaces);
 
         List<PanelBase> roofBaseList = building.getFloorBaseList();
-//        panels.add(new S_Corner_Frame_Component_Lib_(mergedPanelBase.getShape()));
 
-        F_OneHole.material = Material.DarkGray;
-        panels.add(new F_OneHole(mergedPanelBase.getShape()));
+        F_OneWindow.bottom_height = 1800;
+        F_OneWindow.extended_distance = 300;
+        F_OneWindow.frameMaterial = Material.Blue;
+        panels.add(new F_OneWindow(mergedPanelBase.getShape()));
 
     }
 

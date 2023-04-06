@@ -27,7 +27,7 @@ import java.util.Set;
  **/
 public class CreatorTest extends PApplet {
 
-//        private String file = "src\\main\\resources\\dxf\\school01.dxf";
+//    private String file = "src\\main\\resources\\dxf\\school01.dxf";
 //    private String file = "src\\main\\resources\\dxf\\schoolsmall.dxf";
 //    private String file = "src\\main\\resources\\dxf\\one.dxf";
 //    private String file = "src\\main\\resources\\dxf\\schoolBig.dxf";
@@ -98,7 +98,6 @@ public class CreatorTest extends PApplet {
         statistics.showPanelNum();
         carbonCalculator.showCarbon();
         priceCalculator.showPrice();
-
     }
 
     /**
