@@ -221,7 +221,7 @@ public class Statistics {
 
     public void showPanelNum() {
         System.out.println("\033[33m");
-        System.out.println("=======STATISTICS INFORMATION=======");
+        System.out.println("=====STATISTICS INFORMATION=====");
         System.out.println("ITEM               NUM");
 
         System.out.println(String.format("%s  -->  %s", "OUT-PANEL  ", outPanelNumber));
@@ -233,7 +233,7 @@ public class Statistics {
         System.out.println(String.format("%s  -->  %s", "BEAM-NUM   ", beamNumber / 2));
 
 
-        System.out.println("===================================");
+        System.out.println("===============================");
         System.out.println("\033[0m");
     }
 

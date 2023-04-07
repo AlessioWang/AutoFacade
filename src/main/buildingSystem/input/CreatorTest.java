@@ -27,13 +27,17 @@ import java.util.Set;
  **/
 public class CreatorTest extends PApplet {
 
+//    测试轴网
+//    private String file = "src\\main\\resources\\dxf\\grid.dxf";
+
+
 //    private String file = "src\\main\\resources\\dxf\\school01.dxf";
 //    private String file = "src\\main\\resources\\dxf\\schoolsmall.dxf";
-//    private String file = "src\\main\\resources\\dxf\\one.dxf";
 //    private String file = "src\\main\\resources\\dxf\\schoolBig.dxf";
 //    private String file = "src\\main\\resources\\dxf\\schoolBigWithRail.dxf";
 //    private String file = "src\\main\\resources\\dxf\\schoolRound.dxf";
-    private String file = "src\\main\\resources\\dxf\\schoolNotRec.dxf";
+//    private String file = "src\\main\\resources\\dxf\\schoolNotRec.dxf";
+    private String file = "src\\main\\resources\\dxf\\schoolNotRec02.dxf";
 
     private BuildingCreator bc;
 
