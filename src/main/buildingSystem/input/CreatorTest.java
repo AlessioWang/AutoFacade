@@ -35,9 +35,9 @@ public class CreatorTest extends PApplet {
 //    private String file = "src\\main\\resources\\dxf\\schoolsmall.dxf";
 //    private String file = "src\\main\\resources\\dxf\\schoolBig.dxf";
 //    private String file = "src\\main\\resources\\dxf\\schoolBigWithRail.dxf";
-//    private String file = "src\\main\\resources\\dxf\\schoolRound.dxf";
+    private String file = "src\\main\\resources\\dxf\\schoolRound.dxf";
 //    private String file = "src\\main\\resources\\dxf\\schoolNotRec.dxf";
-    private String file = "src\\main\\resources\\dxf\\schoolNotRec02.dxf";
+//    private String file = "src\\main\\resources\\dxf\\schoolNotRec02.dxf";
 
     private BuildingCreator bc;
 

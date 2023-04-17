@@ -91,8 +91,8 @@ public class FacadeMatcher {
 
             initInnerStyle(bases, func);
 
-//            initColorStyle(bases, func);
-            initGrayStyle(bases, func);
+            initColorStyle(bases, func);
+//            initGrayStyle(bases, func);
 //            initAlPanelStyle(bases, func);
 
 //            initOutSimple(bases, func);
@@ -101,7 +101,7 @@ public class FacadeMatcher {
             /**
              * 加底 有bug
              */
-            addBottom();
+//            addBottom();
         }
     }
 
