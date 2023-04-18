@@ -1,26 +1,26 @@
-package input;
+package Test.withPanelTest;
 
+import facade.basic.BasicObject;
+import facade.unit.sjStyles.S_Arc_Stretch;
 import guo_cam.CameraController;
+import input.BuildingInputer;
 import processing.core.PApplet;
 import renders.BuildingRender;
 import unit2Vol.Building;
-import unit2Vol.Unit;
 import unit2Vol.face.Face;
 import wblut.geom.WB_Polygon;
 import wblut.processing.WB_Render3D;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @auther Alessio
- * @date 2023/2/26
+ * @date 2023/3/13
  **/
-public class RoofTest extends PApplet {
+public class MergeExternalPanelTest extends PApplet {
 
-    //    private String file = "src\\main\\resources\\dxf\\roofTest.dxf";
-    private String file = "src\\main\\resources\\dxf\\debugRoof.dxf";
+    private String file = "src\\main\\resources\\dxf\\oneUnit.dxf";
 
     private BuildingInputer buildingInputer;
 
@@ -38,8 +38,10 @@ public class RoofTest extends PApplet {
 
     private List<WB_Polygon> trimmed;
 
+    private List<BasicObject> panels;
+
     public static void main(String[] args) {
-        PApplet.main(RoofTest.class.getName());
+        PApplet.main(MergeExternalPanelTest.class.getName());
     }
 
     public void settings() {
@@ -60,50 +62,43 @@ public class RoofTest extends PApplet {
         buildingRender = new BuildingRender(this, building);
 
         roofAbleFaces = building.getRoofAbleFaces();
+
         roofs = new LinkedList<>();
+
         roofAbleFaces.stream().forEach(e -> roofs.add(e.getShape()));
 
-        initTrimmed();
+        initPanel();
     }
 
-    public void initTrimmed() {
-        trimmed = new LinkedList<>();
-        List<Unit> unitList = building.getUnitList();
-        List<Face> faces = new LinkedList<>();
+    WB_Polygon base;
 
-        for (var u : unitList) {
-            Map<Face, List<Face>> trimmedFaceMap = u.getTrimmedFaceMap();
-            for (var entry : trimmedFaceMap.entrySet()) {
-                faces.addAll(entry.getValue());
-            }
-        }
+    public void initPanel() {
+        panels = new LinkedList<>();
 
-        faces.forEach(e -> trimmed.add(e.getShape()));
+        List<Face> wallAbleFaces = building.getWallAbleFaces();
+
+        Face face = wallAbleFaces.get(3);
+
+//        Changed_S_Corner_Component_Lib panel = new Changed_S_Corner_Component_Lib(face.getShape());
+//        base = panel.getBasePolygon();
+//        panels.add(panel);
+//        panels.add(new S_Corner_Component_Lib(face.getShape()));
+//        panels.add(new S_Corner_Component_Lib(face.getShape(), new WB_Transform3D().addTranslate(new WB_Point(0, 0, 1000))));
+
+        wallAbleFaces.forEach(e -> panels.add(new S_Arc_Stretch(e.getShape())));
     }
 
     public void draw() {
         background(255);
-
         cameraController.drawSystem(10000);
 
-        render.drawPolygonEdges(building.getRoofBaseList().get(0).getShape());
-
-        pushStyle();
-        stroke(255, 0, 0);
-        fill(0, 255, 0);
-        for (var p : roofs) {
-            render.drawPolygonEdges(p);
+        for (var panel : panels) {
+            panel.draw(render);
         }
-        popStyle();
-
-        pushStyle();
-        fill(255,0,0);
-        for (var p : trimmed) {
-            render.drawPolygonEdges(p);
-        }
-        popStyle();
 
         buildingRender.renderPanelGeo();
+
+//        render.drawPolygonEdges(base);
     }
 
 }

@@ -1,4 +1,4 @@
-package input;
+package Test.withPanelTest;
 
 import buildingControl.dataControl.calculator.CarbonCalculator;
 import buildingControl.dataControl.Statistics;

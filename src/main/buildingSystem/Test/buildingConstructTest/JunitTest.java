@@ -1,4 +1,4 @@
-package Test;
+package Test.buildingConstructTest;
 
 import org.junit.jupiter.api.Test;
 

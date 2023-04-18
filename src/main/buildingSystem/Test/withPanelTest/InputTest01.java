@@ -1,4 +1,4 @@
-package input;
+package Test.withPanelTest;
 
 import Tools.DxfReader.DXFImporter;
 import guo_cam.CameraController;

@@ -1,4 +1,4 @@
-package Test;
+package Test.buildingConstructTest;
 
 import Tools.GeoTools;
 import facade.basic.BasicObject;

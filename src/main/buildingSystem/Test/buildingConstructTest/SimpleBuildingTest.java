@@ -1,4 +1,4 @@
-package Test;
+package Test.buildingConstructTest;
 
 import construction.Building;
 import guo_cam.CameraController;

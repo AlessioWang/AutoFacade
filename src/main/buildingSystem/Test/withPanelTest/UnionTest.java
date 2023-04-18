@@ -1,9 +1,10 @@
-package input;
+package Test.withPanelTest;
 
 import facade.basic.BasicObject;
 import facade.basic.Material;
 import facade.unit.styles.F_OneWindow;
 import guo_cam.CameraController;
+import input.BuildingInputer;
 import processing.core.PApplet;
 import renders.BuildingRender;
 import unit2Vol.Building;

@@ -35,6 +35,10 @@ public class BuildingCreator {
 
     private Map<Function, List<PanelBase>> funcBaseMap;
 
+    private List<PanelBase> allPanelBase;
+
+    //polygon与panelBase的对应关系map
+    private Map<WB_Polygon, PanelBase> polyPanelMap;
 
     public BuildingCreator(String file) {
         this.file = file;
@@ -88,7 +92,27 @@ public class BuildingCreator {
         initFloor();
 
         mergeByFuc(Function.Open);
+
+        initPanelBaseShape();
     }
+
+    /**
+     * 获取所有的panelBase
+     * 初始化shape和PanelBase的对应关系
+     */
+    private void initPanelBaseShape() {
+        allPanelBase = new LinkedList<>();
+        polyPanelMap = new HashMap<>();
+
+        Set<Map.Entry<Function, List<PanelBase>>> entries = funcBaseMap.entrySet();
+
+        for (var en : entries) {
+            allPanelBase.addAll(en.getValue());
+        }
+
+        allPanelBase.forEach(e -> polyPanelMap.put(e.getShape(), e));
+    }
+
 
     /**
      * 初始化外墙信息到map
@@ -327,4 +351,9 @@ public class BuildingCreator {
     public Building getBuilding() {
         return building;
     }
+
+    public Map<WB_Polygon, PanelBase> getPolyPanelMap() {
+        return polyPanelMap;
+    }
+
 }

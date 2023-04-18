@@ -1,4 +1,4 @@
-package input;
+package Test.withPanelTest;
 
 import Tools.GeoTools;
 import facade.basic.BasicObject;
@@ -7,6 +7,7 @@ import facade.unit.styles.*;
 import function.Function;
 import function.PosType;
 import guo_cam.CameraController;
+import input.BuildingInputer;
 import processing.core.PApplet;
 import renders.BuildingRender;
 import unit2Vol.Beam;
