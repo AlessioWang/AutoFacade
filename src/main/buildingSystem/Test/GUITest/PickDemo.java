@@ -13,9 +13,7 @@ import unit2Vol.panelBase.PanelBase;
 import wblut.geom.WB_Polygon;
 import wblut.processing.WB_Render3D;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @auther Alessio
@@ -32,6 +30,8 @@ public class PickDemo extends PApplet {
     private WB_Render3D render;
 
     private List<BasicObject> panels;
+
+    private Map<WB_Polygon, BasicObject> objectShapeMap;
 
 //    private FacadeMatcher facadeMatcher;
 
@@ -73,6 +73,7 @@ public class PickDemo extends PApplet {
 //        panels = facadeMatcher.getPanels();
 
         panels = new LinkedList<>();
+        objectShapeMap = new HashMap<>();
 
         initSelector();
     }
@@ -125,15 +126,39 @@ public class PickDemo extends PApplet {
             showBuilding = !showBuilding;
     }
 
+    public void value2List(Map map, List list) {
+        Set<Map.Entry<WB_Polygon, BasicObject>> entries = map.entrySet();
+        entries.stream().filter(e -> e.getValue() != null).forEach(e -> list.add(e.getValue()));
+    }
+
     @Override
     public void mousePressed() {
+        // 添加墙板
         if (mousePressed && mouseButton == LEFT) {
             selectedShape = selector.getSelectedPolygon(this);
 
             PanelBase panelBase = polyPanelMap.get(selectedShape);
 
-            if (panelBase != null)
-                panels.add(new SimplePanel(panelBase.getShape()));
+            if (panelBase != null && !objectShapeMap.containsKey(panelBase.getShape())) {
+                objectShapeMap.put(panelBase.getShape(), new SimplePanel(panelBase.getShape()));
+            }
+
+            panels = new LinkedList<>();
+            value2List(objectShapeMap, panels);
+        }
+
+        //删除墙板
+        if (mousePressed && mouseButton == RIGHT) {
+            selectedShape = selector.getSelectedPolygon(this);
+
+            PanelBase panelBase = polyPanelMap.get(selectedShape);
+
+            if (panelBase != null) {
+                objectShapeMap.remove(panelBase.getShape());
+            }
+
+            panels = new LinkedList<>();
+            value2List(objectShapeMap, panels);
         }
     }
 }
