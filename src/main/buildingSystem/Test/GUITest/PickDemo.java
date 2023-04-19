@@ -1,9 +1,11 @@
 package Test.GUITest;
 
 import buildingControl.designControl.BuildingCreator;
+import buildingControl.designControl.F_Matcher;
 import core.Container;
 import core.J_Selector;
 import facade.basic.BasicObject;
+import facade.unit.styles.F_TwoWindow;
 import facade.unit.styles.SimplePanel;
 import guo_cam.CameraController;
 import processing.core.PApplet;
@@ -13,7 +15,10 @@ import unit2Vol.panelBase.PanelBase;
 import wblut.geom.WB_Polygon;
 import wblut.processing.WB_Render3D;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @auther Alessio
@@ -29,11 +34,11 @@ public class PickDemo extends PApplet {
 
     private WB_Render3D render;
 
-    private List<BasicObject> panels;
+    private Map<WB_Polygon, BasicObject> panelShapeMap;
 
-    private Map<WB_Polygon, BasicObject> objectShapeMap;
+    private List<BasicObject> structureObjects;
 
-//    private FacadeMatcher facadeMatcher;
+    private F_Matcher fm;
 
     private BuildingRender br;
 
@@ -62,7 +67,7 @@ public class PickDemo extends PApplet {
 
         building = bc.getBuilding();
 
-//        facadeMatcher = new FacadeMatcher(bc);
+        fm = new F_Matcher(bc);
 
         cameraController = new CameraController(this, 15000);
 
@@ -70,10 +75,9 @@ public class PickDemo extends PApplet {
 
         br = new BuildingRender(this, building);
 
-//        panels = facadeMatcher.getPanels();
+        panelShapeMap = fm.getPanelMap();
 
-        panels = new LinkedList<>();
-        objectShapeMap = new HashMap<>();
+        structureObjects = fm.getStructuresList();
 
         initSelector();
     }
@@ -88,22 +92,22 @@ public class PickDemo extends PApplet {
         selector = new J_Selector(container, cameraController);
     }
 
-    private void panelCreate() {
-
-    }
-
-
     public void draw() {
         background(255);
 
-        if (panels.size() != 0) {
-            for (var panel : panels) {
+        if (panelShapeMap.values().size() != 0) {
+            for (BasicObject panel : panelShapeMap.values()) {
                 panel.draw(render);
             }
         }
 
-        if (showBuilding)
-            br.renderAll();
+        if (structureObjects.size() != 0) {
+            for (BasicObject o : structureObjects) {
+                o.draw(render);
+            }
+        }
+
+        if (showBuilding) br.renderAll();
 
         pushStyle();
         stroke(0, 0, 200);
@@ -118,12 +122,11 @@ public class PickDemo extends PApplet {
     //选取的目标polygon
     private WB_Polygon selectedShape;
 
-    private boolean showBuilding = true;
+    private boolean showBuilding = false;
 
     @Override
     public void keyPressed() {
-        if (key == 'q' || key == 'Q')
-            showBuilding = !showBuilding;
+        if (key == 'q' || key == 'Q') showBuilding = !showBuilding;
     }
 
     public void value2List(Map map, List list) {
@@ -134,17 +137,25 @@ public class PickDemo extends PApplet {
     @Override
     public void mousePressed() {
         // 添加墙板
+        if (mousePressed && mouseButton == LEFT && key == 'a') {
+            selectedShape = selector.getSelectedPolygon(this);
+
+            PanelBase panelBase = polyPanelMap.get(selectedShape);
+
+            if (panelBase != null && !panelShapeMap.containsKey(panelBase.getShape())) {
+                panelShapeMap.put(panelBase.getShape(), new F_TwoWindow(panelBase.getShape()));
+            }
+        }
+
+        // 添加墙板
         if (mousePressed && mouseButton == LEFT) {
             selectedShape = selector.getSelectedPolygon(this);
 
             PanelBase panelBase = polyPanelMap.get(selectedShape);
 
-            if (panelBase != null && !objectShapeMap.containsKey(panelBase.getShape())) {
-                objectShapeMap.put(panelBase.getShape(), new SimplePanel(panelBase.getShape()));
+            if (panelBase != null && !panelShapeMap.containsKey(panelBase.getShape())) {
+                panelShapeMap.put(panelBase.getShape(), new SimplePanel(panelBase.getShape()));
             }
-
-            panels = new LinkedList<>();
-            value2List(objectShapeMap, panels);
         }
 
         //删除墙板
@@ -154,11 +165,8 @@ public class PickDemo extends PApplet {
             PanelBase panelBase = polyPanelMap.get(selectedShape);
 
             if (panelBase != null) {
-                objectShapeMap.remove(panelBase.getShape());
+                panelShapeMap.remove(panelBase.getShape());
             }
-
-            panels = new LinkedList<>();
-            value2List(objectShapeMap, panels);
         }
     }
 }

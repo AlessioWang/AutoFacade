@@ -115,7 +115,6 @@ public class FacadeMatcher {
                 }
                 break;
             case Roof:
-//                System.out.println("Roof : " + bases.size());
                 try {
                     bases.forEach(e -> roofPanels.add(new RoofSimple(e.getShape())));
                 } catch (Exception ignored) {
@@ -123,7 +122,6 @@ public class FacadeMatcher {
                 }
                 break;
             case InnerWall:
-//                System.out.println("innerwall : " + bases.size());
                 try {
                     bases.forEach(e -> innerPanels.add(new SimplePanel(e.getShape(), 50)));
                 } catch (Exception ignored) {
@@ -131,7 +129,6 @@ public class FacadeMatcher {
                 }
                 break;
             case Floor:
-//                System.out.println("floor : " + bases.size());
                 try {
                     bases.forEach(e -> floorPanels.add(new SimplePanel(e.getShape(), 100)));
                 } catch (Exception ignored) {
