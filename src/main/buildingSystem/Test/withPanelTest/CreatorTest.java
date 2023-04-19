@@ -30,7 +30,6 @@ public class CreatorTest extends PApplet {
 //    测试轴网
 //    private String file = "src\\main\\resources\\dxf\\grid.dxf";
 
-
 //    private String file = "src\\main\\resources\\dxf\\school01.dxf";
 //    private String file = "src\\main\\resources\\dxf\\schoolsmall.dxf";
 //    private String file = "src\\main\\resources\\dxf\\schoolBig.dxf";

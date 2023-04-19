@@ -26,7 +26,11 @@ import java.util.Set;
  **/
 public class PickDemo extends PApplet {
 
-    private String file = "src\\main\\resources\\dxf\\schoolsmall.dxf";
+//    private String file = "src\\main\\resources\\dxf\\schoolsmall.dxf";
+
+    private String file = "src\\main\\resources\\dxf\\school01.dxf";
+
+//    private String file = "src\\main\\resources\\dxf\\schoolNotRec.dxf";
 
     private BuildingCreator bc;
 
@@ -46,12 +50,11 @@ public class PickDemo extends PApplet {
 
     //-------------selector-------
 
-    private Container container;
-
     private J_Selector selector;
 
     private Map<WB_Polygon, PanelBase> polyPanelMap;
 
+    private List<WB_Polygon> containShapes;
 
     public static void main(String[] args) {
         PApplet.main(PickDemo.class.getName());
@@ -85,29 +88,40 @@ public class PickDemo extends PApplet {
     private void initSelector() {
         polyPanelMap = bc.getPolyPanelMap();
 
-        container = new Container();
+        Container container = new Container();
 
         container.addPolygons(new LinkedList<>(polyPanelMap.keySet()));
 
         selector = new J_Selector(container, cameraController);
+
+        containShapes = new LinkedList<>(polyPanelMap.keySet());
     }
 
     public void draw() {
         background(255);
 
-        if (panelShapeMap.values().size() != 0) {
-            for (BasicObject panel : panelShapeMap.values()) {
-                panel.draw(render);
+        if (showPanel) {
+            if (panelShapeMap.values().size() != 0) {
+                for (BasicObject panel : panelShapeMap.values()) {
+                    panel.draw(render);
+                }
             }
         }
 
-        if (structureObjects.size() != 0) {
-            for (BasicObject o : structureObjects) {
-                o.draw(render);
+        if (showStructure) {
+            if (structureObjects.size() != 0) {
+                for (BasicObject o : structureObjects) {
+                    o.draw(render);
+                }
             }
         }
-
         if (showBuilding) br.renderAll();
+
+        if (showContainer) {
+            if (containShapes.size() != 0) {
+                containShapes.forEach(e -> render.drawPolygonEdges(e));
+            }
+        }
 
         pushStyle();
         stroke(0, 0, 200);
@@ -117,16 +131,24 @@ public class PickDemo extends PApplet {
             render.drawPolygonEdges(selectedShape);
         }
         popStyle();
+
     }
 
     //选取的目标polygon
     private WB_Polygon selectedShape;
 
+    //display var
     private boolean showBuilding = false;
+    private boolean showContainer = false;
+    private boolean showPanel = true;
+    private boolean showStructure = true;
 
     @Override
     public void keyPressed() {
-        if (key == 'q' || key == 'Q') showBuilding = !showBuilding;
+        if (key == 'q' || key == 'Q') showPanel = !showPanel;
+        if (key == 'w' || key == 'W') showStructure = !showStructure;
+        if (key == 'e' || key == 'E') showContainer = !showContainer;
+        if (key == 'r' || key == 'R') showBuilding = !showBuilding;
     }
 
     public void value2List(Map map, List list) {
