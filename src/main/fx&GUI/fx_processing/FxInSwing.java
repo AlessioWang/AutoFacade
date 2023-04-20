@@ -52,7 +52,6 @@ public abstract class FxInSwing<T extends FXPApplet> {
      */
     private boolean invokeAndWait = false;
 
-
     static {
         System.setProperty("prism.allowhidpi", "false");
         System.setProperty("sun.java2d.uiScale", "1");

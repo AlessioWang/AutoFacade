@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.*?>
-
-<fx:root prefHeight="400.0" prefWidth="600.0" type="AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.scene.control.ToggleButton?>
+<?import com.jfoenix.controls.JFXToggleButton?>
+<fx:root prefHeight="400.0" prefWidth="300.0" type="AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Button layoutX="14.0" layoutY="30.0" mnemonicParsing="false" text="Button" />
+      <JFXToggleButton fx:id="togShowPanel" layoutX="20.0" layoutY="34.0" text="Show Panel" AnchorPane.leftAnchor="20.0" />
+      <JFXToggleButton fx:id="togShowBase" layoutX="20.0" layoutY="120.0" text="Show Base" AnchorPane.leftAnchor="20.0" />
+      <JFXToggleButton fx:id="togShowStructure" layoutX="20.0" layoutY="200.0" text="Show Structure" AnchorPane.leftAnchor="20.0" />
    </children>
 </fx:root>

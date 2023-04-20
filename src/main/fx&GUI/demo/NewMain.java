@@ -1,5 +1,6 @@
-package fx_processing;
+package demo;
 
+import fx_processing.FXPApplet;
 import guo_cam.CameraController;
 import processing.core.PApplet;
 
@@ -11,7 +12,6 @@ public class NewMain extends FXPApplet {
 
     CameraController camera;
     NewLeftController leftController;
-
 
     public static void main(String[] args) {
         PApplet.main(NewMain.class.getName());

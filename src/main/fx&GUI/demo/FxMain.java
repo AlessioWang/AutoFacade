@@ -1,5 +1,9 @@
-package fx_processing;
+package demo;
 
+
+import Test.GUITest.PickFx;
+import fx_processing.FXPApplet;
+import fx_processing.FxInSwing;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.stage.Screen;
@@ -8,7 +12,7 @@ import javafx.stage.Screen;
  * @auther Alessio
  * @date 2023/4/19
  **/
-public class FxMain extends FxInSwing<NewMain> {
+public class FxMain extends FxInSwing<FXPApplet> {
 
     //程序运行基本参数
     int width = 1800;
@@ -21,7 +25,7 @@ public class FxMain extends FxInSwing<NewMain> {
      *
      * @param applet 继承FXPApplet类的实例
      */
-    protected FxMain(NewMain applet) {
+    protected FxMain(FXPApplet applet) {
         super(applet);
     }
 
@@ -31,7 +35,7 @@ public class FxMain extends FxInSwing<NewMain> {
      * @param args args
      */
     public static void main(String[] args) {
-        FxMain sample = new FxMain(new NewMain());
+        FxMain sample = new FxMain(new PickFx());
         sample.launch("MyFxTest");
     }
 
@@ -46,7 +50,8 @@ public class FxMain extends FxInSwing<NewMain> {
 
     @Override
     protected Scene createLeft() {
-        leftController = new NewLeftController(applet);
+        leftController = new NewLeftController((PickFx) applet);
+        leftController.setOnAction();
         Scene scene = new Scene(leftController);
         return scene;
     }
