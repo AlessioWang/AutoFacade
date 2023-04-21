@@ -5,13 +5,23 @@ package buildingControl.designControl;
  * @date 2023/4/21
  **/
 public enum PanelStyle {
-    Simple("Simple"),
+    SimplePanel("SimplePanel"),
 
     F_Example("F_Example"),
 
     F_OneHole("F_OneHole"),
 
-    F_TwoWindow("F_TwoWindow");
+    F_TwoWindow("F_TwoWindow"),
+
+    F_OneWindow("F_OneWindow"),
+
+    F_WindowArray("F_WindowArray"),
+
+    Handrail("Handrail"),
+
+    S_ExtrudeIn("S_ExtrudeIn"),
+
+    RoofSimple("RoofSimple");
 
     private String style;
 

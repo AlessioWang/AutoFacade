@@ -6,8 +6,7 @@ import core.Container;
 import core.J_Selector;
 import demo.NewLeftController;
 import facade.basic.BasicObject;
-import facade.unit.styles.F_TwoWindow;
-import facade.unit.styles.SimplePanel;
+import facade.unit.styles.*;
 import fx_processing.FXPApplet;
 import guo_cam.CameraController;
 import processing.core.PApplet;
@@ -27,9 +26,10 @@ import java.util.Set;
  * @date 2023/4/18
  **/
 public class PickFx extends FXPApplet {
+    //        private String file = "src\\main\\resources\\dxf\\schoolsmall.dxf";
+//    private String file = "src\\main\\resources\\dxf\\school01.dxf";
+    private String file = "src\\main\\resources\\dxf\\schoolRound.dxf";
 
-    //    private String file = "src\\main\\resources\\dxf\\schoolsmall.dxf";
-    private String file = "src\\main\\resources\\dxf\\school01.dxf";
 //    private String file = "src\\main\\resources\\dxf\\schoolNotRec.dxf";
 
     private BuildingCreator bc;
@@ -57,6 +57,8 @@ public class PickFx extends FXPApplet {
 
     //--------------GUI------------
     private NewLeftController leftController;
+
+    private String panelStyle;
 
     public static void main(String[] args) {
         PApplet.main(PickFx.class.getName());
@@ -178,7 +180,7 @@ public class PickFx extends FXPApplet {
             PanelBase panelBase = polyPanelMap.get(selectedShape);
 
             if (panelBase != null && !panelShapeMap.containsKey(panelBase.getShape())) {
-                panelShapeMap.put(panelBase.getShape(), new SimplePanel(panelBase.getShape()));
+                addPanel(panelBase);
             }
         }
 
@@ -194,7 +196,42 @@ public class PickFx extends FXPApplet {
         }
     }
 
+    private void addPanel(PanelBase panelBase) {
+        switch (panelStyle) {
+            case "SimplePanel":
+                panelShapeMap.put(panelBase.getShape(), new SimplePanel(panelBase.getShape()));
+                break;
+            case "F_Example":
+                panelShapeMap.put(panelBase.getShape(), new F_Example(panelBase.getShape()));
+                break;
+            case "F_OneHole":
+                panelShapeMap.put(panelBase.getShape(), new F_OneHole(panelBase.getShape()));
+                break;
+            case "F_OneWindow":
+                panelShapeMap.put(panelBase.getShape(), new F_OneWindow(panelBase.getShape()));
+                break;
+            case "F_TwoWindow":
+                panelShapeMap.put(panelBase.getShape(), new F_TwoWindow(panelBase.getShape()));
+                break;
+            case "F_WindowArray":
+                panelShapeMap.put(panelBase.getShape(), new F_WindowArray(panelBase.getShape()));
+                break;
+            case "Handrail":
+                panelShapeMap.put(panelBase.getShape(), new Handrail(panelBase.getShape()));
+                break;
+            case "S_ExtrudeIn":
+                panelShapeMap.put(panelBase.getShape(), new S_ExtrudeIn(panelBase.getShape()));
+                break;
+            case "RoofSimple":
+                panelShapeMap.put(panelBase.getShape(), new RoofSimple(panelBase.getShape()));
+                break;
 
+        }
+    }
+
+    public void setPanelStyle(String panelStyle) {
+        this.panelStyle = panelStyle;
+    }
 
     public void setLeftController(NewLeftController leftController) {
         this.leftController = leftController;

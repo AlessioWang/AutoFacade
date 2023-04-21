@@ -60,9 +60,8 @@ public class NewLeftController extends AnchorPane {
 
         PanelStyle[] allTypes = PanelStyle.values();
 
-        List<String> panelName = getPanelName(panelPath);
-        for (var type : panelName) {
-            Label label = new Label(type);
+        for (var type : allTypes) {
+            Label label = new Label(type.getStyle());
             labels.add(label);
         }
 
@@ -78,6 +77,7 @@ public class NewLeftController extends AnchorPane {
     private void comboAction() {
         comboPanelType.setOnAction(event -> {
             String selected = getSelectFromCombo(comboPanelType);
+            applet.setPanelStyle(selected);
             System.out.println(selected);
         });
     }
