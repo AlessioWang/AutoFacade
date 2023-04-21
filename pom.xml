@@ -225,7 +225,6 @@
             <artifactId>javafx-graphics</artifactId>
             <version>17.0.1</version>
         </dependency>
-
     </dependencies>
 
     <repositories>
