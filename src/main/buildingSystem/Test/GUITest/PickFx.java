@@ -1,10 +1,11 @@
 package Test.GUITest;
 
+import buildingControl.dataControl.Statistics;
 import buildingControl.designControl.BuildingCreator;
 import buildingControl.designControl.F_Matcher;
 import core.Container;
 import core.J_Selector;
-import demo.NewLeftController;
+import demo.LeftController;
 import facade.basic.BasicObject;
 import facade.unit.styles.*;
 import fx_processing.FXPApplet;
@@ -26,11 +27,11 @@ import java.util.Set;
  * @date 2023/4/18
  **/
 public class PickFx extends FXPApplet {
-    //        private String file = "src\\main\\resources\\dxf\\schoolsmall.dxf";
-//    private String file = "src\\main\\resources\\dxf\\school01.dxf";
-    private String file = "src\\main\\resources\\dxf\\schoolRound.dxf";
+//            private String file = "src\\main\\resources\\dxf\\schoolsmall.dxf";
+//    private String file = "src\\main\\resources\\dxf\\school011.dxf";
+//    private String file = "src\\main\\resources\\dxf\\schoolRound.dxf";
 
-//    private String file = "src\\main\\resources\\dxf\\schoolNotRec.dxf";
+    private String file = "src\\main\\resources\\dxf\\schoolNotRec03.dxf";
 
     private BuildingCreator bc;
 
@@ -56,9 +57,12 @@ public class PickFx extends FXPApplet {
     private List<WB_Polygon> containShapes;
 
     //--------------GUI------------
-    private NewLeftController leftController;
+    private LeftController leftController;
 
     private String panelStyle;
+
+    //-----------Statistics----------
+    private Statistics statistics;
 
     public static void main(String[] args) {
         PApplet.main(PickFx.class.getName());
@@ -87,6 +91,10 @@ public class PickFx extends FXPApplet {
         structureObjects = fm.getStructuresList();
 
         initSelector();
+
+        statistics = new Statistics(fm);
+
+        statistics.showPriceAndCarbon();
     }
 
     private void initSelector() {
@@ -180,7 +188,12 @@ public class PickFx extends FXPApplet {
             PanelBase panelBase = polyPanelMap.get(selectedShape);
 
             if (panelBase != null && !panelShapeMap.containsKey(panelBase.getShape())) {
-                addPanel(panelBase);
+                try {
+                    addPanel(panelBase);
+                } catch (Exception e) {
+                    System.out.println("Add error");
+//                    throw new RuntimeException(e);
+                }
             }
         }
 
@@ -233,7 +246,7 @@ public class PickFx extends FXPApplet {
         this.panelStyle = panelStyle;
     }
 
-    public void setLeftController(NewLeftController leftController) {
+    public void setLeftController(LeftController leftController) {
         this.leftController = leftController;
     }
 }

@@ -1,12 +1,16 @@
 package buildingControl.dataControl;
 
+import buildingControl.dataControl.calculator.CarbonCalculator;
+import buildingControl.dataControl.calculator.PriceCalculator;
 import buildingControl.dataControl.parameters.PanelThickPara;
 import buildingControl.dataControl.parameters.SteelPara;
+import buildingControl.designControl.F_Matcher;
 import buildingControl.designControl.FacadeMatcher;
 import facade.basic.BasicObject;
 import facade.unit.styles.ColumnSimple;
 import facade.unit.styles.RecBeam;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -15,7 +19,25 @@ import java.util.List;
  **/
 public class Statistics {
 
-    private final FacadeMatcher fm;
+    private FacadeMatcher fm;
+
+    private F_Matcher f_matcher;
+
+    private CarbonCalculator carbonCalculator;
+
+    private PriceCalculator priceCalculator;
+
+    /**
+     * 读取的模型数据
+     */
+
+    private List<BasicObject> all;
+    private List<BasicObject> inner;
+    private List<BasicObject> floor;
+    private List<BasicObject> roof;
+    private List<BasicObject> out;
+    private List<BasicObject> column;
+    private List<BasicObject> beam;
 
     /**
      * 数量相关参数
@@ -95,10 +117,53 @@ public class Statistics {
         this.fm = facadeMatcher;
 
         initData();
+
+        initCalculator();
+    }
+
+    public Statistics(F_Matcher f_matcher) {
+        this.f_matcher = f_matcher;
+
+        initData();
+        initCalculator();
+    }
+
+    private void initData() {
+        initDataFromMatcher();
+        initNumber();
+        initMaterialArea();
+        initVol();
+    }
+
+    /**
+     * 初始化两个calculator
+     */
+    private void initCalculator() {
+        carbonCalculator = new CarbonCalculator(this);
+        priceCalculator = new PriceCalculator(this);
+    }
+
+    private void initDataFromMatcher() {
+        if (fm != null) {
+            all = fm.getPanels();
+            inner = fm.getInnerPanels();
+            floor = fm.getFloorPanels();
+            roof = fm.getRoofPanels();
+            out = fm.getOutPanels();
+            column = fm.getColumns();
+            beam = fm.getBeams();
+        } else {
+            all = new LinkedList<>(f_matcher.getPanelMap().values());
+            inner = new LinkedList<>(f_matcher.getInnerMap().values());
+            floor = new LinkedList<>(f_matcher.getFloorMap().values());
+            roof = new LinkedList<>(f_matcher.getRoofMap().values());
+            out = new LinkedList<>(f_matcher.getOutMap().values());
+            column = new LinkedList<>(f_matcher.getColumnList());
+            beam = new LinkedList<>(f_matcher.getBeamsList());
+        }
     }
 
     private void initMaterialArea() {
-        List<BasicObject> inner = fm.getInnerPanels();
 
         for (BasicObject p : inner) {
             innerConArea += p.concreteArea;
@@ -106,62 +171,51 @@ public class Statistics {
             alArea += p.alArea;
         }
 
-        List<BasicObject> floor = fm.getFloorPanels();
         for (BasicObject p : floor) {
             floorConArea += p.concreteArea;
             glassArea += p.glassArea;
             alArea += p.alArea;
         }
 
-        List<BasicObject> roof = fm.getRoofPanels();
         for (BasicObject p : roof) {
             roofConArea += p.concreteArea;
             glassArea += p.glassArea;
             alArea += p.alArea;
         }
 
-        List<BasicObject> out = fm.getOutPanels();
         for (BasicObject p : out) {
             outConArea += p.concreteArea;
             glassArea += p.glassArea;
             alArea += p.alArea;
         }
 
+
         convertParaUnit();
     }
 
 
     private void initBeamVol() {
-        List<BasicObject> beams = fm.getBeams();
-        for (BasicObject b : beams) {
+        for (BasicObject b : beam) {
             beamConVol += volUnitConvert(((RecBeam) b).concreteVol);
         }
 
     }
 
     private void initColumnVol() {
-        List<BasicObject> columns = fm.getColumns();
-        for (BasicObject b : columns) {
+        for (BasicObject b : column) {
             //去掉位置重复
             columnConVol += volUnitConvert(((ColumnSimple) b).concreteVol) * 0.25;
         }
-
-    }
-
-    private void initData() {
-        initNumber();
-        initMaterialArea();
-        initVol();
     }
 
     private void initNumber() {
-        allPanelNumber = fm.getPanels().size();
-        outPanelNumber = fm.getOutPanels().size();
-        innerPanelNumber = fm.getInnerPanels().size();
-        floorPanelNumber = fm.getFloorPanels().size();
-        roofPanelNumber = fm.getRoofPanels().size();
-        columnNumber = fm.getColumns().size();
-        beamNumber = fm.getBeams().size();
+        allPanelNumber = all.size();
+        outPanelNumber = out.size();
+        innerPanelNumber = inner.size();
+        floorPanelNumber = floor.size();
+        roofPanelNumber = roof.size();
+        columnNumber = column.size();
+        beamNumber = beam.size();
     }
 
     /**
@@ -235,6 +289,19 @@ public class Statistics {
 
         System.out.println("===============================");
         System.out.println("\033[0m");
+    }
+
+    public void showPrice() {
+        priceCalculator.showPrice();
+    }
+
+    public void showCarbon() {
+        carbonCalculator.showCarbon();
+    }
+
+    public void showPriceAndCarbon() {
+        showPrice();
+        showCarbon();
     }
 
     /**
@@ -316,25 +383,6 @@ public class Statistics {
         return roofPanelNumber;
     }
 
-//    @Override
-//    public String toString() {
-//        return "Statistics{" + "allPanelNumber=" + allPanelNumber + ", allConcreteVol=" + allConcreteVol + ", glassVol=" + glassVol + ", alVol=" + alVol + ", allSteelWeight=" + allSteelWeight + '}';
-//    }
-
-
-//    @Override
-//    public String toString() {
-//        return "Statistics{" +
-//                "outSteelWeight=" + outSteelWeight +
-//                ", innerSteelWeight=" + innerSteelWeight +
-//                ", floorSteelWeight=" + floorSteelWeight +
-//                ", roofSteelWeight=" + roofSteelWeight +
-//                ", columnSteelWeight=" + columnSteelWeight +
-//                ", beamSteelWeight=" + beamSteelWeight +
-//                '}';
-//    }
-
-
     @Override
     public String toString() {
         return "Statistics{" +
@@ -370,4 +418,6 @@ public class Statistics {
                 ", beamSteelWeight=" + beamSteelWeight +
                 '}';
     }
+
+
 }

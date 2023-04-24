@@ -1,8 +1,6 @@
 package Test.withPanelTest;
 
-import buildingControl.dataControl.calculator.CarbonCalculator;
 import buildingControl.dataControl.Statistics;
-import buildingControl.dataControl.calculator.PriceCalculator;
 import buildingControl.designControl.BuildingCreator;
 import buildingControl.designControl.FacadeMatcher;
 import facade.basic.BasicObject;
@@ -56,9 +54,7 @@ public class CreatorTest extends PApplet {
 
     private Statistics statistics;
 
-    private CarbonCalculator carbonCalculator;
 
-    private PriceCalculator priceCalculator;
 
     public static void main(String[] args) {
         PApplet.main(CreatorTest.class.getName());
@@ -78,9 +74,7 @@ public class CreatorTest extends PApplet {
 
         statistics = new Statistics(facadeMatcher);
 
-        carbonCalculator = new CarbonCalculator(statistics);
 
-        priceCalculator = new PriceCalculator(statistics);
 
         cameraController = new CameraController(this, 15000);
 
@@ -99,8 +93,7 @@ public class CreatorTest extends PApplet {
 
     private void showData() {
         statistics.showPanelNum();
-        carbonCalculator.showCarbon();
-        priceCalculator.showPrice();
+        statistics.showPriceAndCarbon();
     }
 
     /**

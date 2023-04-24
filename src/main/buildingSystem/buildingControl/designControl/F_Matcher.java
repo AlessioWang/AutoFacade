@@ -7,6 +7,7 @@ import function.Function;
 import function.PosType;
 import unit2Vol.Beam;
 import unit2Vol.Building;
+import unit2Vol.Unit;
 import unit2Vol.panelBase.PanelBase;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
@@ -33,7 +34,6 @@ public class F_Matcher {
     private List<BasicObject> beamsList;
 
     private List<BasicObject> columnList;
-
 
     private BuildingCreator bc;
 
@@ -95,26 +95,32 @@ public class F_Matcher {
 
             initOutPanel(bases, func);
             initInnerPanel(bases, func);
+            initFloorPanel();
         }
     }
 
+    /**
+     * 以每个unit的底为基础创建floor
+     * 权宜之计
+     */
+    private void initFloorPanel() {
+        Building building = bc.getBuilding();
+
+        List<Unit> unitList = building.getUnitList();
+
+        for (Unit u : unitList) {
+            WB_Polygon base = u.getRealBase();
+            floorMap.put(base, new SimplePanel(base, 200));
+        }
+    }
 
     private void initInnerPanel(List<PanelBase> bases, Function function) {
-        switch (function) {
-            case InnerWall:
-                try {
-                    bases.forEach(e -> innerMap.put(e.getShape(), new SimplePanel(e.getShape(), 50)));
-                } catch (Exception ignored) {
-                    System.out.println("InnerWall wrong");
-                }
-                break;
-            case Floor:
-                try {
-                    bases.forEach(e -> floorMap.put(e.getShape(), new SimplePanel(e.getShape(), 100)));
-                } catch (Exception ignored) {
-                    System.out.println("Floor wrong");
-                }
-                break;
+        if (function == Function.InnerWall) {
+            try {
+                bases.forEach(e -> innerMap.put(e.getShape(), new SimplePanel(e.getShape(), 50)));
+            } catch (Exception ignored) {
+                System.out.println("InnerWall wrong");
+            }
         }
     }
 
@@ -208,7 +214,7 @@ public class F_Matcher {
         Set<Map.Entry<Double, List<WB_Point>>> entries = columnBaseMap.entrySet();
         for (var entry : entries) {
             List<WB_Point> pts = entry.getValue();
-            pts.forEach(e -> columnList.add(new ColumnSimple(e, 4000, 500)));
+            pts.forEach(e -> columnList.add(new ColumnSimple(e, 4000, 300)));
         }
     }
 
@@ -219,4 +225,30 @@ public class F_Matcher {
     public List<BasicObject> getStructuresList() {
         return structuresList;
     }
+
+    public Map<WB_Polygon, BasicObject> getOutMap() {
+        return outMap;
+    }
+
+    public Map<WB_Polygon, BasicObject> getInnerMap() {
+        return innerMap;
+    }
+
+    public Map<WB_Polygon, BasicObject> getRoofMap() {
+        return roofMap;
+    }
+
+    public Map<WB_Polygon, BasicObject> getFloorMap() {
+        return floorMap;
+    }
+
+    public List<BasicObject> getBeamsList() {
+        return beamsList;
+    }
+
+    public List<BasicObject> getColumnList() {
+        return columnList;
+    }
+
+
 }

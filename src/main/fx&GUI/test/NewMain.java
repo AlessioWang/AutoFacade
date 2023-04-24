@@ -1,5 +1,6 @@
-package demo;
+package test;
 
+import demo.LeftController;
 import fx_processing.FXPApplet;
 import guo_cam.CameraController;
 import processing.core.PApplet;
@@ -11,7 +12,7 @@ import processing.core.PApplet;
 public class NewMain extends FXPApplet {
 
     CameraController camera;
-    NewLeftController leftController;
+    LeftController leftController;
 
     public static void main(String[] args) {
         PApplet.main(NewMain.class.getName());
@@ -34,9 +35,6 @@ public class NewMain extends FXPApplet {
         box(100);
     }
 
-    public void setLeftController(NewLeftController leftController) {
-        this.leftController = leftController;
-    }
 
 
 }

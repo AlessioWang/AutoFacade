@@ -155,7 +155,6 @@ public abstract class FxInSwing<T extends FXPApplet> {
         }
     }
 
-
     /**
      * 设置窗口内各窗格内容
      */

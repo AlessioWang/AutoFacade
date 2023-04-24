@@ -438,7 +438,7 @@ public class FacadeMatcher {
         Set<Map.Entry<Double, List<WB_Point>>> entries = columnBaseMap.entrySet();
         for (var entry : entries) {
             List<WB_Point> pts = entry.getValue();
-            pts.forEach(e -> columns.add(new ColumnSimple(e, 4000, 500)));
+            pts.forEach(e -> columns.add(new ColumnSimple(e, 4000, 400)));
         }
     }
 

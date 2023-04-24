@@ -18,7 +18,7 @@ public class FxMain extends FxInSwing<FXPApplet> {
     int width = 1800;
     int height = 1080;
 
-    NewLeftController leftController;
+    LeftController leftController;
 
     /**
      * 构造FXInSwing
@@ -50,7 +50,7 @@ public class FxMain extends FxInSwing<FXPApplet> {
 
     @Override
     protected Scene createLeft() {
-        leftController = new NewLeftController((PickFx) applet);
+        leftController = new LeftController((PickFx) applet);
         leftController.setOnAction();
         Scene scene = new Scene(leftController);
         return scene;

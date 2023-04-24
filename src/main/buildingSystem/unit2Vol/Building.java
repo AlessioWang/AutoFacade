@@ -219,7 +219,6 @@ public class Building {
 
     }
 
-
     /**
      * 初始化每一层包含的unit信息
      */
@@ -672,12 +671,12 @@ public class Building {
     private void initFloorBase() {
         floorBaseList = new LinkedList<>();
 
-        /**
-         * 出图修改
-         */
-        Arrays.stream(floorMap.values().toArray()).forEach(e -> floorBaseList.add(new MergedPanelBase((List<Face>) e)));
+//        /**
+//         * 出图修改
+//         */
+//        Arrays.stream(floorMap.values().toArray()).forEach(e -> floorBaseList.add(new MergedPanelBase((List<Face>) e)));
 
-//        floorMap.values().forEach(e -> e.forEach(f -> floorBaseList.add(new SimplePanelBase(f))));
+        floorMap.values().forEach(e -> e.forEach(f -> floorBaseList.add(new SimplePanelBase(f))));
     }
 
     /**

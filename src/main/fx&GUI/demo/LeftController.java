@@ -18,7 +18,7 @@ import java.util.List;
  * @auther Alessio
  * @date 2023/4/19
  **/
-public class NewLeftController extends AnchorPane {
+public class LeftController extends AnchorPane {
 
     private final PickFx applet;
     private final String fxPath = "/fxml/LeftLayout.fxml";
@@ -36,7 +36,7 @@ public class NewLeftController extends AnchorPane {
     @FXML
     private JFXComboBox<Label> comboPanelType;
 
-    public NewLeftController(PickFx applet) {
+    public LeftController(PickFx applet) {
         this.applet = applet;
 
         applet.setLeftController(this);
