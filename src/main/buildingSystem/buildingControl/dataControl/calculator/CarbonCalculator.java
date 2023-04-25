@@ -79,6 +79,45 @@ public class CarbonCalculator {
         System.out.println("\033[0m");
     }
 
+    public double getC30Vol() {
+        return c30Vol;
+    }
+
+    public double getC50Vol() {
+        return c50Vol;
+    }
+
+    public double getSteelWeight() {
+        return steelWeight;
+    }
+
+    public double getAlWeight() {
+        return alWeight;
+    }
+
+    public double getGlassWeight() {
+        return glassWeight;
+    }
+
+    public double getC30Carbon() {
+        return c30Carbon;
+    }
+
+    public double getC50Carbon() {
+        return c50Carbon;
+    }
+
+    public double getGlassCarbon() {
+        return glassCarbon;
+    }
+
+    public double getAlCarbon() {
+        return alCarbon;
+    }
+
+    public double getSteelCarbon() {
+        return steelCarbon;
+    }
 
     public double getCarbon() {
         return carbon;

@@ -383,6 +383,14 @@ public class Statistics {
         return roofPanelNumber;
     }
 
+    public CarbonCalculator getCarbonCalculator() {
+        return carbonCalculator;
+    }
+
+    public PriceCalculator getPriceCalculator() {
+        return priceCalculator;
+    }
+
     @Override
     public String toString() {
         return "Statistics{" +

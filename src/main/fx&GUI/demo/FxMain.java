@@ -1,7 +1,6 @@
 package demo;
 
 
-import Test.GUITest.PickFx;
 import fx_processing.FXPApplet;
 import fx_processing.FxInSwing;
 import javafx.geometry.Rectangle2D;
@@ -19,6 +18,7 @@ public class FxMain extends FxInSwing<FXPApplet> {
     int height = 1080;
 
     LeftController leftController;
+    RightController rightController;
 
     /**
      * 构造FXInSwing
@@ -58,7 +58,10 @@ public class FxMain extends FxInSwing<FXPApplet> {
 
     @Override
     protected Scene createRight() {
-        return null;
+        rightController = new RightController((PickFx) applet);
+        rightController.setOnAction();
+        Scene scene = new Scene(rightController);
+        return scene;
     }
 
     @Override

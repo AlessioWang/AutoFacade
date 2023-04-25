@@ -1,19 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.scene.*?>
 <?import java.lang.*?>
 <?import com.jfoenix.controls.*?>
 <?import javafx.scene.layout.*?>
 
-<fx:root prefHeight="400.0" prefWidth="250.0" type="AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root prefHeight="1000.0" prefWidth="250.0" stylesheets="@../styleSheet/MyCSS.css" type="AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
+      <JFXComboBox fx:id="comboPanelType" focusColor="#009688" layoutX="36.0" layoutY="14.0" prefHeight="36.0" prefWidth="170.0" promptText="Panel Type" styleClass="normal_text" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="50.0" />
       <Group AnchorPane.bottomAnchor="50.0">
          <children>
-            <JFXToggleButton fx:id="togShowStructure" layoutX="20.0" layoutY="200.0" selected="true" text="Show Structure" AnchorPane.leftAnchor="20.0" />
-            <JFXToggleButton fx:id="togShowBase" layoutX="20.0" layoutY="120.0" selected="true" text="Show Base" AnchorPane.leftAnchor="20.0" />
-            <JFXToggleButton fx:id="togShowPanel" layoutX="20.0" layoutY="34.0" selected="true" text="Show Panel" AnchorPane.leftAnchor="20.0" />
+            <JFXToggleButton fx:id="togShowStructure" layoutX="19.0" layoutY="68.0" selected="true" styleClass="bold_text" text="Show Structure" AnchorPane.leftAnchor="19.0" />
+            <JFXToggleButton fx:id="togShowBase" layoutX="19.0" layoutY="118.0" styleClass="bold_text" text="Show Base" AnchorPane.leftAnchor="19.0" />
+            <JFXToggleButton fx:id="togShowPanel" layoutX="19.0" layoutY="17.0" selected="true" styleClass="bold_text" text="Show Panel" AnchorPane.leftAnchor="19.0" />
          </children>
       </Group>
-      <JFXComboBox fx:id="comboPanelType" layoutX="36.0" layoutY="14.0" prefHeight="36.0" prefWidth="170.0" promptText="Panel Type" />
+      <Group layoutX="10.0" layoutY="10.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
+         <children>
+            <Label layoutX="31.0" layoutY="34.0" styleClass="title_text" text="Add Panel Category" AnchorPane.leftAnchor="30.0" />
+         </children>
+      </Group>
+      <Group layoutX="20.0" layoutY="20.0" AnchorPane.bottomAnchor="210.0" AnchorPane.leftAnchor="30.0">
+         <children>
+            <Label layoutX="31.0" layoutY="34.0" styleClass="title_text" text="Display Element" />
+            <Line endX="20.0" layoutX="200.0" layoutY="60.0" startX="-170.0" />
+         </children>
+      </Group>
+      <Group layoutX="30.0" layoutY="30.0" AnchorPane.bottomAnchor="335.0" AnchorPane.leftAnchor="30.0">
+         <children>
+            <Label layoutX="31.0" layoutY="34.0" styleClass="title_text" text="Display Mode" />
+            <Line endX="20.0" layoutX="200.0" layoutY="60.0" startX="-170.0" />
+         </children>
+      </Group>
+      <JFXToggleButton fx:id="togDisplay" layoutX="18.0" layoutY="600.0" styleClass="bold_text" text="Perspective" AnchorPane.bottomAnchor="280.0" AnchorPane.leftAnchor="18.0" />
    </children>
 </fx:root>

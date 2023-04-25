@@ -1,6 +1,5 @@
 package demo;
 
-import Test.GUITest.PickFx;
 import Tools.FxTools;
 import buildingControl.designControl.PanelStyle;
 import com.jfoenix.controls.JFXComboBox;
@@ -22,7 +21,6 @@ public class LeftController extends AnchorPane {
 
     private final PickFx applet;
     private final String fxPath = "/fxml/LeftLayout.fxml";
-    private final String panelPath = "C:\\Bingqi\\InstAAA\\FacadeCreator\\src\\main\\java\\facade\\unit\\styles";
 
     @FXML
     private JFXToggleButton togShowPanel;
@@ -34,12 +32,14 @@ public class LeftController extends AnchorPane {
     private JFXToggleButton togShowStructure;
 
     @FXML
+    private JFXToggleButton togDisplay;
+
+    @FXML
     private JFXComboBox<Label> comboPanelType;
 
     public LeftController(PickFx applet) {
         this.applet = applet;
 
-        applet.setLeftController(this);
         FxTools.iniFxml2Controller(fxPath, this);
 
         initStyle();
@@ -93,6 +93,10 @@ public class LeftController extends AnchorPane {
 
         togShowBase.setOnAction(event -> {
             applet.showContainer = togShowBase.isSelected();
+        });
+
+        togDisplay.setOnAction(event -> {
+            applet.isPerspective = togDisplay.isSelected();
         });
     }
 

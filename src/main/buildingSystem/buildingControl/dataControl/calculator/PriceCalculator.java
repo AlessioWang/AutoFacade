@@ -95,4 +95,32 @@ public class PriceCalculator {
     public String toString() {
         return "priceNoTax=" + String.format("%.1f", priceNoTax) + ", priceInTax=" + String.format("%.1f", priceInTax);
     }
+
+    public double getOutPrice() {
+        return outPrice;
+    }
+
+    public double getInnerPrice() {
+        return innerPrice;
+    }
+
+    public double getFloorPrice() {
+        return floorPrice;
+    }
+
+    public double getRoofPrice() {
+        return roofPrice;
+    }
+
+    public double getBeamPrice() {
+        return beamPrice;
+    }
+
+    public double getColumnPrice() {
+        return columnPrice;
+    }
+
+    public double getGlassPrice() {
+        return glassPrice;
+    }
 }

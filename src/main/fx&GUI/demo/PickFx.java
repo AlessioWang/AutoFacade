@@ -1,15 +1,15 @@
-package Test.GUITest;
+package demo;
 
 import buildingControl.dataControl.Statistics;
 import buildingControl.designControl.BuildingCreator;
 import buildingControl.designControl.F_Matcher;
 import core.Container;
 import core.J_Selector;
-import demo.LeftController;
 import facade.basic.BasicObject;
 import facade.unit.styles.*;
 import fx_processing.FXPApplet;
 import guo_cam.CameraController;
+import javafx.application.Platform;
 import processing.core.PApplet;
 import renders.BuildingRender;
 import unit2Vol.Building;
@@ -27,11 +27,10 @@ import java.util.Set;
  * @date 2023/4/18
  **/
 public class PickFx extends FXPApplet {
-//            private String file = "src\\main\\resources\\dxf\\schoolsmall.dxf";
-//    private String file = "src\\main\\resources\\dxf\\school011.dxf";
-//    private String file = "src\\main\\resources\\dxf\\schoolRound.dxf";
-
-    private String file = "src\\main\\resources\\dxf\\schoolNotRec03.dxf";
+    //    private String file = "src\\main\\resources\\dxf\\schoolsmall.dxf";
+    //    private String file = "src\\main\\resources\\dxf\\school011.dxf";
+    private String file = "src\\main\\resources\\dxf\\schoolRound.dxf";
+    //    private String file = "src\\main\\resources\\dxf\\schoolNotRec03.dxf";
 
     private BuildingCreator bc;
 
@@ -49,6 +48,8 @@ public class PickFx extends FXPApplet {
 
     private Building building;
 
+    boolean isPerspective = false;
+
     //-------------selector----------
     private J_Selector selector;
 
@@ -59,10 +60,12 @@ public class PickFx extends FXPApplet {
     //--------------GUI------------
     private LeftController leftController;
 
+    private RightController rightController;
+
     private String panelStyle;
 
     //-----------Statistics----------
-    private Statistics statistics;
+    public Statistics statistics;
 
     public static void main(String[] args) {
         PApplet.main(PickFx.class.getName());
@@ -95,6 +98,8 @@ public class PickFx extends FXPApplet {
         statistics = new Statistics(fm);
 
         statistics.showPriceAndCarbon();
+
+        updateInfo();
     }
 
     private void initSelector() {
@@ -111,6 +116,7 @@ public class PickFx extends FXPApplet {
 
     public void draw() {
         background(255);
+        cameraController.getCamera().setPerspective(isPerspective);
 
         if (showPanel) {
             if (panelShapeMap.values().size() != 0) {
@@ -147,7 +153,7 @@ public class PickFx extends FXPApplet {
     }
 
     //选取的目标polygon
-    private WB_Polygon selectedShape;
+    public WB_Polygon selectedShape;
 
     //display var
     public boolean showBuilding = false;
@@ -206,7 +212,15 @@ public class PickFx extends FXPApplet {
             if (panelBase != null) {
                 panelShapeMap.remove(panelBase.getShape());
             }
+
+            updateInfo();
         }
+    }
+
+    private synchronized void updateInfo() {
+        Platform.runLater(() -> {
+            rightController.updateInfo();
+        });
     }
 
     private void addPanel(PanelBase panelBase) {
@@ -249,4 +263,13 @@ public class PickFx extends FXPApplet {
     public void setLeftController(LeftController leftController) {
         this.leftController = leftController;
     }
+
+    public void setRightController(RightController rightController) {
+        this.rightController = rightController;
+    }
+
+    public Statistics getStatistics() {
+        return statistics;
+    }
+
 }

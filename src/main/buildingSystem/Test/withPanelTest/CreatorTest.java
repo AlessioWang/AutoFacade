@@ -55,7 +55,6 @@ public class CreatorTest extends PApplet {
     private Statistics statistics;
 
 
-
     public static void main(String[] args) {
         PApplet.main(CreatorTest.class.getName());
     }
@@ -73,7 +72,6 @@ public class CreatorTest extends PApplet {
         facadeMatcher = new FacadeMatcher(bc);
 
         statistics = new Statistics(facadeMatcher);
-
 
 
         cameraController = new CameraController(this, 15000);
