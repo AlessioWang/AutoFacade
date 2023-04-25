@@ -1,10 +1,12 @@
 package demo;
 
 import Tools.FxTools;
+import buildingControl.dataControl.Comparator;
 import buildingControl.dataControl.calculator.CarbonCalculator;
 import buildingControl.dataControl.calculator.PriceCalculator;
 import buildingControl.dataControl.parameters.CarbonPara;
 import buildingControl.dataControl.parameters.PricePara;
+import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
@@ -115,6 +117,22 @@ public class RightController extends AnchorPane {
     @FXML
     private Label allCarbonSum;
 
+    //--------------Compare----------------
+    @FXML
+    private Label targetPrice;
+    @FXML
+    private Label currentPrice;
+    @FXML
+    private Label comparePrice;
+    @FXML
+    private Label targetCarbon;
+    @FXML
+    private Label currentCarbon;
+    @FXML
+    private Label compareCarbon;
+
+    @FXML
+    private JFXButton btnSetDesign;
 
     public RightController(PickFx applet) {
         this.applet = applet;
@@ -145,6 +163,9 @@ public class RightController extends AnchorPane {
         updateNum();
         updateCarbonPara();
         updateAllCarbon();
+
+        //compare
+        updateCompare();
     }
 
     private void updateVol() {
@@ -210,31 +231,16 @@ public class RightController extends AnchorPane {
         allCarbonSum.setText(String.format("%.1f", cc.getCarbon()));
     }
 
-    public Label getOutVol() {
-        return outVol;
+    private void updateCompare() {
+        Comparator comparator = applet.comparator;
+
+        currentPrice.setText(String.format("%.1f", comparator.getCurrentPrice()));
+        currentCarbon.setText(String.format("%.1f", comparator.getCurrentCarbon()));
+        targetCarbon.setText(String.format("%.1f", comparator.getTargetCarbon()));
+        targetPrice.setText(String.format("%.1f", comparator.getTargetPrice()));
+        comparePrice.setText(String.format("%.1f", comparator.getComparePrice()));
+        compareCarbon.setText(String.format("%.1f", comparator.getCompareCarbon()));
+
     }
 
-    public Label getInnerVol() {
-        return innerVol;
-    }
-
-    public Label getFloorVol() {
-        return floorVol;
-    }
-
-    public Label getRoofVol() {
-        return roofVol;
-    }
-
-    public Label getBeamVol() {
-        return beamVol;
-    }
-
-    public Label getColumnVol() {
-        return columnVol;
-    }
-
-    public Label getGlassArea() {
-        return glassArea;
-    }
 }

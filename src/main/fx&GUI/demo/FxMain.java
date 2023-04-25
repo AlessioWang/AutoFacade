@@ -36,7 +36,7 @@ public class FxMain extends FxInSwing<FXPApplet> {
      */
     public static void main(String[] args) {
         FxMain sample = new FxMain(new PickFx());
-        sample.launch("MyFxTest");
+        sample.launch("Facade Creator");
     }
 
     @Override

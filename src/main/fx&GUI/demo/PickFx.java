@@ -1,5 +1,6 @@
 package demo;
 
+import buildingControl.dataControl.Comparator;
 import buildingControl.dataControl.Statistics;
 import buildingControl.designControl.BuildingCreator;
 import buildingControl.designControl.F_Matcher;
@@ -20,7 +21,6 @@ import wblut.processing.WB_Render3D;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @auther Alessio
@@ -67,6 +67,8 @@ public class PickFx extends FXPApplet {
     //-----------Statistics----------
     public Statistics statistics;
 
+    public Comparator comparator;
+
     public static void main(String[] args) {
         PApplet.main(PickFx.class.getName());
     }
@@ -77,15 +79,7 @@ public class PickFx extends FXPApplet {
     }
 
     public void setup() {
-        bc = new BuildingCreator(file, 4000);
-
-        building = bc.getBuilding();
-
-        fm = new F_Matcher(bc);
-
-        cameraController = new CameraController(this, 15000);
-
-        render = new WB_Render3D(this);
+        initEnv();
 
         br = new BuildingRender(this, building);
 
@@ -95,11 +89,29 @@ public class PickFx extends FXPApplet {
 
         initSelector();
 
+        initStatistics();
+    }
+
+    private void initStatistics() {
         statistics = new Statistics(fm);
 
         statistics.showPriceAndCarbon();
 
         updateInfo();
+
+        comparator = new Comparator(statistics);
+    }
+
+    private void initEnv() {
+        bc = new BuildingCreator(file, 4000);
+
+        building = bc.getBuilding();
+
+        fm = new F_Matcher(bc);
+
+        cameraController = new CameraController(this, 15000);
+
+        render = new WB_Render3D(this);
     }
 
     private void initSelector() {
@@ -169,11 +181,6 @@ public class PickFx extends FXPApplet {
         if (key == 'r' || key == 'R') showBuilding = !showBuilding;
     }
 
-    public void value2List(Map map, List list) {
-        Set<Map.Entry<WB_Polygon, BasicObject>> entries = map.entrySet();
-        entries.stream().filter(e -> e.getValue() != null).forEach(e -> list.add(e.getValue()));
-    }
-
     @Override
     public void mousePressed() {
         // 添加墙板
@@ -198,7 +205,6 @@ public class PickFx extends FXPApplet {
                     addPanel(panelBase);
                 } catch (Exception e) {
                     System.out.println("Add error");
-//                    throw new RuntimeException(e);
                 }
             }
         }
