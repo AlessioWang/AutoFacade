@@ -20,6 +20,7 @@ import java.util.List;
 public class LeftController extends AnchorPane {
 
     private final PickFx applet;
+//    private final PickSY applet;
     private final String fxPath = "/fxml/LeftLayout.fxml";
 
     @FXML
@@ -44,6 +45,14 @@ public class LeftController extends AnchorPane {
 
         initStyle();
     }
+
+//    public LeftController(PickSY applet) {
+//        this.applet = applet;
+//
+//        FxTools.iniFxml2Controller(fxPath, this);
+//
+//        initStyle();
+//    }
 
     /**
      * 初始化页面上的控件信息
@@ -78,6 +87,7 @@ public class LeftController extends AnchorPane {
         comboPanelType.setOnAction(event -> {
             String selected = getSelectFromCombo(comboPanelType);
             applet.setPanelStyle(selected);
+
             System.out.println(selected);
         });
     }

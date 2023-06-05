@@ -72,7 +72,7 @@ public class MergedPanelBase extends PanelBase {
     }
 
     private WB_Polygon jtsUnion(List<WB_Polygon> origin) {
-        WB_Polygon polygon = GeoTools.multiWbPolygonUnion(origin, 10);
+        WB_Polygon polygon = GeoTools.multiWbPolygonUnion(origin, 50);
 
         /**
          * 保证合并后的面方向与原本的一致

@@ -91,9 +91,9 @@ public class FacadeMatcher {
 
             initInnerStyle(bases, func);
 
-            initColorStyle(bases, func);
+//            initColorStyle(bases, func);
 //            initGrayStyle(bases, func);
-//            initAlPanelStyle(bases, func);
+            initAlPanelStyle(bases, func);
 
 //            initOutSimple(bases, func);
 //            initTest(bases, func);
@@ -141,8 +141,9 @@ public class FacadeMatcher {
     private void initColorStyle(List<PanelBase> bases, Function function) {
         switch (function) {
             case ClassRoom:
-                replaceSimpleByWidth(bases, 4200);
-//                System.out.println("class : " + bases.size());
+
+//                replaceSimpleByWidth(bases, 4200);  //origin
+                replaceSimpleByWidth(bases, 2000);
                 try {
                     bases.forEach(e -> outPanels.add(new F_TwoWindow(e.getShape())));
                 } catch (Exception ignored) {
@@ -152,7 +153,6 @@ public class FacadeMatcher {
             case Transport:
                 replaceSimpleByWidth(bases, 4000);
 //                replaceHandRailByWidth(bases, 3000);
-//                System.out.println("Transport : " + bases.size());
                 try {
                     F_OneWindow.frameMaterial = Material.DarkGray;
                     bases.forEach(e -> outPanels.add(new F_OneWindow(e.getShape())));
@@ -201,7 +201,7 @@ public class FacadeMatcher {
     private void initAlPanelStyle(List<PanelBase> bases, Function function) {
         switch (function) {
             case ClassRoom:
-                replaceSimpleByWidth(bases, 4200);
+//                replaceSimpleByWidth(bases, 4200);
                 try {
                     bases.forEach(e -> outPanels.add(new S_Quad_Hole(e.getShape())));
                 } catch (Exception ignored) {
@@ -209,7 +209,7 @@ public class FacadeMatcher {
                 }
                 break;
             case Transport:
-                replaceSimpleByWidth(bases, 4000);
+//                replaceSimpleByWidth(bases, 4000);
 //                replaceHandRailByWidth(bases, 3000);
                 try {
                     bases.forEach(e -> outPanels.add(new Handrail(e.getShape())));
@@ -225,7 +225,7 @@ public class FacadeMatcher {
                 }
                 break;
             case Open:
-                replaceSimpleByWidth(bases, 8500);
+//                replaceSimpleByWidth(bases, 8500);
                 try {
                     F_OneWindow.bottom_height = 500;
                     F_OneWindow.frameMaterial = Material.Blue;

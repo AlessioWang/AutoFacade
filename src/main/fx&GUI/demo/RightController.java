@@ -10,6 +10,7 @@ import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 
 /**
  * @auther Alessio
@@ -18,7 +19,10 @@ import javafx.scene.layout.AnchorPane;
 public class RightController extends AnchorPane {
 
     private final PickFx applet;
+//    private final PickSY applet;
     private final String fxPath = "/fxml/RightLayout.fxml";
+
+    private boolean showCompare = false;
 
     /**
      * Price
@@ -142,6 +146,14 @@ public class RightController extends AnchorPane {
         initStyle();
     }
 
+//    public RightController(PickSY applet) {
+//        this.applet = applet;
+//        FxTools.iniFxml2Controller(fxPath, this);
+//
+//        applet.setRightController(this);
+//        initStyle();
+//    }
+
     /**
      * 初始化页面上的控件信息
      */
@@ -150,7 +162,14 @@ public class RightController extends AnchorPane {
     }
 
     public void setOnAction() {
+        btnAction();
+    }
 
+    private void btnAction() {
+        btnSetDesign.setOnAction(event -> {
+            showCompare = true;
+            setCompareTarget();
+        });
     }
 
     public void updateInfo() {
@@ -165,7 +184,7 @@ public class RightController extends AnchorPane {
         updateAllCarbon();
 
         //compare
-        updateCompare();
+//        updateCompare();
     }
 
     private void updateVol() {
@@ -231,15 +250,44 @@ public class RightController extends AnchorPane {
         allCarbonSum.setText(String.format("%.1f", cc.getCarbon()));
     }
 
-    private void updateCompare() {
+    private void setCompareTarget() {
         Comparator comparator = applet.comparator;
+        comparator.updateTarget();
 
-        currentPrice.setText(String.format("%.1f", comparator.getCurrentPrice()));
-        currentCarbon.setText(String.format("%.1f", comparator.getCurrentCarbon()));
         targetCarbon.setText(String.format("%.1f", comparator.getTargetCarbon()));
         targetPrice.setText(String.format("%.1f", comparator.getTargetPrice()));
-        comparePrice.setText(String.format("%.1f", comparator.getComparePrice()));
-        compareCarbon.setText(String.format("%.1f", comparator.getCompareCarbon()));
+    }
+
+    public void setCompareCurrent() {
+        Comparator comparator = applet.comparator;
+        comparator.updateCurrent();
+
+        if (showCompare) {
+            currentPrice.setText(String.format("%.1f", comparator.getCurrentPrice()));
+            currentCarbon.setText(String.format("%.1f", comparator.getCurrentCarbon()));
+
+            comparePrice.setText(String.format("%.1f", comparator.getComparePrice()));
+            compareCarbon.setText(String.format("%.1f", comparator.getCompareCarbon()));
+        }
+
+        updateLabelColor(comparator.getComparePrice(), comparator.getCompareCarbon());
+    }
+
+    private void updateLabelColor(double price, double carbon) {
+        Color red = Color.rgb(0, 145, 131);
+        Color green = Color.rgb(227, 77, 36);
+
+        if (price < 0) {
+            comparePrice.setTextFill(red);
+        } else {
+            comparePrice.setTextFill(green);
+        }
+
+        if (carbon < 0) {
+            compareCarbon.setTextFill(red);
+        } else {
+            compareCarbon.setTextFill(green);
+        }
 
     }
 

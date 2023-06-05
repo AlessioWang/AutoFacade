@@ -85,16 +85,20 @@ public class BuildingInputer {
         units = new LinkedList<>();
 
         for (String id : layerNames) {
-            double height = Double.parseDouble(id);
-            Map<WB_Polygon, Integer> map = layerGeoColorMap.get(id);
-            List<WB_Polygon> polygons = recorder.get(id);
+            try {
+                double height = Double.parseDouble(id);
+                Map<WB_Polygon, Integer> map = layerGeoColorMap.get(id);
+                List<WB_Polygon> polygons = recorder.get(id);
 
-            for (var poly : polygons) {
-                int color = map.get(poly);
-                WB_Polygon real = GeoTools.movePolygon3D(poly, new WB_Point(0, 0, height));
-                Unit unit = new Unit(real, unitHeight);
-                funcByColor(unit, color);
-                units.add(unit);
+                for (var poly : polygons) {
+                    int color = map.get(poly);
+                    WB_Polygon real = GeoTools.movePolygon3D(poly, new WB_Point(0, 0, height));
+                    Unit unit = new Unit(real, unitHeight);
+                    funcByColor(unit, color);
+                    units.add(unit);
+                }
+            } catch (Exception e) {
+//                throw new RuntimeException(e);
             }
         }
 

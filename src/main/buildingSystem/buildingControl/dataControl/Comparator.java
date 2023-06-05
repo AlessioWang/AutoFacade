@@ -25,6 +25,16 @@ public class Comparator {
 
         setTarget();
         setCurrent();
+        updateCompare();
+    }
+
+    public void updateTarget() {
+        setTarget();
+    }
+
+    public void updateCurrent() {
+        setCurrent();
+        updateCompare();
     }
 
     /**

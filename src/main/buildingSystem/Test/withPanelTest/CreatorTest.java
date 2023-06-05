@@ -8,16 +8,11 @@ import guo_cam.CameraController;
 import processing.core.PApplet;
 import renders.BuildingRender;
 import unit2Vol.Building;
-import unit2Vol.Unit;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
-import wblut.geom.WB_Vector;
 import wblut.processing.WB_Render3D;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * @auther Alessio
@@ -28,13 +23,15 @@ public class CreatorTest extends PApplet {
 //    测试轴网
 //    private String file = "src\\main\\resources\\dxf\\grid.dxf";
 
-//    private String file = "src\\main\\resources\\dxf\\school01.dxf";
+    //    private String file = "src\\main\\resources\\dxf\\school01.dxf";
 //    private String file = "src\\main\\resources\\dxf\\schoolsmall.dxf";
 //    private String file = "src\\main\\resources\\dxf\\schoolBig.dxf";
 //    private String file = "src\\main\\resources\\dxf\\schoolBigWithRail.dxf";
-    private String file = "src\\main\\resources\\dxf\\schoolRound.dxf";
+//    private String file = "src\\main\\resources\\dxf\\schoolRound.dxf";
 //    private String file = "src\\main\\resources\\dxf\\schoolNotRec.dxf";
 //    private String file = "src\\main\\resources\\dxf\\schoolNotRec02.dxf";
+
+    private String file = "C:\\Bingqi\\InstAAA\\SchoolDxfFFromSY\\1-4f\\SY_School_New_3D2.dxf";
 
     private BuildingCreator bc;
 
@@ -95,43 +92,6 @@ public class CreatorTest extends PApplet {
     }
 
     /**
-     * 出数据用
-     */
-    private void getNeiUnits() {
-        List<Unit> unitList = building.getUnitList();
-
-        for (Unit u : unitList) {
-            HashMap<WB_Vector, List<Unit>> unitMap = u.getUnitNeiMap();
-
-            int id = u.getId();
-            Set<Map.Entry<WB_Vector, List<Unit>>> entries = unitMap.entrySet();
-            for (var en : entries) {
-                WB_Vector dir = en.getKey();
-                List<Unit> units = en.getValue();
-
-                if (units.size() != 0) {
-                    for (Unit uu : units) {
-                        int neiID = uu.getId();
-
-                        double x = dir.xd();
-                        x = Math.abs(x - 0) < 0.1 ? 0 : x;
-
-                        double y = dir.yd();
-                        y = Math.abs(y - 0) < 0.1 ? 0 : y;
-
-                        double z = dir.zd();
-                        z = Math.abs(y - 0) < 0.1 ? 0 : z;
-
-                        System.out.println(id + "--> [" + x + " , " + y + " , " + z + "] --> " + neiID);
-                    }
-                }
-
-            }
-        }
-
-    }
-
-    /**
      * 地面
      */
     private void initGround() {
@@ -163,7 +123,7 @@ public class CreatorTest extends PApplet {
             panel.draw(render);
         }
 
-        renderGround();
+//        renderGround();
 
 //        br.renderAll();
 

@@ -14,8 +14,8 @@ import javafx.stage.Screen;
 public class FxMain extends FxInSwing<FXPApplet> {
 
     //程序运行基本参数
-    int width = 1800;
-    int height = 1080;
+    int width = 2000;
+    int height = 1200;
 
     LeftController leftController;
     RightController rightController;
@@ -36,6 +36,7 @@ public class FxMain extends FxInSwing<FXPApplet> {
      */
     public static void main(String[] args) {
         FxMain sample = new FxMain(new PickFx());
+//        FxMain sample = new FxMain(new PickSY());
         sample.launch("Facade Creator");
     }
 
@@ -51,6 +52,7 @@ public class FxMain extends FxInSwing<FXPApplet> {
     @Override
     protected Scene createLeft() {
         leftController = new LeftController((PickFx) applet);
+//        leftController = new LeftController((PickSY) applet);
         leftController.setOnAction();
         Scene scene = new Scene(leftController);
         return scene;
@@ -59,6 +61,7 @@ public class FxMain extends FxInSwing<FXPApplet> {
     @Override
     protected Scene createRight() {
         rightController = new RightController((PickFx) applet);
+//        rightController = new RightController((PickSY) applet);
         rightController.setOnAction();
         Scene scene = new Scene(rightController);
         return scene;

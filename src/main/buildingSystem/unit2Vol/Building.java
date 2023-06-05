@@ -117,6 +117,7 @@ public class Building {
 
         //获取屋顶的PanelBase
         initRoofBase();
+//        initRoofBaseSY();
 
         //获取每层楼板信息
         initFloorList();
@@ -319,6 +320,20 @@ public class Building {
         return map;
     }
 
+    private void initRoofBaseSY() {
+        roofBaseList = new LinkedList<>();
+
+        roofAbleFaces.forEach(e -> roofBaseList.add(new SimplePanelBase(e)));
+
+        for (PanelBase roof : roofBaseList) {
+            //如果roof的面是朝下的，则翻转
+            if (roof.getShape().getNormal().zd() < 0) {
+                roof.reverseShape();
+            }
+        }
+    }
+
+
     /**
      * 初始化屋顶的几何形状
      * 暂定标高一致的就默认是一个屋顶
@@ -336,6 +351,7 @@ public class Building {
                 roof.reverseShape();
             }
         }
+
     }
 
 

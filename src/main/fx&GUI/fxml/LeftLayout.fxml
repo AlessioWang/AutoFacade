@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.paint.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.*?>
@@ -14,7 +15,7 @@
          <children>
             <JFXToggleButton fx:id="togShowStructure" layoutX="19.0" layoutY="68.0" selected="true" styleClass="bold_text" text="Show Structure" AnchorPane.leftAnchor="19.0" />
             <JFXToggleButton fx:id="togShowBase" layoutX="19.0" layoutY="118.0" styleClass="bold_text" text="Show Base" AnchorPane.leftAnchor="19.0" />
-            <JFXToggleButton fx:id="togShowPanel" layoutX="19.0" layoutY="17.0" selected="true" styleClass="bold_text" text="Show Panel" AnchorPane.leftAnchor="19.0" />
+            <JFXToggleButton fx:id="togShowPanel" layoutX="19.0" layoutY="17.0" selected="true" styleClass="bold_text" text="Show Panel" toggleColor="#009183" AnchorPane.leftAnchor="19.0" />
          </children>
       </Group>
       <Group layoutX="10.0" layoutY="10.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">

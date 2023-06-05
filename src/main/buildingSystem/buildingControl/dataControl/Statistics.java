@@ -128,6 +128,11 @@ public class Statistics {
         initCalculator();
     }
 
+    public void updateData() {
+        initData();
+        initCalculator();
+    }
+
     private void initData() {
         initDataFromMatcher();
         initNumber();
@@ -163,7 +168,18 @@ public class Statistics {
         }
     }
 
+    private void resetArea() {
+        innerConArea = 0;
+        floorConArea = 0;
+        roofConArea = 0;
+        outConArea = 0;
+
+        glassArea = 0;
+        alArea = 0;
+    }
+
     private void initMaterialArea() {
+        resetArea();
 
         for (BasicObject p : inner) {
             innerConArea += p.concreteArea;
@@ -195,13 +211,16 @@ public class Statistics {
 
 
     private void initBeamVol() {
+        beamConVol = 0;
+
         for (BasicObject b : beam) {
             beamConVol += volUnitConvert(((RecBeam) b).concreteVol);
         }
-
     }
 
     private void initColumnVol() {
+        columnConVol = 0;
+
         for (BasicObject b : column) {
             //去掉位置重复
             columnConVol += volUnitConvert(((ColumnSimple) b).concreteVol) * 0.25;
@@ -240,7 +259,7 @@ public class Statistics {
 
         innerConVol = innerConArea * PanelThickPara.WALLTHICK;
 
-        roofConVol = innerConArea * PanelThickPara.FLOORTHICK;
+        roofConVol = roofConArea * PanelThickPara.FLOORTHICK;
 
         floorConVol = floorConArea * PanelThickPara.FLOORTHICK;
 
