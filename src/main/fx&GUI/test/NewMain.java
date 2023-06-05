@@ -1,6 +1,6 @@
 package test;
 
-import demo.LeftController;
+import Main.LeftController;
 import fx_processing.FXPApplet;
 import guo_cam.CameraController;
 import processing.core.PApplet;

@@ -1,4 +1,4 @@
-package demo;
+package Main;
 
 import buildingControl.dataControl.Comparator;
 import buildingControl.dataControl.Statistics;
@@ -27,8 +27,11 @@ import java.util.Map;
  * @auther Alessio
  * @date 2023/4/18
  **/
-public class PickSY extends FXPApplet {
-    private String file = "C:\\Bingqi\\InstAAA\\SchoolDxfFFromSY\\1-4f\\SY_School_New_3D2.dxf";
+public class PickFx extends FXPApplet {
+    //    private String file = "src\\main\\resources\\dxf\\schoolsmall.dxf";
+    //    private String file = "src\\main\\resources\\dxf\\school011.dxf";
+//    private String file = "src\\main\\resources\\dxf\\schoolRound.dxf";
+        private String file = "src\\main\\resources\\dxf\\schoolNotRec03.dxf";
 
     private BuildingCreator bc;
 
@@ -68,7 +71,7 @@ public class PickSY extends FXPApplet {
     public Comparator comparator;
 
     public static void main(String[] args) {
-        PApplet.main(PickSY.class.getName());
+        PApplet.main(PickFx.class.getName());
     }
 
     public void settings() {

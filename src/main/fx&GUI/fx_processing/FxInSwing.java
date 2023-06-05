@@ -10,7 +10,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 
@@ -92,21 +91,6 @@ public abstract class FxInSwing<T extends FXPApplet> {
         left = new JFXPanel();
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        frame.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                try {
-//                    Runtime.getRuntime().exec("tskill dimGen");
-                    String command = "cmd.exe /c c:\\windows\\system32\\taskkill /f /im  dimGen.exe";
-                    Process proc = Runtime.getRuntime().exec(command);
-
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
-                super.windowClosing(e);
-            }
-        });
     }
 
     /**

@@ -1,4 +1,4 @@
-package demo;
+package Main;
 
 
 import fx_processing.FXPApplet;
@@ -25,7 +25,7 @@ public class FxMain extends FxInSwing<FXPApplet> {
      *
      * @param applet 继承FXPApplet类的实例
      */
-    protected FxMain(FXPApplet applet) {
+    public FxMain(FXPApplet applet) {
         super(applet);
     }
 
